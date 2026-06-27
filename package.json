@@ -1,0 +1,24 @@
+{
+  "name": "doc-gen",
+  "version": "1.0.0",
+  "description": "aura",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron:dev": "electron electron/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Doc-Gen-org/Doc-Gen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Doc-Gen-org/Doc-Gen/issues"
+  },
+  "homepage": "https://github.com/Doc-Gen-org/Doc-Gen#readme",
+  "devDependencies": {
+    "electron": "^42.5.0"
+  }
+}
