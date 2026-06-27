@@ -1,1 +1,19 @@
 .idea
+# Node
+node_modules/
+dist/
+dist-electron/
+*.log
+
+# Python
+backend/venv/
+__pycache__/
+*.pyc
+
+# Electron build output
+out/
+release/
+
+# Env files
+.env
+.env.local
