@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/layout/layout";
+import { routes } from "./routes";
 
 function App() {
-  const [status, setStatus] = useState<string>("checking backend...");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/health")
-        .then((res) => res.json())
-        .then((data) => setStatus(`Backend says: ${data.status}`))
-        .catch(() => setStatus("Backend not reachable"));
-  }, []);
-
-  return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">DocGen</h1>
-          <p className="text-3xl font-bold text-emerald-400">{status}</p>
-        </div>
-      </div>
-  );
+    return (
+        <HashRouter>
+            <Routes>
+                <Route element={<Layout />}>
+                    {routes.map((route) => (
+                        <Route key={route.path} path={route.path} element={route.element} />
+                    ))}
+                </Route>
+            </Routes>
+        </HashRouter>
+    );
 }
 
 export default App;

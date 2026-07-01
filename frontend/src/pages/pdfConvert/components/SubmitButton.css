@@ -1,0 +1,10 @@
+.submit-button {
+    margin-top: 20px;
+    font: inherit;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+}

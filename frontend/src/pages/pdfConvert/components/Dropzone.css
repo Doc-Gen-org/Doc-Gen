@@ -1,0 +1,39 @@
+.dropzone {
+    margin-top: 24px;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone:hover,
+.dropzone.dragging {
+    border-color: var(--accent-border);
+    background: var(--accent-bg);
+}
+
+.dropzone-or {
+    margin: 8px 0;
+    color: var(--text);
+    font-size: 13px;
+}
+.browse-button:hover {
+    background: var(--accent-bg);
+}
+
+.file-name {
+    font-family: var(--mono);
+    color: var(--text-h);
+}
+
+.browse-button {
+    font: inherit;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--accent-border);
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+}
