@@ -18,7 +18,14 @@ function PdfConvert() {
             <Dropzone file={file} onFileSelected={selectFile} />
 
             {file && <SubmitButton onClick={handleSubmit} />}
+
+            <br/>
+            <h1>Extracted Content </h1>
+            <p>Extracted file contents.</p>
+
+
         </div>
+
     );
 }
 
