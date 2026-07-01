@@ -38,5 +38,5 @@
 .sidebar-link.active {
     color: var(--accent);
     border-left-color: var(--accent);
-    background: var(--accent-bg);
+    background: black /*var(--accent-bg)*/;
 }

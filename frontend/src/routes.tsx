@@ -10,7 +10,7 @@ export interface AppRoute {
 export const routes: AppRoute[] = [
     {
         path: "/",
-        label: "Upload PDF",
+        label: "Upload and Extract",
         element: <PdfConvert />,
     },
     // Future pages get added here — one line adds both the route and the nav link

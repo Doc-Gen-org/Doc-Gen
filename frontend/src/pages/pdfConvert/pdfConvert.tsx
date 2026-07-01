@@ -12,7 +12,7 @@ function PdfConvert() {
 
     return (
         <div className="pdf-convert">
-            <h1>Upload PDF</h1>
+            <h2>Upload PDF</h2>
             <p>Select or drop a PDF to send it for processing.</p>
 
             <Dropzone file={file} onFileSelected={selectFile} />
@@ -20,7 +20,7 @@ function PdfConvert() {
             {file && <SubmitButton onClick={handleSubmit} />}
 
             <br/>
-            <h1>Extracted Content </h1>
+            <h2>Extracted Content </h2>
             <p>Extracted file contents.</p>
 
 
