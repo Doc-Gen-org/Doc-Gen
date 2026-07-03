@@ -1,14 +1,19 @@
 import { usePdfSelection } from "./hooks/usePdfSelection.ts";
+import { useExtract } from "./hooks/useExtract.ts";
 import Dropzone from "./components/Dropzone.tsx";
 import SubmitButton from "./components/SubmitButton.tsx";
+import Extractedzone from "./components/Extractedzone.tsx";
 import "./pdfConvert.css";
 
 function PdfConvert() {
     const { file, selectFile } = usePdfSelection();
+    const { extract, status, extractedInformation, error } = useExtract();
 
     const handleSubmit = () => {
-        // backend call goes here later
+        if (!file) return;
+        extract(file)
     };
+
 
     return (
         <div className="pdf-convert">
@@ -17,12 +22,24 @@ function PdfConvert() {
 
             <Dropzone file={file} onFileSelected={selectFile} />
 
-            {file && <SubmitButton onClick={handleSubmit} />}
+            {file && <SubmitButton
+                onClick={handleSubmit}
+            />}
 
             <br/>
+            <br/>
             <h2>Extracted Content </h2>
-            <p>Extracted file contents.</p>
+            {status == "loading" && <p> processing...</p>}
+            {status == "error" && <p className="error-text">{error}</p>}
+            {status == "success" && extractedInformation && (
+                <>
+                    <p>Extracted file contents.</p>
+                    <Extractedzone text = {extractedInformation.text}/>
+                </>
+            )}
 
+            <br/>
+            <br/>
 
         </div>
 
