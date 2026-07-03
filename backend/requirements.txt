@@ -1,2 +1,15 @@
 fastapi
 uvicorn[standard]
+python-multipart
+sqlalchemy
+pdfplumber
+python-docx
+pytesseract
+pdf2image
+Pillow
+jinja2
+weasyprint
+requests
+docxtpl
+python-dateutil
+httpx

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+    @page {
+        size: A4;
+        margin: 1.8cm;
+    }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        color: #1a1a1a;
+        font-size: 10.5pt;
+        line-height: 1.4;
+    }
+    .top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+    }
+    .logo {
+        font-size: 26pt;
+        font-weight: bold;
+        color: #1a1a2e;
+    }
+    .logo .accent {
+        color: #a78bfa;
+    }
+    .tagline {
+        font-size: 9pt;
+        color: #666;
+        margin-top: -4px;
+    }
+    .po-title {
+        text-align: right;
+        font-size: 22pt;
+        color: #333;
+    }
+    .po-number {
+        text-align: right;
+        font-size: 10pt;
+        color: #666;
+    }
+    .company-block {
+        margin-top: 8px;
+        margin-bottom: 20px;
+        font-size: 9.5pt;
+    }
+    .company-block strong {
+        font-size: 11pt;
+    }
+    .address-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .address-col {
+        width: 48%;
+        font-size: 9.5pt;
+    }
+    .address-col h4 {
+        margin: 0 0 4px;
+        font-size: 10pt;
+        color: #333;
+    }
+    .meta-table {
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 9.5pt;
+    }
+    .meta-table td {
+        padding: 2px 0;
+    }
+    .meta-table td.meta-label {
+        text-align: right;
+        padding-right: 12px;
+        color: #555;
+    }
+    .meta-table td.meta-value {
+        text-align: right;
+        font-weight: bold;
+        width: 120px;
+    }
+    table.items {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 4px;
+    }
+    table.items th {
+        background-color: #1a1a2e;
+        color: white;
+        text-align: left;
+        padding: 8px 10px;
+        font-size: 9.5pt;
+    }
+    table.items th.num {
+        text-align: right;
+    }
+    table.items td {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        font-size: 9.5pt;
+        vertical-align: top;
+    }
+    table.items td.num {
+        text-align: right;
+        white-space: nowrap;
+    }
+    .total-row td {
+        border-top: 2px solid #333;
+        font-weight: bold;
+        font-size: 11pt;
+    }
+    .terms {
+        margin-top: 28px;
+        font-size: 8.5pt;
+        color: #333;
+    }
+    .terms h4 {
+        font-size: 9.5pt;
+        margin-bottom: 6px;
+    }
+    .terms p {
+        margin: 6px 0 2px;
+        font-weight: bold;
+    }
+    .terms ol {
+        margin: 4px 0 12px 18px;
+        padding: 0;
+    }
+    .terms li {
+        margin-bottom: 3px;
+    }
+    .footer-note {
+        margin-top: 24px;
+        font-size: 9pt;
+        color: #777;
+        border-top: 1px solid #ddd;
+        padding-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+    <div class="top-row">
+        <div>
+            <div class="logo">ACA<span class="accent">Technologies</span></div>
+            <div class="tagline">Vendor Purchase Order System</div>
+        </div>
+        <div>
+            <div class="po-title">Purchase Order</div>
+            <div class="po-number"># {{ po_number }}</div>
+        </div>
+    </div>
+
+    <div class="company-block">
+        <strong>{{ company_name }}</strong><br>
+        {{ company_address }}<br>
+        {% if company_gstin %}GSTIN {{ company_gstin }}<br>{% endif %}
+        {% if company_pan %}PAN {{ company_pan }}{% endif %}
+    </div>
+
+    <div class="address-row">
+        <div class="address-col">
+            <h4>Vendor Address</h4>
+            <strong>{{ vendor_name }}</strong><br>
+            {{ vendor_address }}
+        </div>
+        <div class="address-col">
+            <h4>Deliver To</h4>
+            <strong>{{ deliver_to_name }}</strong><br>
+            {{ deliver_to_address }}
+        </div>
+    </div>
+
+    <table class="meta-table">
+        <tr>
+            <td></td>
+            <td class="meta-label">Date :</td>
+            <td class="meta-value">{{ po_date }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="meta-label">Start Date :</td>
+            <td class="meta-value">{{ start_date }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="meta-label">End Date :</td>
+            <td class="meta-value">{{ end_date }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="meta-label">Trainer / Consultant Name :</td>
+            <td class="meta-value">{{ trainer_name }}</td>
+        </tr>
+    </table>
+
+    <table class="items">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Item &amp; Description</th>
+                <th class="num">Qty</th>
+                <th class="num">Rate</th>
+                <th class="num">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.description }}</td>
+                <td class="num">{{ item.qty }}</td>
+                <td class="num">{{ item.rate }}</td>
+                <td class="num">{{ item.amount }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="num">Total</td>
+                <td class="num">₹{{ total }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="terms">
+        <h4>Terms &amp; Conditions</h4>
+        <p>Payment Terms:</p>
+        <ol>
+            <li>Freelance trainers can raise invoices only after completing at least 15 training days.</li>
+            <li>Subsequent invoices must be raised after completing each additional 15 training days.</li>
+            <li>Each invoice must reference the respective purchase order number.</li>
+            <li>Invoices shall be paid on net 30 basis from date of approval.</li>
+        </ol>
+    </div>
+
+    <div class="footer-note">
+        This is a system generated PO and does not require signature.
+    </div>
+
+</body>
+</html>
