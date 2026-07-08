@@ -18,3 +18,5 @@ release/
 .env
 .env.local
 ml
+
+generated_files/*
