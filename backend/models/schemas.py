@@ -19,3 +19,18 @@ class DocumentRecord(Base):
     fields_json = Column(Text, nullable=False)           # stores the full field data as JSON text
     source_document_id = Column(String, nullable=True)   # links transform outputs back to an extraction
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class Trainer(Base):
+    __tablename__ = "trainers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    phone = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class InvoiceCounter(Base):
+    __tablename__ = "invoice_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)

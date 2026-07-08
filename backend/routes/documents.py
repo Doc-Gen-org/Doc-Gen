@@ -7,6 +7,7 @@ from models.database import get_db
 from models.schemas import Company, DocumentRecord
 from config.document_types import DOCUMENT_TYPES
 from services.generator import generate_document
+from services.invoice_counter import get_next_invoice_number
 from pydantic import BaseModel
 from typing import Any, Dict
 
@@ -37,12 +38,18 @@ class GenerateRequest(BaseModel):
 
 @router.post("/generate")
 def generate(request: GenerateRequest, db: Session = Depends(get_db)):
+    fields = dict(request.fields)
+
+    # Auto-assign a unique invoice number for every generated invoice
+    if request.document_type == "invoice":
+        fields["invoice_number"] = get_next_invoice_number(db)
+
     try:
         file_path = generate_document(
             request.document_type,
             request.company_id,
             request.output_format,
-            request.fields,
+            fields,
         )
     except FileNotFoundError as e:
         raise HTTPException(status_code=422, detail={"error": str(e)})
@@ -56,7 +63,7 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
         company_id=request.company_id,
         output_format=request.output_format,
         filename=filename,
-        fields_json=json.dumps(request.fields),
+        fields_json=json.dumps(fields),
         source_document_id=None,
     )
     db.add(record)

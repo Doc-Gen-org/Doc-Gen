@@ -2,7 +2,10 @@ from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 from docxtpl import DocxTemplate
 import os
+import re
 import uuid
+
+from services.field_mapping import map_mou_fields
 
 TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "..", "templates")
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
@@ -10,6 +13,20 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 jinja_env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
+
+
+def markdown_bold(text):
+    """
+    Converts **bolded text** within a field into <strong> tags,
+    so ACA staff can mark specific phrases as bold without needing
+    a separate field per bolded segment. Used via the `mdbold` filter.
+    """
+    if text is None:
+        return ""
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+
+
+jinja_env.filters["mdbold"] = markdown_bold
 
 
 def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
@@ -51,6 +68,9 @@ def generate_docx(document_type: str, company_id: str, fields: dict) -> str:
 
 
 def generate_document(document_type: str, company_id: str, output_format: str, fields: dict) -> str:
+    if document_type == "mou":
+        fields = map_mou_fields(fields)
+
     if output_format == "pdf":
         return generate_pdf(document_type, company_id, fields)
     elif output_format == "docx":

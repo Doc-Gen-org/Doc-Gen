@@ -2,11 +2,12 @@ import tempfile
 import os
 import json
 import uuid
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from services.parser import extract_text
 from services.pattern_extraction import extract_fields_pattern
+from services.mou_pattern_extraction import extract_mou_fields
 from services.ai_extraction import extract_fields_from_text
 from services.generator import generate_document
 from models.database import get_db
@@ -29,7 +30,10 @@ def get_extraction_status(job_id: str):
 
 
 @router.post("/extract")
-async def extract_document(file: UploadFile = File(...)):
+async def extract_document(
+    file: UploadFile = File(...),
+    document_type: str = Form("po")  # defaults to "po" if not specified
+):
     job_id = f"job_{uuid.uuid4().hex[:8]}"
     _extraction_jobs[job_id] = {"stage": "uploading", "progress": 10}
 
@@ -56,32 +60,37 @@ async def extract_document(file: UploadFile = File(...)):
 
     os.remove(tmp_path)
 
-    _extraction_jobs[job_id] = {"stage": "extracting", "progress": 60}
+    # Route to correct extraction pipeline based on document type
+    if document_type == "mou":
+        _extraction_jobs[job_id] = {"stage": "extracting", "progress": 70}
+        extracted_fields = extract_mou_fields(raw_text)
+        suggested_output_type = "mou"
 
-    # Step 1: pattern matching — 10 fields
-    pattern_fields = extract_fields_pattern(raw_text)
+    else:
+        # Default: PO extraction pipeline
+        _extraction_jobs[job_id] = {"stage": "extracting", "progress": 60}
+        pattern_fields = extract_fields_pattern(raw_text)
 
-    _extraction_jobs[job_id] = {"stage": "ai_extraction", "progress": 80}
+        _extraction_jobs[job_id] = {"stage": "ai_extraction", "progress": 80}
 
-    # Step 2: TinyLlama via Ollama — 4 LLM fields
-    try:
-        llm_raw = extract_fields_from_text(raw_text)
-        llm_fields = {
-            "issuing_company_name": llm_raw.get("issuing_company") or llm_raw.get("issuing_company_name"),
-            "vendor_name": llm_raw.get("vendor_name"),
-            "technology": llm_raw.get("technology"),
-            "trainer_name": llm_raw.get("trainer_name"),
-        }
-    except Exception:
-        llm_fields = {
-            "issuing_company_name": None,
-            "vendor_name": None,
-            "technology": None,
-            "trainer_name": None,
-        }
+        try:
+            llm_raw = extract_fields_from_text(raw_text)
+            llm_fields = {
+                "issuing_company_name": llm_raw.get("issuing_company") or llm_raw.get("issuing_company_name"),
+                "vendor_name": "ACA Technologies",
+                "technology": llm_raw.get("technology"),
+                "trainer_name": llm_raw.get("trainer_name"),
+                }
+        except Exception:
+            llm_fields = {
+                "issuing_company_name": None,
+                "vendor_name": "ACA Technologies",
+                "technology": None,
+                "trainer_name": None,
+                }
 
-    # Step 3: merge — 14 fields total
-    extracted_fields = {**pattern_fields, **llm_fields}
+        extracted_fields = {**pattern_fields, **llm_fields}
+        suggested_output_type = "po"
 
     source_document_id = f"tmp_{uuid.uuid4().hex[:8]}"
     _temp_extraction_store[source_document_id] = extracted_fields
@@ -99,7 +108,7 @@ async def extract_document(file: UploadFile = File(...)):
         "source_document_id": source_document_id,
         "extracted_fields": extracted_fields,
         "confidence_warnings": confidence_warnings,
-        "suggested_output_type": "po",
+        "suggested_output_type": suggested_output_type,
         "suggested_company_id": "aca-technologies",
     }
 

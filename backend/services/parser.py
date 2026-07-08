@@ -2,15 +2,116 @@ import pdfplumber
 import docx
 import pytesseract
 from pdf2image import convert_from_path
-import tempfile
 import os
+import shutil
 
-# Update these paths to match where you installed Tesseract and Poppler
-TESSERACT_PATH = r"C:\Users\sanja\Desktop\Sanjay\tesseract.exe"
-POPPLER_PATH = r"C:\Users\sanja\Desktop\Sanjay\Poppler\poppler-26.02.0\Library\bin"
+# ─────────────────────────────────────────
+# Auto-detect Tesseract path
+# ─────────────────────────────────────────
 
-pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+def _find_tesseract() -> str:
+    # 1. Check environment variable (most portable — set this on any machine)
+    env_path = os.environ.get("TESSERACT_PATH")
+    if env_path and os.path.exists(env_path):
+        return env_path
 
+    # 2. Check if tesseract is on system PATH (standard install on Mac/Linux)
+    system_path = shutil.which("tesseract")
+    if system_path:
+        return system_path
+
+    # 3. Check common Windows install locations
+    windows_paths = [
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+        r"C:\Users\sanja\Desktop\Sanjay\tesseract.exe",
+        r"C:\Users\KBsan\Desktop\tesseract.exe",
+    ]
+    for path in windows_paths:
+        if os.path.exists(path):
+            return path
+
+    # 4. Search relative to this file (for bundled/portable installs)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bundled_paths = [
+        os.path.join(base_dir, "bin", "tesseract.exe"),
+        os.path.join(base_dir, "tesseract", "tesseract.exe"),
+    ]
+    for path in bundled_paths:
+        if os.path.exists(path):
+            return path
+
+    raise FileNotFoundError(
+        "Tesseract not found. Set the TESSERACT_PATH environment variable "
+        "to the full path of tesseract.exe on your machine."
+    )
+
+
+# ─────────────────────────────────────────
+# Auto-detect Poppler path
+# ─────────────────────────────────────────
+
+def _find_poppler() -> str | None:
+    # 1. Check environment variable
+    env_path = os.environ.get("POPPLER_PATH")
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    # 2. Check if pdftoppm is on system PATH (Mac/Linux standard install)
+    system_path = shutil.which("pdftoppm")
+    if system_path:
+        # Return the directory containing it, not the binary itself
+        return os.path.dirname(system_path)
+
+    # 3. Check common Windows locations
+    windows_paths = [
+        r"C:\Users\sanja\Desktop\Sanjay\Poppler\poppler-26.02.0\Library\bin",
+        r"C:\Users\KBsan\Desktop\Poppler\poppler-26.02.0\Library\bin",
+        r"C:\poppler\poppler-26.02.0\Library\bin",
+        r"C:\poppler\Library\bin",
+        r"C:\Program Files\poppler\bin",
+    ]
+    for path in windows_paths:
+        if os.path.exists(path):
+            return path
+
+    # 4. Search relative to this file
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bundled_paths = [
+        os.path.join(base_dir, "bin", "poppler", "bin"),
+        os.path.join(base_dir, "poppler", "bin"),
+    ]
+    for path in bundled_paths:
+        if os.path.exists(path):
+            return path
+
+    # Poppler is optional — return None if not found
+    # (only needed for OCR fallback on scanned PDFs)
+    return None
+
+
+# ─────────────────────────────────────────
+# Initialize paths on module load
+# ─────────────────────────────────────────
+
+try:
+    TESSERACT_PATH = _find_tesseract()
+    pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+    print(f"[parser] Tesseract found at: {TESSERACT_PATH}")
+except FileNotFoundError as e:
+    TESSERACT_PATH = None
+    print(f"[parser] WARNING: {e}")
+
+POPPLER_PATH = _find_poppler()
+if POPPLER_PATH:
+    print(f"[parser] Poppler found at: {POPPLER_PATH}")
+else:
+    print("[parser] WARNING: Poppler not found — OCR fallback on scanned PDFs will be unavailable")
+
+
+# ─────────────────────────────────────────
+# Extraction functions
+# ─────────────────────────────────────────
 
 def extract_text_from_pdf(file_path: str) -> str:
     text = ""
@@ -20,9 +121,14 @@ def extract_text_from_pdf(file_path: str) -> str:
             if page_text:
                 text += page_text + "\n"
 
-    # If no text was found, the PDF is likely scanned images — fall back to OCR
     if not text.strip():
-        text = extract_text_via_ocr(file_path)
+        if TESSERACT_PATH and POPPLER_PATH:
+            text = extract_text_via_ocr(file_path)
+        else:
+            raise RuntimeError(
+                "This PDF appears to be a scanned image but OCR dependencies "
+                "(Tesseract/Poppler) are not available on this machine."
+            )
 
     return text.strip()
 

@@ -1,6 +1,10 @@
 import re
 from dateutil import parser as date_parser
 
+# ─────────────────────────────────────────
+# Date extraction
+# ─────────────────────────────────────────
+
 DATE_LABELS = {
     "start_date": [
         r"Start\s*Date\s*[:\-]",
@@ -57,6 +61,10 @@ def extract_dates(text: str) -> dict:
     }
 
 
+# ─────────────────────────────────────────
+# PO Number extraction
+# ─────────────────────────────────────────
+
 PO_NUMBER_PATTERNS = [
     r"#\s*(PO[-\s][A-Za-z0-9\-]+)",
     r"PO\s*(?:No|Number|Num|#)\.?\s*[:\-]?\s*([A-Za-z0-9\-/]+)",
@@ -72,6 +80,10 @@ def extract_po_number(text: str) -> str | None:
             return match.group(1).strip()
     return None
 
+
+# ─────────────────────────────────────────
+# Qty extraction
+# ─────────────────────────────────────────
 
 def extract_qty(text: str) -> str | None:
     table_match = re.search(
@@ -90,6 +102,10 @@ def extract_qty(text: str) -> str | None:
 
     return None
 
+
+# ─────────────────────────────────────────
+# Rate extraction
+# ─────────────────────────────────────────
 
 def extract_rate(text: str) -> str | None:
     table_section_match = re.search(
@@ -115,6 +131,10 @@ def extract_rate(text: str) -> str | None:
     return None
 
 
+# ─────────────────────────────────────────
+# Total extraction
+# ─────────────────────────────────────────
+
 def extract_total(text: str) -> str | None:
     patterns = [
         r"Total\s*(?:Amount)?\s*[:\-]?\s*(?:₹|Rs\.?)?\s*([\d,]+(?:\.\d{2})?)",
@@ -127,6 +147,10 @@ def extract_total(text: str) -> str | None:
             return match.group(1).strip()
     return None
 
+
+# ─────────────────────────────────────────
+# Location extraction
+# ─────────────────────────────────────────
 
 def extract_location(text: str) -> str | None:
     patterns = [
@@ -143,6 +167,10 @@ def extract_location(text: str) -> str | None:
     return None
 
 
+# ─────────────────────────────────────────
+# GSTIN extraction
+# ─────────────────────────────────────────
+
 def extract_gstin(text: str) -> str | None:
     match = re.search(
         r"GSTIN\s+([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1})",
@@ -153,12 +181,43 @@ def extract_gstin(text: str) -> str | None:
     return None
 
 
+# ─────────────────────────────────────────
+# PAN extraction
+# ─────────────────────────────────────────
+
 def extract_pan(text: str) -> str | None:
     match = re.search(r"PAN\s+([A-Z]{5}[0-9]{4}[A-Z]{1})", text)
     if match:
         return match.group(1).strip()
     return None
 
+
+# ─────────────────────────────────────────
+# Vendor address extraction
+# ─────────────────────────────────────────
+
+def extract_vendor_address(text: str) -> str | None:
+    patterns = [
+        r"Vendor\s+Address\s*\n[^\n]+\n([^\n]+(?:\n[^\n]+)?)",
+        r"Vendor\s+Address[^\n]*\n[^\n]+\n([A-Za-z0-9][^\n]+(?:\n[^\n]+)?)",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            address = match.group(1).strip()
+            # Join hyphen-split lines (e.g. "Chennai-\n600082" → "Chennai-600082")
+            address = re.sub(r'-\s*\n\s*', '', address)
+            # Replace any remaining newlines with a space
+            address = re.sub(r'\s*\n\s*', ' ', address)
+            address = address.strip()
+            if 5 <= len(address) <= 200:
+                return address
+    return None
+
+
+# ─────────────────────────────────────────
+# Master extraction function
+# ─────────────────────────────────────────
 
 def extract_fields_pattern(text: str) -> dict:
     dates = extract_dates(text)
@@ -174,4 +233,5 @@ def extract_fields_pattern(text: str) -> dict:
         "total": extract_total(text),
         "gstin": extract_gstin(text),
         "pan": extract_pan(text),
+        "vendor_address": extract_vendor_address(text),
     }
