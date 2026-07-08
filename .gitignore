@@ -8,6 +8,7 @@ dist-electron/
 # Python
 backend/venv/
 __pycache__/
+.venv
 *.pyc
 
 # Electron build output
