@@ -1,6 +1,6 @@
 import { useState } from "react";
-import {extractPdf} from "../../../lib/api/pdfSendandReceive.ts";
-import type { ExtractResponse } from "../../../lib/api/pdfSendandReceive.ts";
+import {extractPdf} from "../../../lib/api/editorClient.ts";
+import type { ExtractResponse } from "../../../lib/api/editorClient.ts";
 
 type Status = "idle" | "loading" | "success" | "error";
 
