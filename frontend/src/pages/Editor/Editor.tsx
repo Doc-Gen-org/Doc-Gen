@@ -43,7 +43,7 @@ function Editor() {
 
     return (
         <div className="editor">
-            <h2>Upload Document</h2>
+            <h1>Upload Document</h1>
             <p>Upload a PDF or DOCX to extract and edit its fields.</p>
 
             <Dropzone file={file} onFileSelected={selectFile} />
@@ -62,7 +62,7 @@ function Editor() {
 
             {hasResult && (
                 <>
-                    <h2>Extracted Fields</h2>
+                    <h3>Extracted Fields</h3>
                     <p>Review and correct the fields below, then generate your document.</p>
 
                     <ExtractedFields

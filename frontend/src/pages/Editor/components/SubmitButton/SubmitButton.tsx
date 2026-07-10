@@ -1,3 +1,5 @@
+import './SubmitButton.css'
+
 interface SubmitButtonProps {
     onClick: () => void;
     disabled?: boolean;
