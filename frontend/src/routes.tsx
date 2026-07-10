@@ -1,5 +1,5 @@
 import type {ReactElement} from "react";
-import PdfConvert from "./pages/pdfConvert/pdfConvert";
+import Editor from "./pages/Editor/Editor";
 
 export interface AppRoute {
     path: string;
@@ -10,8 +10,8 @@ export interface AppRoute {
 export const routes: AppRoute[] = [
     {
         path: "/",
-        label: "Upload and Extract",
-        element: <PdfConvert />,
+        label: "Editor",
+        element: <Editor/>,
     },
     // Future pages get added here — one line adds both the route and the nav link
 ];

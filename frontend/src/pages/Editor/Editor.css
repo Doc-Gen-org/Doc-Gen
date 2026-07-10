@@ -1,0 +1,15 @@
+.editor {
+    max-width: 720px;
+}
+
+.error-text {
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.success-text {
+    color: #38a169;
+    font-size: 13px;
+    margin-top: 8px;
+}
