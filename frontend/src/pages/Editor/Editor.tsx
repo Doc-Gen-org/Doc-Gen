@@ -5,22 +5,33 @@ import { useGenerate } from "./hooks/useGenerate";
 import Dropzone from "./components/Dropzone/Dropzone";
 import SubmitButton from "./components/SubmitButton/SubmitButton";
 import ExtractedFields from "./components/ExtractedFields/ExtractedFields";
+import SendEmailPanel from "./components/SendEmailPanel/SendEmailPanel";
+import { useToast } from "../../contexts/ToastContext";
 import "./Editor.css";
 
 function Editor() {
     const { file, selectFile } = usePdfSelection();
     const { extract, status: extractStatus, result, error: extractError } = useExtract();
-    const { generate, status: generateStatus, error: generateError } = useGenerate();
+    const { generate, status: generateStatus, error: generateError, documentId } = useGenerate();
+    const { showToast } = useToast();
 
     const [editedFields, setEditedFields] =
         useState<Record<string, string | number | null>>({});
 
-    // initialise edited fields whenever a new extraction result arrives
     useEffect(() => {
         if (result) {
             setEditedFields(result.extracted_fields);
         }
     }, [result]);
+
+    useEffect(() => {
+        if (extractStatus === "error" && extractError) showToast(extractError, "error");
+    }, [extractStatus, extractError, showToast]);
+
+    useEffect(() => {
+        if (generateStatus === "success") showToast("Document generated and downloaded");
+        if (generateStatus === "error" && generateError) showToast(generateError, "error");
+    }, [generateStatus, generateError, showToast]);
 
     const handleExtract = () => {
         if (!file) return;
@@ -44,7 +55,7 @@ function Editor() {
     return (
         <div className="editor">
             <h1>Upload Document</h1>
-            <p>Upload a PDF or DOCX to extract and edit its fields.</p>
+            <p className="editor-subtitle">Upload a PDF or DOCX to extract and edit its fields.</p>
 
             <Dropzone file={file} onFileSelected={selectFile} />
 
@@ -62,7 +73,7 @@ function Editor() {
 
             {hasResult && (
                 <>
-                    <h3>Extracted Fields</h3>
+                    <h2 className="editor-section-title">Extracted Fields</h2>
                     <p>Review and correct the fields below, then generate your document.</p>
 
                     <ExtractedFields
@@ -83,6 +94,10 @@ function Editor() {
 
                     {generateStatus === "success" && (
                         <p className="success-text">Document downloaded successfully.</p>
+                    )}
+
+                    {generateStatus === "success" && documentId && (
+                        <SendEmailPanel documentId={documentId} />
                     )}
                 </>
             )}

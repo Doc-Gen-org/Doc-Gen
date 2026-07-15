@@ -26,7 +26,6 @@ def send_email(request: SendEmailRequest, db: Session = Depends(get_db)):
     if not document:
         raise HTTPException(status_code=404, detail={"error": "Document not found"})
 
-    # Manual email override takes priority over DB lookup
     recipient_email = request.trainer_email
     trainer_name = None
 
@@ -56,6 +55,7 @@ def send_email(request: SendEmailRequest, db: Session = Depends(get_db)):
 
     try:
         send_email_with_attachment(
+            db=db,
             to_email=recipient_email,
             subject=subject,
             body=body,

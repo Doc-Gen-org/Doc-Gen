@@ -147,6 +147,7 @@
         margin-top: 1px;
     }
     .sign-block.right { text-align: right; }
+    .sign-block-solo { width: 260px; margin-left: auto; }
 
     .footer-divider {
         border-top: 1px solid #e5e5e5;
@@ -202,9 +203,8 @@
 
         <div class="cert-body">
             <p>
-                This is to certify that <strong>{{ intern_name }}</strong> interned with
-                <strong>ACA Technologies</strong>, commencing <strong>{{ start_date }}</strong>,
-                for a period of <strong>{{ duration }}</strong>.
+                has successfully completed an internship with <strong>ACA Technologies</strong>,
+                commencing <strong>{{ start_date }}</strong>, for a period of <strong>{{ duration }}</strong>.
             </p>
             <p>
                 During the internship, {{ intern_name }} contributed significantly by
@@ -219,16 +219,12 @@
 
         <div class="spacer"></div>
 
-        <div class="sign-row">
-            <div class="sign-block">
-                <div class="sign-line"></div>
-                <div class="sign-name">ACA Technologies</div>
-                <div class="sign-title">Issuing Organization</div>
-            </div>
-            <div class="sign-block right">
+                <div class="sign-row">
+            <div class="sign-block right sign-block-solo">
                 <div class="sign-line"></div>
                 <div class="sign-name">{{ signatory_name }}</div>
                 <div class="sign-title">{{ signatory_title }}</div>
+                <div class="sign-title">ACA Technologies</div>
             </div>
         </div>
 

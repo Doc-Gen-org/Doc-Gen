@@ -8,6 +8,8 @@ from models.schemas import Company, DocumentRecord
 from config.document_types import DOCUMENT_TYPES
 from services.generator import generate_document
 from services.invoice_counter import get_next_invoice_number
+from services.trainer_utils import get_or_create_trainer_by_name
+from services.mou_company_utils import get_or_create_mou_company
 from pydantic import BaseModel
 from typing import Any, Dict
 
@@ -40,7 +42,6 @@ class GenerateRequest(BaseModel):
 def generate(request: GenerateRequest, db: Session = Depends(get_db)):
     fields = dict(request.fields)
 
-    # Auto-assign a unique invoice number for every generated invoice
     if request.document_type == "invoice":
         fields["invoice_number"] = get_next_invoice_number(db)
 
@@ -58,6 +59,15 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
 
     filename = os.path.basename(file_path)
 
+    trainer = None
+    trainer_name = fields.get("trainer_name")
+    if trainer_name and request.document_type in ("po", "invoice"):
+        trainer = get_or_create_trainer_by_name(db, trainer_name)
+
+    mou_company = None
+    if request.document_type == "mou":
+        mou_company = get_or_create_mou_company(db, fields)
+
     record = DocumentRecord(
         document_type=request.document_type,
         company_id=request.company_id,
@@ -65,6 +75,8 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
         filename=filename,
         fields_json=json.dumps(fields),
         source_document_id=None,
+        trainer_id=trainer.id if trainer else None,
+        mou_company_id=mou_company.id if mou_company else None,
     )
     db.add(record)
     db.commit()

@@ -1,0 +1,43 @@
+.trainers-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.trainers-subtitle { color: var(--color-slate); font-size: 0.92rem; margin-top: 4px; }
+.hint-text { color: var(--color-slate-light); font-size: 0.85rem; font-style: italic; margin: 8px 0 16px 0; }
+
+.search-input {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 16px;
+    padding: 9px 14px;
+}
+
+.table-card { padding: 4px; overflow-x: auto; }
+.trainers-table { width: 100%; border-collapse: collapse; }
+.trainers-table th {
+    text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--color-slate); padding: 12px 14px; border-bottom: 1px solid var(--color-border-strong);
+}
+.trainers-table td { padding: 10px 14px; border-bottom: 1px solid var(--color-border); vertical-align: middle; font-size: 0.88rem; }
+.trainers-table tbody tr:hover { background: var(--color-bg); }
+.actions-cell { display: flex; gap: 8px; }
+.btn-compact { padding: 6px 12px; font-size: 0.8rem; }
+.trainers-table input[type="date"], .trainers-table input[type="email"], .trainers-table input[type="text"] { padding: 6px 10px; font-size: 0.85rem; }
+.trainers-table input[type="email"] { width: 170px; }
+.trainers-table input[type="text"] { width: 120px; }
+
+.status-select { font-size: 0.8rem; font-weight: 600; padding: 5px 10px; border-radius: 999px; border: 1px solid transparent; cursor: pointer; }
+.status-select.success { background: var(--color-success-bg); color: var(--color-success); }
+.status-select.warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.status-select.danger  { background: var(--color-danger-bg); color: var(--color-danger); }
+.status-select.neutral { background: var(--color-neutral-bg); color: var(--color-slate); }
+
+.status-dot {
+    font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--color-border-strong); background: var(--color-neutral-bg); color: var(--color-slate);
+    cursor: pointer; white-space: nowrap;
+}
+.status-dot.dot-on { background: var(--color-success-bg); color: var(--color-success); border-color: transparent; }
+
+@keyframes field-pulse {
+    0% { background: var(--color-success-bg); border-color: var(--color-success); }
+    100% { background: var(--color-surface); border-color: var(--color-border-strong); }
+}
+.field-pulse { animation: field-pulse 0.7s ease-out; }

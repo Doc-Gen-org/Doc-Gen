@@ -1,19 +1,14 @@
 .editor {
-    max-width: 100%;
+    max-width: 720px;
 }
 
-.error-text {
-    color: #e53e3e;
-    font-size: 13px;
-    margin-top: 8px;
+.editor-subtitle {
+    color: var(--color-slate);
+    font-size: 0.92rem;
+    margin-top: 4px;
+    margin-bottom: 20px;
 }
 
-.success-text {
-    color: #38a169;
-    font-size: 13px;
-    margin-top: 8px;
-}
-
-#root {
-    text-align: left;
+.editor-section-title {
+    margin-top: 28px;
 }

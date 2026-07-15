@@ -1,0 +1,171 @@
+/* ==========================================================
+   DocGen Design Tokens — derived from ACA Technologies brand
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root {
+    /* Surfaces */
+    --color-bg: #F5F6F8;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-border-strong: #D1D5DB;
+
+    /* Text */
+    --color-ink: #1A1A1A;
+    --color-slate: #6B7280;
+    --color-slate-light: #9CA3AF;
+
+    /* Brand */
+    --color-navy: #1A1A2E;
+    --color-navy-hover: #24243D;
+    --color-yellow: #F2C14E;
+    --color-yellow-soft: #FCF0D4;
+
+    /* Status */
+    --color-success: #2F855A;
+    --color-success-bg: #E6F4EA;
+    --color-warning: #B7791F;
+    --color-warning-bg: #FDF3DA;
+    --color-danger: #C53030;
+    --color-danger-bg: #FBE7E7;
+    --color-neutral-bg: #EEEFF1;
+
+    /* Type */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+
+    /* Radius & shadow */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    margin: 0;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0;
+}
+
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.15rem; margin-top: 24px; margin-bottom: 8px; }
+
+/* ---------- Buttons ---------- */
+button {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+/* Primary — solid navy */
+button[type="button"], button[type="submit"] {
+    background: var(--color-navy);
+    color: #FFFFFF;
+}
+button[type="button"]:hover:not(:disabled), button[type="submit"]:hover:not(:disabled) {
+    background: var(--color-navy-hover);
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Secondary — outline style, opt-in via class */
+button.btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-navy);
+    border: 1px solid var(--color-border-strong);
+}
+button.btn-secondary:hover:not(:disabled) {
+    background: var(--color-neutral-bg);
+}
+
+/* Destructive — opt-in via class */
+button.btn-danger {
+    background: var(--color-surface);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+}
+button.btn-danger:hover:not(:disabled) {
+    background: var(--color-danger-bg);
+}
+
+/* ---------- Inputs ---------- */
+input, select, textarea {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+}
+
+/* ---------- Cards ---------- */
+.card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+/* ---------- Reference codes (TRN-0001, PO-neo-00442, etc.) ---------- */
+.ref-code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    background: var(--color-yellow-soft);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* ---------- Status pills ---------- */
+.status-pill {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+.status-pill.success { background: var(--color-success-bg); color: var(--color-success); }
+.status-pill.warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.status-pill.danger  { background: var(--color-danger-bg); color: var(--color-danger); }
+.status-pill.neutral { background: var(--color-neutral-bg); color: var(--color-slate); }
+
+/* ---------- Shared text utility classes already used across pages ---------- */
+.error-text {
+    color: var(--color-danger);
+    font-size: 0.9rem;
+    margin: 8px 0;
+}
+.success-text {
+    color: var(--color-success);
+    font-size: 0.9rem;
+    margin: 8px 0;
+}

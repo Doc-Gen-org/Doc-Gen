@@ -1,0 +1,124 @@
+.picker-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 21, 26, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.picker-panel {
+    width: 440px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 22px;
+}
+
+.picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.picker-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+}
+
+.picker-close {
+    background: none;
+    border: none;
+    color: var(--color-slate);
+    font-size: 1rem;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.picker-close:hover {
+    background: var(--color-neutral-bg);
+    border-radius: var(--radius-sm);
+}
+
+.picker-doc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.picker-doc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.picker-doc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.picker-doc-date {
+    font-size: 0.75rem;
+    color: var(--color-slate-light);
+}
+
+.picker-doc-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.picker-preview-link {
+    font-size: 0.82rem;
+    color: var(--color-navy);
+    text-decoration: underline;
+}
+
+.picker-generate-prompt {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.picker-regenerate {
+    width: 100%;
+    margin-top: 14px;
+}
+
+.picker-upload-row {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.picker-upload-label {
+    font-size: 0.82rem;
+    color: var(--color-slate);
+}
+
+.picker-upload-button {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-navy);
+    cursor: pointer;
+}
+
+.picker-upload-button:hover {
+    background: var(--color-neutral-bg);
+}

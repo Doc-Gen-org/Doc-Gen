@@ -20,6 +20,7 @@ def extract_fields_from_text(raw_text: str) -> dict:
                     "model": "tinyllama-po",
                     "prompt": raw_text,
                     "stream": False,
+                    "keep_alive": "2m",
                 },
                 timeout=60.0,
             )

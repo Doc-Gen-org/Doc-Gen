@@ -1,42 +1,85 @@
 .sidebar {
-    width: 220px;
+    width: 232px;
     flex-shrink: 0;
-    border-right: 1px solid var(--border);
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    padding: 24px 0;
+    padding: 20px 0;
 }
 
 .sidebar-header {
-    font-family: var(--heading);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-h);
-    padding: 0 24px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px 18px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.sidebar-title {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.sidebar-title-main {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-ink);
+}
+
+.sidebar-title-sub {
+    font-size: 0.7rem;
+    color: var(--color-slate);
 }
 
 .sidebar-nav {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-item {
+    position: relative;
+}
+
+.sidebar-pill {
+    position: absolute;
+    inset: 0;
+    background: var(--color-yellow-soft);
+    border-radius: var(--radius-sm);
+    z-index: 0;
 }
 
 .sidebar-link {
+    position: relative;
+    z-index: 1;
     display: block;
-    padding: 10px 24px;
-    color: var(--text);
+    padding: 9px 14px;
+    color: var(--color-slate);
     text-decoration: none;
-    font-size: 14px;
-    border-left: 2px solid transparent;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s ease;
 }
 
 .sidebar-link:hover {
-    background: var(--code-bg);
-    color: var(--text-h);
+    color: var(--color-ink);
 }
 
 .sidebar-link.active {
-    color: var(--accent);
-    border-left-color: var(--accent);
-    background: black /*var(--accent-bg)*/;
+    color: var(--color-navy);
+    font-weight: 600;
 }

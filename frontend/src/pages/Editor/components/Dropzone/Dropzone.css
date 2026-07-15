@@ -1,39 +1,43 @@
 .dropzone {
-    margin-top: 24px;
-    border: 2px dashed var(--border);
-    border-radius: 8px;
+    margin-top: 8px;
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-lg);
     padding: 48px 24px;
     text-align: center;
     cursor: pointer;
+    background: var(--color-surface);
     transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .dropzone:hover,
 .dropzone.dragging {
-    border-color: var(--accent-border);
-    background: var(--accent-bg);
+    border-color: var(--color-yellow);
+    background: var(--color-yellow-soft);
 }
 
 .dropzone-or {
     margin: 8px 0;
-    color: var(--text);
-    font-size: 13px;
-}
-.browse-button:hover {
-    background: var(--accent-bg);
+    color: var(--color-slate);
+    font-size: 0.85rem;
 }
 
 .file-name {
-    font-family: var(--mono);
-    color: var(--text-h);
+    font-family: var(--font-mono);
+    color: var(--color-navy);
+    font-size: 0.9rem;
 }
 
 .browse-button {
     font: inherit;
-    padding: 8px 16px;
-    border-radius: 6px;
-    border: 1px solid var(--accent-border);
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-navy);
     background: transparent;
-    color: var(--accent);
+    color: var(--color-navy);
     cursor: pointer;
+    font-weight: 600;
+}
+
+.browse-button:hover {
+    background: var(--color-yellow-soft);
 }

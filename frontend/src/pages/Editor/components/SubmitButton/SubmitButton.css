@@ -1,10 +1,21 @@
 .submit-button {
     margin-top: 20px;
     font: inherit;
-    padding: 10px 20px;
-    border-radius: 6px;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
     border: none;
-    background: var(--accent);
+    background: var(--color-navy);
     color: #fff;
     cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+    background: var(--color-navy-hover);
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

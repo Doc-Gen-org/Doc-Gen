@@ -10,6 +10,7 @@ from services.pattern_extraction import extract_fields_pattern
 from services.mou_pattern_extraction import extract_mou_fields
 from services.ai_extraction import extract_fields_from_text
 from services.generator import generate_document
+from services.trainer_utils import get_or_create_trainer_by_name
 from models.database import get_db
 from models.schemas import DocumentRecord
 from pydantic import BaseModel
@@ -80,16 +81,27 @@ async def extract_document(
                 "vendor_name": "ACA Technologies",
                 "technology": llm_raw.get("technology"),
                 "trainer_name": llm_raw.get("trainer_name"),
-                }
+            }
         except Exception:
             llm_fields = {
                 "issuing_company_name": None,
                 "vendor_name": "ACA Technologies",
                 "technology": None,
                 "trainer_name": None,
-                }
+            }
 
         extracted_fields = {**pattern_fields, **llm_fields}
+
+        # PO number is no longer taken from the source document — ACA
+        # assigns its own PO number manually for the output document.
+        extracted_fields["po_number"] = ""
+
+        # These fields never come from extraction; the source PO has no
+        # data for them, so they're always filled in manually on review.
+        extracted_fields["trainer_address"] = ""
+        extracted_fields["vendor_gstin"] = ""
+        extracted_fields["vendor_pan"] = ""
+
         suggested_output_type = "po"
 
     source_document_id = f"tmp_{uuid.uuid4().hex[:8]}"
@@ -98,7 +110,7 @@ async def extract_document(
     confidence_warnings = [
         f"'{field}' could not be extracted — please fill in manually"
         for field, value in extracted_fields.items()
-        if value is None
+        if value is None or value == ""
     ]
 
     _extraction_jobs[job_id] = {"stage": "complete", "progress": 100}
@@ -137,6 +149,12 @@ def transform_document(request: TransformRequest, db: Session = Depends(get_db))
 
     filename = os.path.basename(file_path)
 
+    # Auto-link (or auto-create) the trainer this document belongs to
+    trainer = None
+    trainer_name = request.fields.get("trainer_name")
+    if trainer_name and request.output_document_type in ("po", "invoice"):
+        trainer = get_or_create_trainer_by_name(db, trainer_name)
+
     record = DocumentRecord(
         document_type=request.output_document_type,
         company_id=request.company_id,
@@ -144,6 +162,7 @@ def transform_document(request: TransformRequest, db: Session = Depends(get_db))
         filename=filename,
         fields_json=json.dumps(request.fields),
         source_document_id=request.source_document_id,
+        trainer_id=trainer.id if trainer else None,
     )
     db.add(record)
     db.commit()

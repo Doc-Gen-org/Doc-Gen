@@ -20,5 +20,8 @@
   "homepage": "https://github.com/Doc-Gen-org/Doc-Gen#readme",
   "devDependencies": {
     "electron": "^42.5.0"
+  },
+  "dependencies": {
+    "react-router-dom": "^7.18.1"
   }
 }

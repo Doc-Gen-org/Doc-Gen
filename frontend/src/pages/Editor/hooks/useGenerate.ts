@@ -7,15 +7,16 @@ type GenerateStatus = "idle" | "loading" | "success" | "error";
 export function useGenerate() {
     const [status, setStatus] = useState<GenerateStatus>("idle");
     const [error, setError] = useState<string | null>(null);
+    const [documentId, setDocumentId] = useState<string | null>(null);
 
     const generate = async (body: GenerateRequest) => {
         setStatus("loading");
         setError(null);
+        setDocumentId(null);
 
         try {
-            const { blob, filename } = await generateDocument(body);
+            const { blob, filename, documentId: id } = await generateDocument(body);
 
-            // triggers a file download in the browser/electron
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
@@ -23,6 +24,7 @@ export function useGenerate() {
             a.click();
             window.URL.revokeObjectURL(url);
 
+            setDocumentId(id);
             setStatus("success");
         } catch (err) {
             setError(err instanceof Error ? err.message : "Generation failed.");
@@ -30,5 +32,5 @@ export function useGenerate() {
         }
     };
 
-    return { generate, status, error };
+    return { generate, status, error, documentId };
 }
