@@ -4,6 +4,8 @@ from docxtpl import DocxTemplate
 import os
 import re
 import uuid
+from datetime import datetime
+from collections import OrderedDict
 
 from services.mou_defaults import ACA_MOU_DEFAULTS
 
@@ -21,17 +23,50 @@ CERTIFICATE_DEFAULTS = {
 
 
 def markdown_bold(text):
-    """
-    Converts **bolded text** within a field into <strong> tags,
-    so ACA staff can mark specific phrases as bold without needing
-    a separate field per bolded segment. Used via the `mdbold` filter.
-    """
     if text is None:
         return ""
     return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
 
 
 jinja_env.filters["mdbold"] = markdown_bold
+
+
+def _format_attended_dates(fields: dict) -> dict:
+    """
+    Takes fields["attended_dates"] (a list of "YYYY-MM-DD" strings from
+    the calendar picker) and computes a clean, grouped display string
+    plus a day count. Purely informational — never touches the item
+    table's blank Qty field, which the trainer fills in themselves.
+    """
+    raw_dates = fields.get("attended_dates")
+    if not raw_dates:
+        fields["attended_dates_count"] = 0
+        fields["attended_dates_display"] = ""
+        return fields
+
+    parsed = []
+    for d in raw_dates:
+        try:
+            parsed.append(datetime.strptime(d, "%Y-%m-%d").date())
+        except (ValueError, TypeError):
+            continue
+
+    parsed.sort()
+
+    groups = OrderedDict()
+    for d in parsed:
+        key = (d.year, d.month)
+        groups.setdefault(key, []).append(d.day)
+
+    parts = []
+    for (year, month), days in groups.items():
+        month_name = datetime(year, month, 1).strftime("%B %Y")
+        day_list = ", ".join(str(day) for day in days)
+        parts.append(f"{month_name}: {day_list}")
+
+    fields["attended_dates_count"] = len(parsed)
+    fields["attended_dates_display"] = "; ".join(parts)
+    return fields
 
 
 def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
@@ -77,6 +112,8 @@ def generate_document(document_type: str, company_id: str, output_format: str, f
         fields = {**ACA_MOU_DEFAULTS, **fields}
     elif document_type == "certificate":
         fields = {**CERTIFICATE_DEFAULTS, **fields}
+    elif document_type == "invoice":
+        fields = _format_attended_dates(dict(fields))
 
     if output_format == "pdf":
         return generate_pdf(document_type, company_id, fields)

@@ -30,6 +30,15 @@ export async function fetchTrainerStatus(trainerId: number): Promise<TrainerStat
     return response.json();
 }
 
+export async function fetchFinanceDetails(trainerId: number): Promise<Record<string, string> | null> {
+    const response = await fetch(`${BASE_URL}/trainers/${trainerId}/finance-details`);
+    if (!response.ok) {
+        throw new Error(`Failed to fetch finance details: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.details;
+}
+
 export async function uploadReceivedInvoice(trainerId: number, file: File): Promise<ReceivedDoc> {
     const formData = new FormData();
     formData.append("file", file);

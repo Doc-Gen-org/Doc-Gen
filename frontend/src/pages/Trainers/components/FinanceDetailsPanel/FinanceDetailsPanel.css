@@ -1,0 +1,32 @@
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+}
+
+.finance-table td {
+    padding: 8px 4px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.88rem;
+    vertical-align: top;
+}
+
+.finance-label {
+    color: var(--color-slate);
+    font-weight: 500;
+    width: 45%;
+}
+
+.finance-value {
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+.finance-disclaimer {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.76rem;
+    color: var(--color-slate-light);
+    font-style: italic;
+}

@@ -1,7 +1,9 @@
 import os
+import json
 import uuid
 from sqlalchemy.orm import Session
 from models.schemas import ReceivedDocument, DocumentRecord
+from services.invoice_finance_extraction import extract_finance_details
 
 RECEIVED_DIR = os.path.join(os.path.dirname(__file__), "..", "received_documents")
 os.makedirs(RECEIVED_DIR, exist_ok=True)
@@ -15,11 +17,21 @@ def save_received_document(db: Session, trainer_id: int, doc_type: str, original
     with open(stored_path, "wb") as f:
         f.write(contents)
 
+    finance_details_json = None
+    if doc_type == "invoice":
+        try:
+            details = extract_finance_details(stored_path)
+            finance_details_json = json.dumps(details) if details else None
+        except Exception:
+            # Extraction failing should never block the upload itself
+            finance_details_json = None
+
     record = ReceivedDocument(
         trainer_id=trainer_id,
         doc_type=doc_type,
         filename=stored_filename,
         original_filename=original_filename,
+        finance_details_json=finance_details_json,
     )
     db.add(record)
     db.commit()
@@ -35,14 +47,6 @@ def get_received_documents(db: Session, trainer_id: int, doc_type: str | None = 
 
 
 def get_trainer_status(db: Session, trainer) -> dict:
-    """
-    - po_ready: True if a PO has ever been generated for this trainer
-      (checked directly against generated documents — no manual step needed).
-    - invoice_received: True if a filled invoice has been manually
-      uploaded back from the trainer.
-    - process_complete: True only when payment is marked Paid AND
-      both of the above are true.
-    """
     po_ready = (
         db.query(DocumentRecord)
         .filter(DocumentRecord.document_type == "po", DocumentRecord.trainer_id == trainer.id)
@@ -62,3 +66,24 @@ def get_trainer_status(db: Session, trainer) -> dict:
         "invoice_received": invoice_received,
         "process_complete": process_complete,
     }
+
+
+def get_latest_finance_details(db: Session, trainer_id: int) -> dict | None:
+    """
+    Returns the finance details extracted from the most recently
+    uploaded filled invoice for this trainer, or None if nothing's
+    been uploaded yet or extraction found nothing.
+    """
+    latest = (
+        db.query(ReceivedDocument)
+        .filter(ReceivedDocument.trainer_id == trainer_id, ReceivedDocument.doc_type == "invoice")
+        .order_by(ReceivedDocument.uploaded_at.desc())
+        .first()
+    )
+    if not latest or not latest.finance_details_json:
+        return None
+
+    try:
+        return json.loads(latest.finance_details_json)
+    except json.JSONDecodeError:
+        return None

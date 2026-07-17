@@ -102,9 +102,14 @@ export function getPreviewUrl(trainerId: number, docType: "po" | "invoice", docu
     return `${BASE_URL}/trainers/${trainerId}/documents/${docType}/${documentId}/preview`;
 }
 
-export async function generateInvoiceFromPO(trainerId: number): Promise<PickerDocument> {
+export async function generateInvoiceFromPO(
+    trainerId: number,
+    attendedDates: string[]
+): Promise<PickerDocument> {
     const response = await fetch(`${BASE_URL}/trainers/${trainerId}/generate-invoice-from-po`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ attended_dates: attendedDates }),
     });
     if (!response.ok) {
         const detail = await response.json().catch(() => null);

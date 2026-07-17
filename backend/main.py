@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes import health, documents, extraction, history
 from models.database import Base, engine
 from models import schemas
-from routes import trainers, email as email_routes, warnings, settings, received_documents, mou_companies, ai
+from routes import trainers, email as email_routes, warnings, settings, received_documents, mou_companies, ai, finance
 
 
 Base.metadata.create_all(bind=engine)
@@ -31,3 +31,4 @@ app.include_router(settings.router)
 app.include_router(received_documents.router)
 app.include_router(mou_companies.router)
 app.include_router(ai.router)
+app.include_router(finance.router)

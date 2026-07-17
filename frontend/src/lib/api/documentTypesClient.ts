@@ -3,7 +3,7 @@ const BASE_URL = "http://localhost:8000";
 export interface DocumentTypeField {
     name: string;
     label: string;
-    type: "text" | "textarea" | "number" | "date";
+    type: "text" | "textarea" | "number" | "date" | "multidate";
     required: boolean;
     placeholder?: string;
     defaultToday?: boolean;

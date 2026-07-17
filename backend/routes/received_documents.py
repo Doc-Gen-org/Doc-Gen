@@ -1,10 +1,16 @@
 import os
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from models.database import get_db
 from models.schemas import Trainer, ReceivedDocument
-from services.received_documents import save_received_document, get_received_documents, get_trainer_status, RECEIVED_DIR
+from services.received_documents import (
+    save_received_document,
+    get_received_documents,
+    get_trainer_status,
+    get_latest_finance_details,
+    RECEIVED_DIR,
+)
 
 router = APIRouter()
 
@@ -38,17 +44,22 @@ def trainer_status(trainer_id: int, db: Session = Depends(get_db)):
     return get_trainer_status(db, trainer)
 
 
+@router.get("/trainers/{trainer_id}/finance-details")
+def trainer_finance_details(trainer_id: int, db: Session = Depends(get_db)):
+    trainer = db.query(Trainer).filter(Trainer.id == trainer_id).first()
+    if not trainer:
+        raise HTTPException(status_code=404, detail={"error": "Trainer not found"})
+
+    details = get_latest_finance_details(db, trainer_id)
+    return {"details": details}
+
+
 @router.post("/trainers/{trainer_id}/received")
 async def upload_received_document(
     trainer_id: int,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ):
-    """
-    Upload a filled-in invoice received back from the trainer.
-    PO is never manually uploaded here — it's tracked automatically
-    from whatever's been generated for this trainer.
-    """
     trainer = db.query(Trainer).filter(Trainer.id == trainer_id).first()
     if not trainer:
         raise HTTPException(status_code=404, detail={"error": "Trainer not found"})

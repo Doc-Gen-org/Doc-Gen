@@ -1,0 +1,123 @@
+.finance-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.finance-subtitle {
+    color: var(--color-slate);
+    font-size: 0.92rem;
+    margin-top: 4px;
+}
+
+.export-link {
+    text-decoration: none;
+}
+
+.stat-cards {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    padding: 22px 28px;
+    min-width: 200px;
+}
+
+.stat-number {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+
+.stat-number.stat-success { color: var(--color-success); }
+.stat-number.stat-danger { color: var(--color-danger); }
+
+.stat-label {
+    color: var(--color-slate);
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.finance-panel {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.finance-panel.full-width {
+    width: 100%;
+}
+
+.finance-columns {
+    display: flex;
+    gap: 20px;
+}
+
+.finance-columns .finance-panel {
+    flex: 1;
+}
+
+.finance-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.finance-form input {
+    padding: 8px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+}
+
+.finance-form input:focus {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+}
+
+.finance-form .notes-input {
+    grid-column: span 3;
+}
+
+.finance-form button {
+    grid-column: span 3;
+}
+
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.finance-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-slate);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border-strong);
+}
+
+.finance-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.88rem;
+}
+
+.finance-table tbody tr:hover {
+    background: var(--color-bg);
+}
+
+.profit-positive {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.profit-negative {
+    color: var(--color-danger);
+    font-weight: 600;
+}

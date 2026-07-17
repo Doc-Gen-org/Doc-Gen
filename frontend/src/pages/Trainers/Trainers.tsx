@@ -5,6 +5,7 @@ import { useTrainerStatus } from "./hooks/useTrainerStatus";
 import { updateTrainer } from "../../lib/api/trainersClient";
 import SendDocumentPicker from "./components/SendDocumentPicker/SendDocumentPicker";
 import ReceivedDocsPanel from "./components/ReceivedDocsPanel/ReceivedDocsPanel";
+import FinanceDetailsPanel from "./components/FinanceDetailsPanel/FinanceDetailsPanel";
 import { useToast } from "../../contexts/ToastContext";
 import { useConfirm } from "../../contexts/ConfirmContext";
 import "./Trainers.css";
@@ -29,17 +30,14 @@ function Trainers() {
 
     const [pickerFor, setPickerFor] = useState<{ trainerId: number; docType: "po" | "invoice" } | null>(null);
     const [receivedPanelFor, setReceivedPanelFor] = useState<{ trainerId: number; trainerName: string } | null>(null);
+    const [financePanelFor, setFinancePanelFor] = useState<{ trainerId: number; trainerName: string } | null>(null);
     const [pulsingField, setPulsingField] = useState<string | null>(null);
     const [search, setSearch] = useState("");
 
     const filteredTrainers = trainers.filter((t) => {
         const q = search.trim().toLowerCase();
         if (!q) return true;
-        return (
-            t.name.toLowerCase().includes(q) ||
-            t.email.toLowerCase().includes(q) ||
-            t.trainer_code.toLowerCase().includes(q)
-        );
+        return t.name.toLowerCase().includes(q) || t.email.toLowerCase().includes(q) || t.trainer_code.toLowerCase().includes(q);
     });
 
     const handleFieldBlur = async (
@@ -96,7 +94,7 @@ function Trainers() {
             </div>
             <p className="hint-text">
                 Trainers are also created automatically whenever a PO or Invoice is generated for a new name.
-                Click into any field below to edit it — changes save when you click away.
+                Click into any field to edit it.
             </p>
 
             <input
@@ -129,6 +127,7 @@ function Trainers() {
                                 <th>Paid Date</th>
                                 <th>PO</th>
                                 <th>Invoice</th>
+                                <th>Finance</th>
                                 <th>Process</th>
                                 <th>Actions</th>
                             </tr>
@@ -204,15 +203,33 @@ function Trainers() {
                                             </button>
                                         </td>
                                         <td>
+                                            <button
+                                                type="button"
+                                                className="finance-button"
+                                                onClick={() => setFinancePanelFor({ trainerId: t.id, trainerName: t.name })}
+                                                title="View extracted finance details"
+                                            >
+                                                💰 View
+                                            </button>
+                                        </td>
+                                        <td>
                                             <span className={status?.process_complete ? "status-pill success" : "status-pill neutral"}>
                                                 {status?.process_complete ? "✓ Complete" : "In Progress"}
                                             </span>
                                         </td>
                                         <td className="actions-cell">
-                                            <button type="button" className="btn-compact" onClick={() => setPickerFor({ trainerId: t.id, docType: "po" })}>
+                                            <button
+                                                type="button"
+                                                className="btn-compact"
+                                                onClick={() => setPickerFor({ trainerId: t.id, docType: "po" })}
+                                            >
                                                 Send PO
                                             </button>
-                                            <button type="button" className="btn-compact btn-secondary" onClick={() => setPickerFor({ trainerId: t.id, docType: "invoice" })}>
+                                            <button
+                                                type="button"
+                                                className="btn-compact btn-secondary"
+                                                onClick={() => setPickerFor({ trainerId: t.id, docType: "invoice" })}
+                                            >
                                                 Send Invoice
                                             </button>
                                             <button
@@ -242,6 +259,14 @@ function Trainers() {
                     trainerName={receivedPanelFor.trainerName}
                     onClose={() => setReceivedPanelFor(null)}
                     onChanged={reloadStatus}
+                />
+            )}
+
+            {financePanelFor && (
+                <FinanceDetailsPanel
+                    trainerId={financePanelFor.trainerId}
+                    trainerName={financePanelFor.trainerName}
+                    onClose={() => setFinancePanelFor(null)}
                 />
             )}
         </div>

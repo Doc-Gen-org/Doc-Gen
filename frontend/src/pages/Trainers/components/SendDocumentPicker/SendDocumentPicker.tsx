@@ -9,6 +9,7 @@ import {
 } from "../../../../lib/api/trainersClient";
 import type { PickerDocument } from "../../../../lib/api/trainersClient";
 import { useToast } from "../../../../contexts/ToastContext";
+import MultiDatePicker from "../../../Creator/components/CreatorForm/MultiDatePicker/MultiDatePicker";
 import "./SendDocumentPicker.css";
 
 interface SendDocumentPickerProps {
@@ -31,6 +32,7 @@ function SendDocumentPicker({ trainerId, docType, onClose }: SendDocumentPickerP
     const [sendingId, setSendingId] = useState<number | null>(null);
     const [generating, setGenerating] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [attendedDates, setAttendedDates] = useState<string[]>([]);
 
     const load = () => {
         setLoading(true);
@@ -65,8 +67,9 @@ function SendDocumentPicker({ trainerId, docType, onClose }: SendDocumentPickerP
         setGenerating(true);
         setError(null);
         try {
-            await generateInvoiceFromPO(trainerId);
+            await generateInvoiceFromPO(trainerId, attendedDates);
             showToast("Invoice generated from PO");
+            setAttendedDates([]);
             load();
         } catch (err) {
             const message = err instanceof Error ? err.message : "Failed to generate invoice.";
@@ -130,7 +133,14 @@ function SendDocumentPicker({ trainerId, docType, onClose }: SendDocumentPickerP
                     {!loading && documents.length === 0 && docType === "invoice" && (
                         <div className="picker-generate-prompt">
                             <p className="empty-text">No invoices generated yet.</p>
-                            <button type="button" onClick={handleGenerateFromPO} disabled={generating}>
+                            <label className="picker-field-label">Training days attended (optional)</label>
+                            <MultiDatePicker value={attendedDates} onChange={setAttendedDates} />
+                            <button
+                                type="button"
+                                className="picker-generate-button"
+                                onClick={handleGenerateFromPO}
+                                disabled={generating}
+                            >
                                 {generating ? "Generating..." : "Generate & Send Invoice from PO"}
                             </button>
                         </div>
@@ -168,14 +178,18 @@ function SendDocumentPicker({ trainerId, docType, onClose }: SendDocumentPickerP
                     )}
 
                     {docType === "invoice" && documents.length > 0 && (
-                        <button
-                            type="button"
-                            className="btn-secondary picker-regenerate"
-                            onClick={handleGenerateFromPO}
-                            disabled={generating}
-                        >
-                            {generating ? "Generating..." : "Generate a New Invoice from PO"}
-                        </button>
+                        <div className="picker-generate-prompt">
+                            <label className="picker-field-label">Training days attended (optional)</label>
+                            <MultiDatePicker value={attendedDates} onChange={setAttendedDates} />
+                            <button
+                                type="button"
+                                className="btn-secondary picker-regenerate"
+                                onClick={handleGenerateFromPO}
+                                disabled={generating}
+                            >
+                                {generating ? "Generating..." : "Generate a New Invoice from PO"}
+                            </button>
+                        </div>
                     )}
 
                     <div className="picker-upload-row">

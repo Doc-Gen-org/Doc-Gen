@@ -36,6 +36,10 @@ class TrainerUpdate(BaseModel):
     paid_date: str | None = None
 
 
+class GenerateInvoiceFromPORequest(BaseModel):
+    attended_dates: list[str] | None = None
+
+
 def _get_trainer_documents(db: Session, trainer: Trainer):
     records = get_trainer_documents_by_type(db, trainer, "po")
     matches = []
@@ -181,7 +185,16 @@ def preview_trainer_document(trainer_id: int, doc_type: str, document_id: int, d
 
 
 @router.post("/trainers/{trainer_id}/generate-invoice-from-po")
-def generate_invoice_from_po(trainer_id: int, db: Session = Depends(get_db)):
+def generate_invoice_from_po(
+    trainer_id: int,
+    request: GenerateInvoiceFromPORequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Auto-generates an invoice using data pulled from this trainer's
+    most recent PO, plus manually-selected attended dates from the
+    calendar picker (optional — omit for a fully blank date reference).
+    """
     trainer = db.query(Trainer).filter(Trainer.id == trainer_id).first()
     if not trainer:
         raise HTTPException(status_code=404, detail={"error": "Trainer not found"})
@@ -203,6 +216,7 @@ def generate_invoice_from_po(trainer_id: int, db: Session = Depends(get_db)):
         "po_number": po_fields.get("po_number") or "",
         "technology": po_fields.get("technology") or "",
         "invoice_number": get_next_invoice_number(db),
+        "attended_dates": request.attended_dates or [],
     }
 
     try:

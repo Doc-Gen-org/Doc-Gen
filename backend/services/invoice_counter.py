@@ -5,8 +5,8 @@ from models.schemas import InvoiceCounter
 def get_next_invoice_number(db: Session) -> str:
     """
     Atomically increments and returns the next invoice number,
-    formatted as INV-0001, INV-0002, etc. Creates the counter
-    row on first use if it doesn't exist yet.
+    formatted as INVOICE-ACA-0001, INVOICE-ACA-0002, etc. Creates
+    the counter row on first use if it doesn't exist yet.
     """
     counter = db.query(InvoiceCounter).first()
     if not counter:
@@ -18,4 +18,4 @@ def get_next_invoice_number(db: Session) -> str:
     db.commit()
     db.refresh(counter)
 
-    return f"INV-{counter.last_number:04d}"
+    return f"INVOICE-ACA-{counter.last_number:04d}"

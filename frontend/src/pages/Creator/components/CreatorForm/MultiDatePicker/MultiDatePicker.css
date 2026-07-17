@@ -1,0 +1,153 @@
+.multidate-picker {
+    display: flex;
+    gap: 20px;
+    padding: 14px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.multidate-cal {
+    width: 240px;
+    flex-shrink: 0;
+}
+
+.multidate-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.multidate-month-label {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--color-ink);
+}
+
+/* Nav arrows — light outline buttons, not solid navy pills */
+.multidate-picker button.multidate-nav {
+    background: var(--color-surface) !important;
+    color: var(--color-navy) !important;
+    border: 1px solid var(--color-border-strong) !important;
+    width: 26px;
+    height: 26px;
+    font-size: 1rem;
+    line-height: 1;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 0;
+}
+
+.multidate-picker button.multidate-nav:hover {
+    background: var(--color-neutral-bg) !important;
+}
+
+.multidate-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-slate-light);
+    margin-bottom: 4px;
+}
+
+.multidate-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+/* Day cells — must explicitly override the global button[type=button]
+   navy default, which otherwise wins on specificity and makes every
+   day look "selected" regardless of actual state. */
+.multidate-grid button.multidate-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    background: var(--color-surface) !important;
+    color: var(--color-ink) !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 0;
+}
+
+.multidate-grid button.multidate-cell:hover {
+    background: var(--color-yellow-soft) !important;
+}
+
+.multidate-grid button.multidate-cell.empty {
+    cursor: default;
+    background: transparent !important;
+}
+
+.multidate-grid button.multidate-cell.today {
+    border: 1px solid var(--color-yellow) !important;
+}
+
+.multidate-grid button.multidate-cell.selected {
+    background: var(--color-navy) !important;
+    color: #fff !important;
+    font-weight: 600;
+}
+
+.multidate-selected-area {
+    flex: 1;
+    min-width: 180px;
+}
+
+.multidate-selected-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--color-slate);
+    margin-bottom: 8px;
+}
+
+.multidate-picker button.multidate-clear {
+    background: none !important;
+    border: none !important;
+    color: var(--color-danger) !important;
+    font-size: 0.78rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.multidate-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.multidate-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--color-yellow-soft);
+    color: var(--color-navy);
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 999px;
+}
+
+.multidate-chip button {
+    background: none !important;
+    border: none !important;
+    color: var(--color-navy) !important;
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.6;
+}
+
+.multidate-chip button:hover {
+    opacity: 1;
+}

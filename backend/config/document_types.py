@@ -44,6 +44,7 @@ DOCUMENT_TYPES = [
             {"name": "trainer_name", "label": "Trainer Name", "type": "text", "required": True},
             {"name": "po_number", "label": "Purchase Order Number", "type": "text", "required": True},
             {"name": "technology", "label": "Technology / Subject", "type": "text", "required": False},
+            {"name": "attended_dates", "label": "Training Days Attended", "type": "multidate", "required": False},
             {"name": "num_rows", "label": "Number of Blank Item Rows", "type": "number", "required": False},
         ],
     },

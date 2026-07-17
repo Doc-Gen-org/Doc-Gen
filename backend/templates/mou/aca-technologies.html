@@ -29,34 +29,37 @@
         text-align: justify;
     }
 
-    /* ── Logo ── */
+    /* -- Logo (top-left) -- */
     .logo-area {
-        text-align: right;
+        text-align: left;
         margin-bottom: 24px;
         padding-bottom: 10px;
         border-bottom: 1px solid #ccc;
     }
     .logo-area img {
-        height: 90px;
+        height: 70px;
         width: auto;
     }
 
-    /* ── Document title ── */
+    /* -- Document title -- */
     .doc-title {
         text-align: center;
         font-size: 12pt;
         font-weight: bold;
         text-decoration: underline;
-        margin: 20px 0 14px 0;
+        margin: 20px 0 4px 0;
         letter-spacing: 0.5px;
     }
-
-    /* ── Body paragraphs ── */
-    p {
-        margin: 0 0 8px 0;
+    .doc-subtitle {
+        text-align: center;
+        font-size: 9.5pt;
+        font-style: italic;
+        color: #333;
+        margin: 0 0 14px 0;
     }
 
-    /* ── Centred bold labels (BY AND BETWEEN / AND) ── */
+    p { margin: 0 0 8px 0; }
+
     .center-label {
         text-align: center;
         font-weight: bold;
@@ -64,7 +67,6 @@
         font-size: 10.5pt;
     }
 
-    /* ── Section headings ── */
     .sec-heading {
         font-weight: bold;
         margin: 16px 0 6px 0;
@@ -73,390 +75,302 @@
         text-align: left;
     }
 
-    /* ── Clause levels — no indentation, everything flush left ── */
-    .cl1, .cl2, .cl3, .cl-let {
+    .cl1 {
         margin: 2px 0;
         padding: 0;
         text-indent: 0;
         text-align: left;
     }
 
-    /* ── Bullet list ── */
-    .bul {
-        margin: 2px 0;
-        padding: 0;
-        list-style: none;
-        text-align: left;
-    }
-    .bul li::before { content: "• "; }
-    .bul li { margin-bottom: 1px; }
-
-    /* ── Dash list (ratings) ── */
-    .dash {
-        margin: 2px 0;
-        padding: 0;
-        list-style: none;
-        text-align: left;
-    }
-    .dash li::before { content: "- "; }
-    .dash li { margin-bottom: 1px; }
-
-    /* ── Escalation table ── */
-    .esc-table {
+    /* -- Party info table (First Party / Second Party / Collectively / Draft status) -- */
+    .party-table {
         width: 100%;
         border-collapse: collapse;
-        margin: 8px 0 8px 0;
-        font-size: 9.5pt;
+        margin: 10px 0 14px 0;
+        font-size: 10pt;
     }
-    .esc-table th {
-        border: 1px solid #000;
-        padding: 4px 6px;
-        background: #f0f0f0;
+    .party-table td {
+        border: 1px solid #999;
+        padding: 8px 10px;
+        vertical-align: top;
+        text-align: left;
+    }
+    .party-table td.label-cell {
         font-weight: bold;
-        text-align: left;
-        vertical-align: top;
-    }
-    .esc-table td {
-        border: 1px solid #000;
-        padding: 4px 6px;
-        vertical-align: top;
-        text-align: left;
-    }
-    .esc-table tr {
-        page-break-inside: avoid;
-        break-inside: avoid;
+        width: 22%;
+        background: #f5f5f5;
     }
 
-    /* ── Signature block ── */
+    /* -- Signature block -- */
     .sig-section {
-        margin-top: 36px;
+        margin-top: 24px;
         page-break-inside: avoid;
     }
     .sig-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 12px;
+        margin-top: 10px;
     }
     .sig-table td {
         width: 50%;
         vertical-align: top;
-        padding-right: 12px;
+        padding: 10px;
+        border: 1px solid #999;
     }
-    .sig-line {
-        border-bottom: 1px solid #000;
-        height: 44px;
-        width: 80%;
-        margin: 8px 0 6px 0;
-    }
-    .sig-field { margin: 2px 0; font-size: 10pt; }
-
-    /* ── End marker ── */
-    .end-marker {
-        text-align: center;
+    .sig-table td.sig-header {
         font-weight: bold;
-        margin-top: 20px;
-        font-size: 10.5pt;
+        background: #f5f5f5;
     }
+    .sig-field { margin: 3px 0; font-size: 10pt; }
 
-    /* ── Annexure ── */
-    .annex-title {
-        text-align: center;
+    /* -- Witnesses -- */
+    .witness-block {
+        margin-top: 18px;
+    }
+    .witness-title {
         font-weight: bold;
-        text-decoration: underline;
-        margin: 28px 0 10px 0;
-        font-size: 11pt;
+        margin: 10px 0 4px 0;
     }
-    .annex-sub {
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-    ol.annex-list {
-        margin: 0;
-        padding: 0;
-        text-align: left;
-    }
-    ol.annex-list li { margin-bottom: 2px; }
-
-    /* ── Notice indent ── */
-    .notice {
-        margin: 2px 0;
-        text-align: left;
-    }
+    .witness-field { margin: 2px 0; font-size: 10pt; }
 </style>
 </head>
 <body>
 
-<!-- ════════════════ LOGO ════════════════ -->
+<!-- ============ LOGO ============ -->
 <div class="logo-area">
     <img src="data:image/png;base64,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" alt="ACA Technologies">
 </div>
 
-<!-- ════════════════ TITLE ════════════════ -->
-<div class="doc-title">CONSULTANT AGREEMENT</div>
+<!-- ============ TITLE ============ -->
+<div class="doc-title">MEMORANDUM OF UNDERSTANDING</div>
+<div class="doc-subtitle">(Trainer Sourcing and Coordination Arrangement - Revised ACA-Protective Draft)</div>
 
-<p>This Consulting Agreement (hereinafter referred to as "Agreement") lays down the terms of engagement, agreed upon by the Company and the Consultant.</p>
+<p>This Memorandum of Understanding ("MoU") is made on this <strong>{{ mou_date }}</strong> at Chennai, Tamil Nadu.</p>
 
-<p>This Agreement is executed on <strong>{{ mou_date }}</strong></p>
-
-<div class="center-label">BY AND BETWEEN</div>
-
-<p><strong>{{ issuing_company_name }}</strong>, having its corporate office at {{ company_address }} (hereinafter referred to as the "Company" which expression shall unless it be repugnant to the context or meaning thereof, be deemed to mean and include its successors and permitted assigns) of the <strong>FIRST PART;</strong></p>
-
-<div class="center-label">AND</div>
-
-<p><strong>{{ vendor_name }} (Vendor), {{ trainer_name }} (Trainer)</strong> residing at <strong>{{ vendor_address }}</strong>, {{ vendor_pan }}, {{ vendor_aadhaar }} (hereinafter referred to as the "Consultant", which expression shall, unless repugnant to the meaning or context hereof, be deemed to include all heirs, executors and administrators) of the <strong>SECOND PART.</strong></p>
-
-<p>The Company and the Consultant are hereinafter individually referred to as the "Party" and collectively as the "Parties".</p>
-
-<p>WHEREAS the parties hereto desire to enter into this Agreement to define and set forth the terms and conditions of the engagement of the Consultant by the Company;</p>
-
-<p>NOW, THEREFORE, IN CONSIDERATION OF THE MUTUAL PROMISES AND COVENANTS HEREIN CONTAINED, THE PARTIES HERETO AGREES AS FOLLOWS:</p>
-
-<!-- ════════════════ 1 ════════════════ -->
-<div class="sec-heading">1.&nbsp;&nbsp;Terms and conditions of Engagement</div>
-
-<p>The Consultant has been engaged as of the date of this agreement, which will be considered the acceptance date for the terms outlined herein. The Memorandum of Understanding (MOU) will be valid for a period of 12 months from the acceptance date. The training start date and scope of service will be communicated to you through a Purchase Order (PO) which will be released before the training engagement. The Consultant commits to delivering the services detailed in the Purchase Order (PO) (referred to as the "Scope of Services and Work") and agrees to offer any other reasonably requested services in connection with this Agreement.</p>
-
-<div class="cl1"><strong>1.1.</strong>&nbsp; The Consultant agrees to perform the Services in a timely manner, and to exercise all reasonable skill and care in the performance of the Services.</div>
-<div class="cl2"><strong>1.2.</strong>&nbsp; The Consultant shall provide the Company promptly with any information, data or documents which may be reasonably required in connection with the Services under this Agreement.</div>
-<div class="cl1"><strong>1.3.</strong>&nbsp; Unless otherwise agreed by the parties in writing, the Company shall at its own expense supply the Consultant with all necessary documents and materials, and all necessary data or other information as may be necessary for the Consultant to carry out the Services.</div>
-<div class="cl1"><strong>1.4.</strong>&nbsp; The Company shall provide reasonable co-operation to the Consultant in relation to the performance of the Services by the Consultant mentioned under this Agreement.</div>
-<div class="cl1"><strong>1.5.</strong>&nbsp; The training will take place in a client location and the location of the training will be notified to the consultant within sufficient time to enable the Consultant to reach the destination.</div>
-<div class="cl1"><strong>1.6.</strong>&nbsp; For the benefit of the Consultants and to ensure seamless execution of the training sessions, the Company will provide an orientation/Train the Trainer session for a week leading up to the training start date.</div>
-<div class="cl1"><strong>1.7.</strong>&nbsp; During the engagement, the consultant shall be responsible for providing their own personal laptop or computer equipment necessary for the performance of their duties.</div>
-
-<!-- ════════════════ 2 ════════════════ -->
-<div class="sec-heading">2.&nbsp;&nbsp;Tenure:</div>
-<p>The initial term of this agreement will commence upon the start date of the training program and will remain in effect for a duration mentioned in the Purchase Order (PO), unless either party provides a notice of termination in accordance with clause 9 below.</p>
-
-<!-- ════════════════ 3 ════════════════ -->
-<div class="sec-heading">3.&nbsp;&nbsp;Leaves &amp; Holidays:</div>
-
-<div class="cl2"><strong>3.1&nbsp;&nbsp;Leave Policy and Absence:</strong></div>
-<div class="cl3"><strong>3.1.1.</strong>&nbsp; The consultant is expected to refrain from taking any leave during the engagement, except in cases of genuine emergencies.</div>
-<div class="cl3"><strong>3.1.2.</strong>&nbsp; In the event of a genuine emergency, the consultant is permitted to take a maximum of three days of leave.</div>
-<div class="cl3"><strong>3.1.3.</strong>&nbsp; To ensure a smooth continuation of the engagement without disrupting the project or client's requirements, the consultant must provide a minimum of five days' prior notice to the Company when requesting leave.</div>
-<div class="cl3"><strong>3.1.4.</strong>&nbsp; If the consultant is absent from work, the day of absence will be treated as a loss of pay.</div>
-
-<div class="cl2"><strong>3.2&nbsp;&nbsp;Non-Payment for Holidays:</strong></div>
-<div class="cl3"><strong>3.2.1.</strong>&nbsp; The consultant will not receive payment during public holidays, or any other holidays declared by the client.</div>
-
-<div class="cl2"><strong>3.3&nbsp;&nbsp;Unforeseen Incidents and Cancellation of Training Sessions:</strong></div>
-<div class="cl3"><strong>3.3.1.</strong>&nbsp; Unforeseen incidents like rain, strikes, or circumstances beyond either party's control may result in the cancellation of training sessions.</div>
-<div class="cl3"><strong>3.3.2.</strong>&nbsp; The company is not obligated to make payment for the duration of the cancellation period caused by such incidents.</div>
-<div class="cl3"><strong>3.3.3.</strong>&nbsp; Both parties acknowledge that these circumstances can temporarily suspend contractual obligations without penalty or liability.</div>
-<div class="cl3"><strong>3.3.4.</strong>&nbsp; Once the unforeseen incident is resolved, the training sessions will resume as agreed upon in the contract, without prejudice to any other rights or remedies available to either party.</div>
-<div class="cl3"><strong>3.3.5.</strong>&nbsp; In the event of batch cancellation due to reasons such as reduction in the number of learners, changes in the training schedule, or cancellation of the batch by the client for any reasons:
-    <ul class="bul">
-        <li>The company will notify the consultant promptly regarding the cancellation.</li>
-        <li>Payment will be made only for the days on which training was completed prior to cancellation.</li>
-    </ul>
-</div>
-
-<!-- ════════════════ 4 ════════════════ -->
-<div class="sec-heading">4.&nbsp;&nbsp;Fees and Allowance:</div>
-
-<div class="cl1"><strong>4.1.</strong>&nbsp; Subject to any special terms agreed in writing by the parties, the Company shall pay the Consultant fees and charges from time to time for the provision of the Services as set out in the Purchase Order (PO).</div>
-<div class="cl1"><strong>4.2.</strong>&nbsp; The completeness of the Services and work product shall be determined by the Company in its sole discretion, and the Consultant agrees to make all revisions, additions, deletions or alterations as requested by the Company.</div>
-<div class="cl1"><strong>4.3.</strong>&nbsp; The tax will be deducted as per the applicable laws. The Consultant shall be solely responsible for any and all taxes, social security contributions or payments, health insurance, and other payroll type taxes or other legal requirements applicable to such compensation or to the Consultant.</div>
-<div class="cl1"><strong>4.4.</strong>&nbsp; The fees listed in Purchase Order (PO) do not include the relevant GST charges. The Company bears the responsibility of settling any additional GST payments mandated by tax authorities. Any modifications to GST rates will fall under the Company's jurisdiction. The Consultant must furnish GST invoices and ensure accurate completion of GSTR1. Failure to adhere to proper GST filing may result in withholding payment.</div>
-<div class="cl1"><strong>4.5.</strong>&nbsp; In the event that any travel is required during the training period, the Company shall not be liable for any expenses incurred by the Consultant for such travel. The Consultant acknowledges and agrees that any travel expenses incurred during the training period shall be the sole responsibility of the Consultant.</div>
-<div class="cl1"><strong>4.6.</strong>&nbsp; Freelance trainers can raise invoices only after completing at least 15 training days. Invoices must be raised only for completed training days.</div>
-<div class="cl1"><strong>4.7.</strong>&nbsp; Subsequent invoices must be raised after completing each additional 15 training days. If the remaining contract duration is less than 15 days, the final invoice must be raised upon completion of the contract.</div>
-<div class="cl1"><strong>4.8.</strong>&nbsp; Each invoice must be accompanied by the Purchase Order (PO) issued by {{ issuing_company_name }} before the commencement of services.</div>
-<div class="cl1"><strong>4.9.</strong>&nbsp; While submitting subsequent invoices, previous invoice linked to the same PO must be shared alongside for ease of reconciliation.</div>
-<div class="cl1"><strong>4.10.&nbsp; Freelancer / Contract Trainer Incentive and Retainer Policy</strong></div>
-<p style="margin: 0 0 6px 0;">Additional incentives and retainers, where applicable, are governed by the Freelancer Trainer Incentive and Retainer Policy detailed in Annexure A of this Agreement.</p>
-<div class="cl1"><strong>4.11.&nbsp; Payment Escalation Matrix:</strong></div>
-
-<table class="esc-table">
-    <thead>
-        <tr>
-            <th>Level</th>
-            <th>Contact Person</th>
-            <th>Escalation Time Frame</th>
-            <th>Contact Details</th>
-            <th>Escalation Criteria</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>L1</td>
-            <td>Support Team</td>
-            <td>12-24 hours</td>
-            <td>support@hiretrainers.in</td>
-            <td>Initial inquiry about payment status, missing details, or processing delays</td>
-        </tr>
-        <tr>
-            <td>L2</td>
-            <td>Surender Singh</td>
-            <td>1-2 business days</td>
-            <td>surendersingh@hiretrainers.in</td>
-            <td>No response from Level 1, unsatisfactory resolution, or complex issues requiring senior intervention</td>
-        </tr>
-        <tr>
-            <td>L3</td>
-            <td>Priyadharshini A</td>
-            <td>2-3 business days</td>
-            <td>priyadharshini@hiretrainers.in</td>
-            <td>Issue not resolved at Level 2, or for large, critical payments that are significantly overdue</td>
-        </tr>
-    </tbody>
+<table class="party-table">
+    <tr>
+        <td class="label-cell">First Party</td>
+        <td>{{ first_party_full_name }}, having its office at {{ first_party_address }}, represented by its authorised signatory {{ first_party_signatory_name }} ("{{ first_party_short_name }}").</td>
+    </tr>
+    <tr>
+        <td class="label-cell">Second Party</td>
+        <td>ACA Technologies, having its office at No. B2, Mona Home, 2nd Main Road, Ashoknandavanam, Melpakkam, Avadi - 600077, represented by its authorised signatory Mrs. Priyadharshini A ("ACA").</td>
+    </tr>
+    <tr>
+        <td class="label-cell">Collectively</td>
+        <td>{{ first_party_short_name }} and ACA are referred to individually as a "Party" and collectively as the "Parties".</td>
+    </tr>
+    <tr>
+        <td class="label-cell">Draft status</td>
+        <td>Revised draft prepared to place ACA on a safer commercial and legal footing. Parties should review and confirm before execution.</td>
+    </tr>
 </table>
 
-<div class="cl1"><strong>4.12.</strong>&nbsp; The consultant will go through continuous evaluation and rating by the Company, Client and the Trainees. The payments will be made solely based on feedback provided to the Consultant.</div>
-<p style="margin: 4px 0;">Rating <strong>4.2 and above</strong> will get 100% Payment.</p>
-<p style="margin: 0 0 4px 0;">The percentage of payment for the rating below 4.2 will be as given below:</p>
-<ul class="dash">
-    <li>Rating 4 - 4.2 = 75% payment of the total fee</li>
-    <li>Rating 3.8 - 4 = 50% payment of the total fee</li>
-    <li>Rating 3.5 - 3.8 = 30% payment of the total fee</li>
-    <li>Rating &lt;3.5 = No payment for this rating</li>
-</ul>
-<p style="margin: 4px 0 8px 0;">This condition will be part of the Purchase Order (PO).</p>
+<!-- ============ 1 ============ -->
+<div class="sec-heading">1.&nbsp;&nbsp;Purpose</div>
+<div class="cl1"><strong>1.1</strong>&nbsp; The purpose of this MoU is to record the terms under which ACA shall source and coordinate qualified trainers for training assignments undertaken by {{ first_party_short_name }} for its client institutions.</div>
+<div class="cl1"><strong>1.2</strong>&nbsp; This MoU is intended to define ACA's limited coordination role. No obligation, warranty, commitment, penalty, or liability shall be implied against ACA unless expressly stated in this MoU or in a written assignment confirmation signed or confirmed by the authorised representatives of both Parties.</div>
 
-<!-- ════════════════ 5 ════════════════ -->
-<div class="sec-heading">5.&nbsp;&nbsp;Duties and Obligations</div>
-<p>The Consultant shall diligently provide his/her Services and shall execute all the assignments and projects on timely manner with the highest professional standards and ethical business practices.</p>
-<div class="cl2"><strong>5.1.</strong>&nbsp; Consultant shall obtain and maintain such licenses, permissions and memberships required for him/her to perform the Services as mentioned in this Agreement.</div>
-<div class="cl2"><strong>5.2.</strong>&nbsp; The Consultant acknowledges and agrees that if they fail to adequately complete the Work by the agreed due date, the Company has the sole right to cancel this Agreement. If the Consultant fails to meet the Work deadline, they must contact the Company to request <strong>deadline extension at least 24 hours</strong> prior to the due date. Extension may be granted at the Company's sole discretion.</div>
-<div class="cl2"><strong>5.3.</strong>&nbsp; The training must conform to general standards as determined by the Company. If the training fails to conform to the general standards, the Company has the sole right to request an immediate revision of the Work, deny payment, and/or cancel this Agreement.</div>
+<!-- ============ 2 ============ -->
+<div class="sec-heading">2.&nbsp;&nbsp;Term and Renewal</div>
+<div class="cl1"><strong>2.1</strong>&nbsp; This MoU shall remain valid for a period of three (3) years from the date of execution, unless terminated earlier in accordance with this MoU.</div>
+<div class="cl1"><strong>2.2</strong>&nbsp; The MoU may be renewed only by mutual written consent of the Parties before expiry or by a fresh written agreement.</div>
 
-<!-- ════════════════ 6 ════════════════ -->
-<div class="sec-heading">6.&nbsp;&nbsp;Representations and Warranties</div>
-<div class="cl1"><strong>6.1.</strong>&nbsp; Each Party hereby warrants and represents that:</div>
-<div class="cl3"><strong>6.1.1.</strong>&nbsp; it has the requisite power, legal capacity and authority to enter into this Agreement and to perform its obligations hereunder;</div>
-<div class="cl3"><strong>6.1.2.</strong>&nbsp; nothing contained in any agreements or Applicable Laws prohibit it from entering into and performing its obligations under this Agreement;</div>
-<div class="cl3"><strong>6.1.3.</strong>&nbsp; this Agreement constitutes a legal, valid and binding obligation of it, enforceable against it in accordance with the terms of this Agreement.</div>
+<!-- ============ 3 ============ -->
+<div class="sec-heading">3.&nbsp;&nbsp;Scope of ACA's Role</div>
+<div class="cl1"><strong>3.1</strong>&nbsp; ACA's role is limited to sourcing, proposing, confirming, and coordinating trainers for assignments approved by {{ first_party_short_name }} in writing.</div>
+<div class="cl1"><strong>3.2</strong>&nbsp; {{ first_party_short_name }} shall be responsible for client acquisition, client relationship management, programme design approval, venue readiness, institutional coordination, student coordination, certificates, client approvals, and overall project execution, unless otherwise agreed in writing.</div>
+<div class="cl1"><strong>3.3</strong>&nbsp; ACA shall not be responsible for client-side commitments, institutional approvals, venue arrangements, student attendance, programme cancellations by the client or {{ first_party_short_name }}, certificate issuance, assessment outcomes, client payment collection, or deliverables outside the agreed trainer-sourcing role.</div>
+<div class="cl1"><strong>3.4</strong>&nbsp; ACA shall not be deemed to have accepted any additional staffing, training delivery, reporting, compliance, replacement, documentation, or administrative obligation unless the same is expressly agreed in the written assignment confirmation.</div>
 
-<!-- ════════════════ 7 ════════════════ -->
-<div class="sec-heading">7.&nbsp;&nbsp;Confidentiality and Non-Disclosure</div>
-<div class="cl1"><strong>7.1.</strong>&nbsp; The Company owns and may develop, compile and own certain proprietary techniques, trade secrets, and confidential information (collectively, "Confidential Information"). All information relating to the Company or given by Company to the Consultant pursuant to this Agreement shall be deemed to be confidential, including but not limited to details of customers, business contacts, developments, designs, inventions, software, techniques, know-how, data, marketing, sales or other business information.</div>
-<div class="cl1"><strong>7.2.</strong>&nbsp; The Consultant shall not use Company's Confidential Information for any purpose other than as required to perform its obligations under this Agreement and shall ensure that Consultant's Representatives do not disclose any Confidential Information of the Company at any time.</div>
-<div class="cl1"><strong>7.3.</strong>&nbsp; The Consultant shall ensure that his/her representatives are provided access to Company's Confidential Information only on a need-to-know-basis and solely for the performance of this Agreement.</div>
-<div class="cl1"><strong>7.4.</strong>&nbsp; The Consultant agrees that the Confidential Information will be received in confidence and will be used only for performance under and in accordance with this Agreement.</div>
-<div class="cl1"><strong>7.5.</strong>&nbsp; The Consultant acknowledges and agrees that all Confidential Information constitutes valuable, special and unique assets of the business of the Company. In the event of any breach of this Clause, the Company shall be entitled to equitable relief, including injunctive relief and specific performance.</div>
-<div class="cl1"><strong>7.6.</strong>&nbsp; The disclosure and supply of the Confidential Information shall not cause transfer of ownership of such information and assignment of Intellectual Property Rights in connection with the same.</div>
+<!-- ============ 4 ============ -->
+<div class="sec-heading">4.&nbsp;&nbsp;Assignment Confirmation and Commercial Terms</div>
+<div class="cl1"><strong>4.1</strong>&nbsp; Each training assignment shall be confirmed in writing by email, work order, purchase order, or annexure before ACA is required to block trainer dates, incur costs, or deploy any trainer.</div>
+<div class="cl1"><strong>4.2</strong>&nbsp; The written confirmation shall specify, as applicable, the client institution, training topic, dates, venue, trainer profile, expected duration, trainer fee, payment terms, travel and accommodation responsibility, cancellation terms, reporting instructions, equipment requirements, and any special requirements.</div>
+<div class="cl1"><strong>4.3</strong>&nbsp; No oral instruction shall create a payment, deployment, discount, waiver, replacement, or additional service obligation unless confirmed in writing by the authorised representatives of both Parties.</div>
+<div class="cl1"><strong>4.4</strong>&nbsp; ACA may decline to block trainer dates or incur costs until the assignment confirmation and commercial terms are complete and clear.</div>
 
-<!-- ════════════════ 8 ════════════════ -->
-<div class="sec-heading">8.&nbsp;&nbsp;Intellectual Property Rights</div>
-<p>All Intellectual Property Rights comprised in any and all materials (including software, source code, documentation, data, concepts and ideas) created or developed during the term of the Agreement shall, unless otherwise expressly agreed between the Parties, be deemed to be irrevocably assigned to and shall vest in the Company upon creation without further charge. If required by the Company, Consultant shall do all things and sign all documents necessary to vest all such Intellectual Property Rights in the Company.</p>
+<!-- ============ 5 ============ -->
+<div class="sec-heading">5.&nbsp;&nbsp;Trainer Representation and Client Communication</div>
+<div class="cl1"><strong>5.1</strong>&nbsp; During an authorised assignment, trainers coordinated by ACA shall represent {{ first_party_short_name }} only for the limited operational purpose of conducting the agreed training assignment.</div>
+<div class="cl1"><strong>5.2</strong>&nbsp; Trainers shall not have authority to make commercial, contractual, pricing, refund, discount, certificate, employment, or relationship-level commitments on behalf of ACA or {{ first_party_short_name }}.</div>
+<div class="cl1"><strong>5.3</strong>&nbsp; All commercial, contractual, and relationship-level communication with client institutions shall be handled by {{ first_party_short_name }} unless {{ first_party_short_name }} expressly authorises ACA or the trainer in writing.</div>
+<div class="cl1"><strong>5.4</strong>&nbsp; Operational communication by trainers at the venue, including coordination with faculty, coordinators, students, and local representatives, shall be permitted to the extent reasonably required for conducting the training programme.</div>
 
-<!-- ════════════════ 9 ════════════════ -->
-<div class="sec-heading">9.&nbsp;&nbsp;Termination</div>
-<div class="cl1"><strong>9.1.</strong>&nbsp; The Company may terminate this Agreement <strong>immediately</strong> upon written notice to the Consultant if:</div>
-<div class="cl3"><strong>9.1.1.</strong>&nbsp; The Consultant is in material breach of this Agreement and has failed to cure such breach within <strong>five (5) days</strong> after its receipt of written notice of such breach, or</div>
-<div class="cl3"><strong>9.1.2.</strong>&nbsp; The Consultant is unable to perform the Services or has materially or repeatedly breached any of the terms of this Agreement; or</div>
-<div class="cl3"><strong>9.1.3.</strong>&nbsp; He/she fails to meet the required qualifications or any act that demonstrates a disregard on his/her part for the reputation or legitimate business interests of the Company.</div>
-<div class="cl3"><strong>9.1.4.&nbsp; Performance:</strong>
-    <div class="cl-let">a.&nbsp; If the consultant's performance is deemed unsatisfactory by the Client, the Company retains the right to terminate this contract. However, if the Company believes that the performance concern is capable of being resolved, the individual will be granted a reasonable period to rectify the issue.</div>
-    <div class="cl-let">b.&nbsp; If the consultant is terminated after allowing time to address the issue, their fee will be calculated on a prorated basis for the days they were deployed, with 75% of the payment being made and the remaining 25% being retained by the company.</div>
-    <div class="cl-let">c.&nbsp; The disbursement of the 75% payment to the consultant will only be made after the Client has completed their payment to the Company for the duration of the consultant's services.</div>
-</div>
-<div class="cl3"><strong>9.1.5.&nbsp; POSH &amp; Disciplinary:</strong>
-    <p style="margin: 4px 0 0 0;">In the event of a substantiated violation of the Prevention of Sexual Harassment (POSH) policy or any other disciplinary policy established by the Company, the Company reserves the right to terminate this contract with immediate effect, without any prior notice or compensation. The decision to terminate shall be at the sole discretion of the Company after conducting a thorough investigation.</p>
-</div>
-<div class="cl3"><strong>9.1.6.&nbsp; Confidentiality:</strong>
-    <p style="margin: 4px 0 0 0;">Should the Consultant breach the confidentiality agreement as specified, the company reserves the right to terminate the contractual relationship with immediate effect. Any pending or future payments to the Consultant will not be processed. Such termination shall be without prejudice to any rights which might have been accrued prior to termination.</p>
-</div>
-<div class="cl1"><strong>9.2.</strong>&nbsp; Either Party may terminate this Agreement without reason, by giving two weeks written notice at any time to the other Party.</div>
-<div class="cl1"><strong>9.3.&nbsp; Consequences of Termination:</strong>
-    <p style="margin: 4px 0 4px 0;">The termination and/or expiry of this Agreement shall automatically terminate and extinguish any rights granted to the Consultant under this Agreement.</p>
-    <div class="cl-let">a.&nbsp; The Consultant's access to and use of any Company's systems and information shall cease immediately.</div>
-    <div class="cl-let">b.&nbsp; The Consultant shall be released from all obligations under this Agreement, including the obligations to provide Services.</div>
-    <div class="cl-let">c.&nbsp; The Consultant shall return all Confidential Information and documentation, including all copies thereof, to the Company within 24 hours after the termination.</div>
-    <div class="cl-let">d.&nbsp; Company shall be released from all obligations to make payments of any remaining portion of the consideration amount for which no Services have been provided.</div>
-    <div class="cl-let">e.&nbsp; The termination/expiry of this Agreement shall not affect any rights or liabilities that may have accrued to a Party prior to such termination/expiry.</div>
-</div>
+<!-- ============ 6 ============ -->
+<div class="sec-heading">6.&nbsp;&nbsp;Client Interaction, Non-Circumvention and Prior Relationships</div>
+<div class="cl1"><strong>6.1</strong>&nbsp; ACA and trainers introduced through ACA shall not directly negotiate, accept, or solicit the same specific training opportunity from a client institution first introduced to them by {{ first_party_short_name }}, except with {{ first_party_short_name }}'s prior written consent.</div>
+<div class="cl1"><strong>6.2</strong>&nbsp; The restriction in this clause shall apply only to the specific client institution and specific training opportunity identified by {{ first_party_short_name }} in writing at or before assignment confirmation, and only during the term of this MoU and for one (1) year after expiry or termination.</div>
+<div class="cl1"><strong>6.3</strong>&nbsp; This restriction shall not apply to clients or institutions with whom ACA or the relevant trainer had a prior independent relationship, who approach ACA or the trainer independently without use of {{ first_party_short_name }}'s confidential information, or to unrelated services, open-market opportunities, public tenders, general enquiries, or independently developed business opportunities.</div>
+<div class="cl1"><strong>6.4</strong>&nbsp; For clarity, any client institution claimed to have been first introduced by {{ first_party_short_name }} shall be identified by {{ first_party_short_name }} in writing, including by email, work order, annexure, or other written assignment confirmation, at or before the relevant assignment confirmation. In the absence of such written identification, the Parties shall not treat the client as a {{ first_party_short_name }}-introduced client for the purposes of this Clause 6, unless introduction is otherwise clearly evidenced in writing.</div>
+<div class="cl1"><strong>6.5</strong>&nbsp; Nothing in this clause shall restrict ACA from carrying on its lawful business, offering trainer sourcing or staffing services to the market generally, or working with institutions that are not covered by the specific written restriction above.</div>
 
-<!-- ════════════════ 10 ════════════════ -->
-<div class="sec-heading">10.&nbsp;&nbsp;Indemnity</div>
-<div class="cl1"><strong>10.1.</strong>&nbsp; The Consultant hereby agrees to indemnify, defend and hold harmless the Company and its affiliates and all their officers, directors, owners, agents, employees, content providers, partners, licensors and licensees from and against any and all losses, damages, liabilities, and claims and all fees, costs and expenses of any kind related thereto (including reasonable attorneys' fees) incurred in connection with any claims arising from the breach of this Agreement.</div>
-<div class="cl1"><strong>10.2.</strong>&nbsp; Company reserves the right, at its own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by the Consultant, and the Consultant agrees that it shall not in any event settle any matter without the prior written consent of the Company.</div>
+<!-- ============ 7 ============ -->
+<div class="sec-heading">7.&nbsp;&nbsp;Fees, Invoicing, Taxes and Payment</div>
+<div class="cl1"><strong>7.1</strong>&nbsp; Commercial discussions for trainer fees and assignment charges shall take place only between {{ first_party_short_name }} and ACA. {{ first_party_short_name }} shall not be required to make direct payment to individual trainers engaged through ACA unless separately agreed in writing.</div>
+<div class="cl1"><strong>7.2</strong>&nbsp; ACA shall raise a valid invoice after completion of the agreed assignment, after cancellation charges become payable, or as otherwise specified in the written assignment confirmation.</div>
+<div class="cl1"><strong>7.3</strong>&nbsp; {{ first_party_short_name }} shall make payment to ACA within twenty (20) days from receipt of a valid invoice, subject only to deductions required under applicable law, including TDS where applicable.</div>
+<div class="cl1"><strong>7.4</strong>&nbsp; {{ first_party_short_name }}'s obligation to pay ACA shall not be dependent on receipt of payment, approval, reimbursement, or confirmation from {{ first_party_short_name }}'s client institution, unless ACA has expressly agreed to such dependency in the written assignment confirmation.</div>
+<div class="cl1"><strong>7.5</strong>&nbsp; GST, if applicable, shall be charged in addition to the agreed fees and paid as per the invoice. The Parties shall be responsible for their respective tax compliances.</div>
+<div class="cl1"><strong>7.6</strong>&nbsp; Any invoice dispute must be notified in writing within seven (7) days of invoice receipt, with specific reasons and supporting details. The undisputed portion shall be paid within the normal payment period.</div>
+<div class="cl1"><strong>7.7</strong>&nbsp; If no written dispute is raised within seven (7) days, the invoice shall be treated as accepted for payment processing.</div>
+<div class="cl1"><strong>7.8</strong>&nbsp; If any undisputed amount remains unpaid after the due date, ACA may suspend further trainer sourcing, trainer blocking, coordination, replacement support, and deployment until all overdue amounts are cleared. Overdue undisputed amounts shall carry interest at eighteen percent (18%) per annum or the maximum rate permitted by law, whichever is lower, from the due date until actual payment.</div>
 
-<!-- ════════════════ 11 ════════════════ -->
-<div class="sec-heading">11.&nbsp;&nbsp;Notices</div>
-<p>All notices under this Agreement shall be written in English and shall be sent by hand or by courier or by facsimile to the applicable Party at the contact details indicated below:</p>
-<div class="cl1">
-    <p>(a)&nbsp; If to <strong>{{ issuing_company_name }}</strong>, at:</p>
-    <div class="notice">
-        <p>Attention:&nbsp; <strong>{{ company_signatory_name }}</strong></p>
-        <p>Address:&nbsp; {{ company_address }}</p>
-        <p>Email:&nbsp; {{ company_email }}</p>
-    </div>
-</div>
-<div class="cl1">
-    <p>(b)&nbsp; If to the Consultant at:</p>
-    <div class="notice">
-        <p><strong>Attention:&nbsp; {{ vendor_signatory_name }}</strong></p>
-        <p><strong>Address:&nbsp; {{ vendor_address }}</strong></p>
-        <p><strong>Email:&nbsp; {{ vendor_email }}</strong></p>
-    </div>
-</div>
+<!-- ============ 8 ============ -->
+<div class="sec-heading">8.&nbsp;&nbsp;Travel, Accommodation and Logistics</div>
+<div class="cl1"><strong>8.1</strong>&nbsp; Travel, accommodation, food, local transport, venue access, and official logistics for trainers shall be arranged by {{ first_party_short_name }} unless otherwise agreed in writing for a specific assignment.</div>
+<div class="cl1"><strong>8.2</strong>&nbsp; If ACA arranges travel, accommodation, or other logistics at {{ first_party_short_name }}'s request, {{ first_party_short_name }} shall reimburse actual reasonable costs against supporting documents, unless a fixed reimbursement amount is agreed in writing.</div>
+<div class="cl1"><strong>8.3</strong>&nbsp; ACA shall not be required to make non-refundable bookings or advance payments for logistics unless {{ first_party_short_name }} has approved the booking in writing and either paid an advance or confirmed reimbursement responsibility in writing.</div>
+<div class="cl1"><strong>8.4</strong>&nbsp; {{ first_party_short_name }} shall provide timely reporting instructions, venue details, contact persons, programme schedules, access permissions, and equipment readiness information so that ACA can coordinate trainer reporting properly.</div>
 
-<!-- ════════════════ 12 ════════════════ -->
-<div class="sec-heading">12.&nbsp;&nbsp;Miscellaneous</div>
+<!-- ============ 9 ============ -->
+<div class="sec-heading">9.&nbsp;&nbsp;Trainer Coordination and Replacement</div>
+<div class="cl1"><strong>9.1</strong>&nbsp; ACA shall coordinate with confirmed trainers from the time an assignment is confirmed until the trainer physically reports to the authorised representative of {{ first_party_short_name }} or the client institution at the training venue.</div>
+<div class="cl1"><strong>9.2</strong>&nbsp; ACA shall use commercially reasonable efforts to ensure that the trainer follows travel instructions, reporting time, and assignment requirements shared in writing by {{ first_party_short_name }} before assignment confirmation or within a reasonable time thereafter.</div>
+<div class="cl1"><strong>9.3</strong>&nbsp; If a trainer is unable to report, cancels, is materially delayed, or fails to reach the venue due to reasons within ACA's reasonable control, ACA shall promptly inform {{ first_party_short_name }} and use commercially reasonable efforts to arrange a suitable replacement trainer.</div>
+<div class="cl1"><strong>9.4</strong>&nbsp; ACA's obligation to use commercially reasonable efforts to arrange a replacement trainer shall be {{ first_party_short_name }}'s sole remedy for trainer unavailability, delay, or non-reporting, except where directly caused by ACA's fraud or wilful misconduct.</div>
+<div class="cl1"><strong>9.5</strong>&nbsp; ACA shall not be liable for delays, cancellation, or non-reporting caused by force majeure, transport disruptions, illness, accident, client-side changes, late confirmation, non-availability of travel or accommodation, venue access issues, delayed payment, unclear instructions, or circumstances beyond ACA's reasonable control.</div>
+<div class="cl1"><strong>9.6</strong>&nbsp; Once the trainer reports at the venue, on-campus coordination, food, accommodation where applicable, local logistics, programme execution, institutional coordination, crowd or student management, equipment readiness, and local safety arrangements shall be managed by {{ first_party_short_name }}.</div>
 
-<div class="cl2"><strong>12.1.&nbsp; Further Acts and Assurances</strong>
-    <p style="margin: 4px 0 6px 0;">Each Party hereto shall co-operate with the other and execute and deliver to the other such instruments and documents as may be required under Applicable Law or as may be necessary or reasonably requested from time to time in order to carry out, give effect to and confirm their rights and intended purpose of this Agreement.</p>
-</div>
-<div class="cl2"><strong>12.2.&nbsp; Nature of the Relationship</strong>
-    <p style="margin: 4px 0 6px 0;">The arrangements between the Parties under this Agreement have been entered into on a principal-to-principal basis and do not create any employee-employer relationship between the Parties. Nothing contained in this Agreement shall be deemed to create any partnership, joint venture, or employment relationship between the Parties.</p>
-</div>
-<div class="cl2"><strong>12.3.&nbsp; Dispute Resolution</strong>
-    <div class="cl-let">a.&nbsp; In the event of any dispute arising out of or in connection with this Agreement, the Parties shall make best efforts to settle the Dispute by mutual conciliation.</div>
-    <div class="cl-let">b.&nbsp; In the event that the Dispute cannot be resolved through amicable discussions within 7 (seven) business days, either Party may refer the Dispute to be finally settled by binding arbitration under the Indian Arbitration and Conciliation Act, 1996. All arbitration proceedings shall be conducted in the English language and the seat and venue of arbitration shall be Coimbatore.</div>
-    <div class="cl-let">c.&nbsp; The award of the arbitrator shall be final and conclusive and binding upon the Parties.</div>
-    <div class="cl-let">d.&nbsp; The arbitrator may award to a Party that substantially prevails on the merits, its costs and expenses including fees of its counsel.</div>
-</div>
-<div class="cl2"><strong>12.4.&nbsp; Governing Law</strong>
-    <p style="margin: 4px 0 6px 0;">This Agreement shall be governed and construed in accordance with Indian Laws and subject to the exclusive jurisdiction of competent courts at Coimbatore.</p>
-</div>
-<div class="cl2"><strong>12.5.&nbsp; Modification</strong>
-    <p style="margin: 4px 0 6px 0;">Any modification of this Agreement or additional obligation assumed by either party in connection with this Agreement shall be binding only if evidenced in writing signed by each party or an authorized representative of each party.</p>
-</div>
-<div class="cl2"><strong>12.6.&nbsp; Entire Agreement</strong>
-    <p style="margin: 4px 0 6px 0;">The Parties hereto confirm and acknowledge that this Agreement shall constitute the entire agreement between them and all earlier agreements, arrangements, letters, correspondence and understandings, either written or verbal, with respect to the subject matter herein stand superseded by this Agreement. No amendment, modification or addition to this Agreement shall be binding on either of the Parties hereto unless set forth in writing and executed by the Parties through their duly authorized representatives.</p>
-</div>
+<!-- ============ 10 ============ -->
+<div class="sec-heading">10.&nbsp;&nbsp;Trainer Standards and Code of Conduct</div>
+<div class="cl1"><strong>10.1</strong>&nbsp; ACA shall endeavour to source trainers with suitable qualifications, experience, communication ability, and subject competence for the agreed assignment, based on the requirements shared by {{ first_party_short_name }} in writing.</div>
+<div class="cl1"><strong>10.2</strong>&nbsp; {{ first_party_short_name }} shall provide any special code of conduct, campus rules, assessment format, dress code, reporting protocol, safety requirements, or client-specific requirements in writing before the assignment.</div>
+<div class="cl1"><strong>10.3</strong>&nbsp; ACA shall communicate {{ first_party_short_name }}'s written code of conduct and assignment requirements to the confirmed trainer.</div>
+<div class="cl1"><strong>10.4</strong>&nbsp; ACA shall not be liable for a trainer's independent act, omission, misconduct, statement, unauthorised promise, or behaviour after reporting at the venue, except to the extent directly caused by ACA's proven fraud, wilful misconduct, or gross negligence in sourcing or coordinating that trainer.</div>
 
-<!-- ════════════════ SIGNATURE ════════════════ -->
+<!-- ============ 11 ============ -->
+<div class="sec-heading">11.&nbsp;&nbsp;Performance Feedback and Replacement During Assignment</div>
+<div class="cl1"><strong>11.1</strong>&nbsp; If {{ first_party_short_name }} reasonably finds a trainer unsuitable due to misconduct, serious lack of competence, repeated non-compliance, or failure to conduct the agreed training, {{ first_party_short_name }} may request replacement with written reasons and supporting details.</div>
+<div class="cl1"><strong>11.2</strong>&nbsp; ACA shall use commercially reasonable efforts to provide a replacement, subject to availability, reasonable notice, travel feasibility, and timely confirmation of commercial terms.</div>
+<div class="cl1"><strong>11.3</strong>&nbsp; No replacement obligation shall apply where the issue arises from unclear scope, change in training topic, inadequate venue or equipment, client-side disruption, student indiscipline, safety concerns, delayed payment, or requirements not shared with ACA before assignment confirmation.</div>
+<div class="cl1"><strong>11.4</strong>&nbsp; Replacement support under this clause shall not amount to admission of fault by ACA or waiver of ACA's right to payment for completed or partially completed services.</div>
+
+<!-- ============ 12 ============ -->
+<div class="sec-heading">12.&nbsp;&nbsp;Confidentiality</div>
+<div class="cl1"><strong>12.1</strong>&nbsp; Each Party shall keep confidential all non-public client, student, pricing, business, training, commercial, and operational information received from the other Party or its client institutions.</div>
+<div class="cl1"><strong>12.2</strong>&nbsp; Confidential information shall not be disclosed to any third party except to trainers, employees, consultants, or representatives who need to know it for the assignment and are informed of confidentiality obligations.</div>
+<div class="cl1"><strong>12.3</strong>&nbsp; Confidentiality obligations shall not apply to information that is public, already known without breach, independently developed, received lawfully from a third party, or required to be disclosed by law or lawful authority.</div>
+<div class="cl1"><strong>12.4</strong>&nbsp; This clause shall survive expiry or termination of this MoU for three (3) years.</div>
+
+<!-- ============ 13 ============ -->
+<div class="sec-heading">13.&nbsp;&nbsp;Intellectual Property and Training Materials</div>
+<div class="cl1"><strong>13.1</strong>&nbsp; Training materials, course content, templates, assessments, client data, and documents provided by {{ first_party_short_name }} shall remain the property of {{ first_party_short_name }} or its client, as applicable.</div>
+<div class="cl1"><strong>13.2</strong>&nbsp; Pre-existing materials, tools, teaching methods, templates, know-how, examples, and content brought by ACA or its trainers shall remain the property of ACA or the relevant trainer, unless specifically assigned in writing.</div>
+<div class="cl1"><strong>13.3</strong>&nbsp; Any custom material ownership, usage rights, licensing, or handover obligation shall be agreed in writing for the relevant assignment before development begins.</div>
+<div class="cl1"><strong>13.4</strong>&nbsp; No assignment or transfer of ACA's or any trainer's intellectual property shall be implied from this MoU, assignment delivery, invoice payment, or sharing of materials for training purposes.</div>
+
+<!-- ============ 14 ============ -->
+<div class="sec-heading">14.&nbsp;&nbsp;Data Protection and Student Information</div>
+<div class="cl1"><strong>14.1</strong>&nbsp; If any student, employee, or client data is shared for an assignment, each Party shall use such data only for the relevant assignment and shall take reasonable steps to protect it from unauthorised disclosure or misuse.</div>
+<div class="cl1"><strong>14.2</strong>&nbsp; {{ first_party_short_name }} shall be responsible for ensuring that any personal data shared with ACA or trainers is collected and shared with proper authority, notice, consent, client permission, or other lawful basis, as applicable.</div>
+<div class="cl1"><strong>14.3</strong>&nbsp; ACA shall process such data only for the assignment and shall not be responsible for the accuracy, legality, completeness, or sufficiency of data supplied by {{ first_party_short_name }} or its client institution.</div>
+<div class="cl1"><strong>14.4</strong>&nbsp; ACA shall instruct trainers not to copy, publish, sell, or misuse student or client data received during assignments.</div>
+<div class="cl1"><strong>14.5</strong>&nbsp; Each Party shall promptly inform the other Party if it becomes aware of unauthorised disclosure or misuse of personal data relating to an assignment, and the Parties shall reasonably cooperate to mitigate the issue according to their respective roles.</div>
+
+<!-- ============ 15 ============ -->
+<div class="sec-heading">15.&nbsp;&nbsp;Compliance and Relationship of Parties</div>
+<div class="cl1"><strong>15.1</strong>&nbsp; Each Party shall comply with applicable Indian laws, tax obligations, and business compliances relevant to its role under this MoU.</div>
+<div class="cl1"><strong>15.2</strong>&nbsp; Nothing in this MoU creates an employer-employee relationship, partnership, agency, franchise, or joint venture between the Parties, or between {{ first_party_short_name }} and trainers coordinated by ACA, unless separately agreed in writing.</div>
+<div class="cl1"><strong>15.3</strong>&nbsp; ACA shall remain responsible for its own commercial arrangements with trainers. {{ first_party_short_name }} shall remain responsible for its own arrangements, representations, commitments, and collections from clients.</div>
+<div class="cl1"><strong>15.4</strong>&nbsp; {{ first_party_short_name }} shall not represent to any client institution that ACA or any trainer is {{ first_party_short_name }}'s employee, partner, or authorised commercial representative.</div>
+
+<!-- ============ 16 ============ -->
+<div class="sec-heading">16.&nbsp;&nbsp;Cancellation and Rescheduling</div>
+<div class="cl1"><strong>16.1</strong>&nbsp; If a confirmed assignment is cancelled or rescheduled by {{ first_party_short_name }} or its client after trainer confirmation, {{ first_party_short_name }} shall promptly notify ACA in writing.</div>
+<div class="cl1"><strong>16.2</strong>&nbsp; The Parties may agree assignment-wise cancellation charges in the written assignment confirmation. In the absence of a specific written arrangement, the default cancellation terms in Clause 16.3 shall apply.</div>
+<div class="cl1"><strong>16.3</strong>&nbsp; If cancellation or rescheduling occurs after trainer confirmation, {{ first_party_short_name }} shall pay ACA: (a) all non-refundable travel, accommodation, and logistics costs incurred or committed by ACA at {{ first_party_short_name }}'s request; (b) fifty percent (50%) of the agreed trainer fee if cancelled within seven (7) days before the assignment date; and (c) one hundred percent (100%) of the agreed trainer fee if cancelled within forty-eight (48) hours before the assignment date, after the trainer has commenced travel, or after the trainer has reported at the venue.</div>
+<div class="cl1"><strong>16.4</strong>&nbsp; The amounts under this clause shall be payable whether or not {{ first_party_short_name }} receives payment, approval, or reimbursement from its client institution.</div>
+<div class="cl1"><strong>16.5</strong>&nbsp; If cancellation is caused by ACA's proven fraud or wilful misconduct, the cancellation charges under this clause shall not apply to the extent directly caused by such conduct.</div>
+
+<!-- ============ 17 ============ -->
+<div class="sec-heading">17.&nbsp;&nbsp;Limitation of Liability</div>
+<div class="cl1"><strong>17.1</strong>&nbsp; Except for fraud, wilful misconduct, and unpaid fees, each Party's aggregate liability under or relating to a particular assignment shall be limited to the fees actually paid or payable to ACA for that affected assignment.</div>
+<div class="cl1"><strong>17.2</strong>&nbsp; For confidentiality breach or third-party intellectual property claims, each Party's aggregate liability shall be limited to two (2) times the fees actually paid or payable to ACA for the affected assignment, unless finally determined by a competent court to have arisen from fraud or wilful misconduct.</div>
+<div class="cl1"><strong>17.3</strong>&nbsp; Neither Party shall be liable for indirect, consequential, special, punitive, exemplary, remote, or loss-of-profit damages arising out of this MoU.</div>
+<div class="cl1"><strong>17.4</strong>&nbsp; This clause does not limit {{ first_party_short_name }}'s payment obligations for completed assignments, cancellation charges, or reimbursements expressly agreed in writing.</div>
+
+<!-- ============ 18 ============ -->
+<div class="sec-heading">18.&nbsp;&nbsp;Indemnity</div>
+<div class="cl1"><strong>18.1</strong>&nbsp; Each Party shall indemnify the other Party only against direct losses, claims, or penalties finally determined by a competent court or admitted in a written settlement approved by the indemnifying Party, to the extent arising from the indemnifying Party's own fraud, wilful misconduct, gross negligence, breach of confidentiality, or violation of applicable law.</div>
+<div class="cl1"><strong>18.2</strong>&nbsp; ACA's indemnity shall not extend to claims arising from {{ first_party_short_name }}'s client commitments, programme design, venue arrangements, content or materials supplied by {{ first_party_short_name }} or its client, institutional directions, student or crowd management, data supplied by {{ first_party_short_name }} or its client, or matters outside ACA's agreed scope.</div>
+<div class="cl1"><strong>18.3</strong>&nbsp; The indemnified Party shall promptly notify the indemnifying Party of the claim, provide reasonable cooperation, allow reasonable control of defence or settlement where legally possible, and take reasonable steps to mitigate losses.</div>
+<div class="cl1"><strong>18.4</strong>&nbsp; No settlement or admission that creates liability for ACA shall be made without ACA's prior written consent.</div>
+
+<!-- ============ 19 ============ -->
+<div class="sec-heading">19.&nbsp;&nbsp;Force Majeure</div>
+<div class="cl1"><strong>19.1</strong>&nbsp; Neither Party shall be liable for delay or failure to perform obligations caused by events beyond its reasonable control, including natural calamities, strikes, bandh, transport disruption, illness, epidemic, government restrictions, venue closure, internet or power failure, civil disturbance, safety risk, or other events that materially affect performance.</div>
+<div class="cl1"><strong>19.2</strong>&nbsp; The affected Party shall notify the other Party as soon as reasonably possible. Force majeure shall not excuse {{ first_party_short_name }}'s payment obligations for services already performed, costs already approved, or cancellation charges already accrued before the force majeure event.</div>
+
+<!-- ============ 20 ============ -->
+<div class="sec-heading">20.&nbsp;&nbsp;Termination and Suspension</div>
+<div class="cl1"><strong>20.1</strong>&nbsp; Either Party may terminate this MoU by giving fifteen (15) days' written notice to the other Party.</div>
+<div class="cl1"><strong>20.2</strong>&nbsp; Either Party may terminate immediately for material breach if the breach is not capable of cure or is not cured within seven (7) days of written notice.</div>
+<div class="cl1"><strong>20.3</strong>&nbsp; ACA may suspend services or decline further trainer sourcing, trainer blocking, coordination, replacement support, and deployment immediately if any undisputed invoice remains unpaid beyond the due date.</div>
+<div class="cl1"><strong>20.4</strong>&nbsp; ACA may terminate this MoU with immediate effect if any undisputed non-payment continues for seven (7) days after written notice.</div>
+<div class="cl1"><strong>20.5</strong>&nbsp; Termination shall not affect payment obligations, cancellation charges, reimbursement obligations, confidentiality obligations, accrued rights, completed assignments, ongoing assignments already confirmed unless mutually cancelled, or clauses intended to survive termination.</div>
+
+<!-- ============ 21 ============ -->
+<div class="sec-heading">21.&nbsp;&nbsp;Governing Law and Dispute Resolution</div>
+<div class="cl1"><strong>21.1</strong>&nbsp; This MoU shall be governed by and construed in accordance with the laws of India.</div>
+<div class="cl1"><strong>21.2</strong>&nbsp; The Parties shall first attempt to resolve disputes through good-faith discussions between authorised representatives within fifteen (15) days of written notice of dispute.</div>
+<div class="cl1"><strong>21.3</strong>&nbsp; If the dispute is not resolved amicably, the courts at Chennai, Tamil Nadu shall have exclusive jurisdiction, subject to applicable law.</div>
+<div class="cl1"><strong>21.4</strong>&nbsp; Nothing in this clause shall prevent ACA from seeking recovery of undisputed unpaid invoices, cancellation charges, reimbursements, or other admitted amounts through any legally available summary or appropriate proceedings before the competent forum.</div>
+
+<!-- ============ 22 ============ -->
+<div class="sec-heading">22.&nbsp;&nbsp;Notices</div>
+<div class="cl1"><strong>22.1</strong>&nbsp; Any notice under this MoU shall be sent by email, courier, registered post, or hand delivery to the addresses or authorised email IDs last notified by the relevant Party.</div>
+<div class="cl1"><strong>22.2</strong>&nbsp; Email notice shall be treated as received on the next business day after sending, unless the sender receives an automated delivery failure notice.</div>
+<div class="cl1"><strong>22.3</strong>&nbsp; Each Party shall promptly notify the other Party of any change in authorised representative, address, or official email ID.</div>
+
+<!-- ============ 23 ============ -->
+<div class="sec-heading">23.&nbsp;&nbsp;Entire Understanding and Amendments</div>
+<div class="cl1"><strong>23.1</strong>&nbsp; This MoU, together with written assignment confirmations issued under it, records the entire understanding between the Parties for the subject matter stated here.</div>
+<div class="cl1"><strong>23.2</strong>&nbsp; Any amendment, waiver, discount, additional obligation, or change to this MoU shall be valid only if recorded in writing and confirmed by authorised representatives of both Parties.</div>
+<div class="cl1"><strong>23.3</strong>&nbsp; If there is any conflict between this MoU and an assignment confirmation, the assignment confirmation shall prevail only for that specific assignment and only to the extent expressly stated.</div>
+
+<!-- ============ 24 SIGNATURES ============ -->
 <div class="sig-section">
-    <p>IN WITNESS WHEREOF the Parties hereto have executed this Agreement on the day and year first above written.</p>
-    <p>Signed and delivered for and on behalf of:</p>
+    <div class="sec-heading">24.&nbsp;&nbsp;Signatures</div>
+    <p>The Parties have executed this MoU through their authorised representatives on the date first written above.</p>
+
     <table class="sig-table">
         <tr>
+            <td class="sig-header">For {{ first_party_full_name }}</td>
+            <td class="sig-header">For ACA Technologies</td>
+        </tr>
+        <tr>
             <td>
-                <div><strong>For {{ issuing_company_name }},</strong></div>
-                <div class="sig-line"></div>
-                <div class="sig-field"><strong>Authorized Signatory</strong></div>
-                <div class="sig-field">Name:&nbsp; {{ company_signatory_name }}</div>
-                <div class="sig-field">Title:&nbsp; {{ company_signatory_title }}</div>
-                <div class="sig-field">Date:&nbsp; {{ mou_date }}</div>
+                <div class="sig-field">Name: {{ first_party_sig_name }}</div>
+                <div class="sig-field">Designation: {{ first_party_sig_designation }}</div>
+                <div class="sig-field">Signature:</div>
+                <div class="sig-field">Date: {{ first_party_sig_date }}</div>
+                <div class="sig-field">Place: {{ first_party_sig_place }}</div>
             </td>
             <td>
-                <div><strong>Agreed and Accepted</strong></div>
-                <div class="sig-line"></div>
-                <div class="sig-field"><strong>Authorized Signatory</strong></div>
-                <div class="sig-field">Name:&nbsp; {{ vendor_signatory_name }}</div>
-                <div class="sig-field">Title:&nbsp; {{ vendor_signatory_title }}</div>
-                <div class="sig-field">Date:&nbsp; {{ mou_date }}</div>
+                <div class="sig-field">Name: Priyadharshini A</div>
+                <div class="sig-field">Designation: Authorized Signatory</div>
+                <div class="sig-field">Signature:</div>
+                <div class="sig-field">Date: {{ mou_date }}</div>
+                <div class="sig-field">Place: Chennai, Tamil Nadu</div>
             </td>
         </tr>
     </table>
-    <div class="end-marker">--- END ---</div>
-</div>
 
-<!-- ════════════════ ANNEXURE A ════════════════ -->
-<div class="annex-title">ANNEXURE A</div>
-<div class="annex-sub">The following details will be available on the Purchase Order (PO)</div>
-<ol class="annex-list">
-    <li>Training Start and End date</li>
-    <li>Tenure of the engagement</li>
-    <li>Scope of Services and Work</li>
-    <li>Training Fees</li>
-    <li>Payment terms and conditions</li>
-</ol>
+    <div class="witness-block">
+        <div class="witness-title">Witnesses</div>
+
+        <div class="witness-title" style="font-weight:bold; margin-top:10px;">Witness 1:</div>
+        <div class="witness-field">Name: {{ witness1_name }}</div>
+        <div class="witness-field">Address: {{ witness1_address }}</div>
+        <div class="witness-field">Signature:</div>
+
+        <div class="witness-title" style="font-weight:bold; margin-top:10px;">Witness 2:</div>
+        <div class="witness-field">Name: {{ witness2_name }}</div>
+        <div class="witness-field">Address: {{ witness2_address }}</div>
+        <div class="witness-field">Signature:</div>
+    </div>
+</div>
 
 </body>
 </html>

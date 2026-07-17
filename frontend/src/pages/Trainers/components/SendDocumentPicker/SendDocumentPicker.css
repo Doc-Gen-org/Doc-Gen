@@ -9,8 +9,8 @@
 }
 
 .picker-panel {
-    width: 440px;
-    max-height: 80vh;
+    width: 480px;
+    max-height: 85vh;
     overflow-y: auto;
     padding: 22px;
 }
@@ -83,13 +83,25 @@
 }
 
 .picker-generate-prompt {
-    text-align: center;
     padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.picker-field-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-slate);
+}
+
+.picker-generate-button {
+    width: 100%;
 }
 
 .picker-regenerate {
     width: 100%;
-    margin-top: 14px;
+    margin-top: 4px;
 }
 
 .picker-upload-row {
