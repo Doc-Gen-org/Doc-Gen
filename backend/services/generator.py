@@ -114,6 +114,14 @@ def generate_document(document_type: str, company_id: str, output_format: str, f
         fields = {**CERTIFICATE_DEFAULTS, **fields}
     elif document_type == "invoice":
         fields = _format_attended_dates(dict(fields))
+        raw_num_rows = fields.get("num_rows")
+        if raw_num_rows in (None, ""):
+            fields["num_rows"] = None
+        else:
+            try:
+                fields["num_rows"] = int(raw_num_rows)
+            except (TypeError, ValueError):
+                fields["num_rows"] = None
 
     if output_format == "pdf":
         return generate_pdf(document_type, company_id, fields)

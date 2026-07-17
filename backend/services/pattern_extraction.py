@@ -168,10 +168,11 @@ def extract_location(text: str) -> str | None:
 
 
 # ─────────────────────────────────────────
-# GSTIN extraction
+# GSTIN extraction (client institution's, not the vendor's — ACA's
+# own identity is hardcoded directly in the PO template now)
 # ─────────────────────────────────────────
 
-def extract_gstin(text: str) -> str | None:
+def extract_institution_gstin(text: str) -> str | None:
     match = re.search(
         r"GSTIN\s+([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1})",
         text
@@ -182,10 +183,10 @@ def extract_gstin(text: str) -> str | None:
 
 
 # ─────────────────────────────────────────
-# PAN extraction
+# PAN extraction (institution's, see note above)
 # ─────────────────────────────────────────
 
-def extract_pan(text: str) -> str | None:
+def extract_institution_pan(text: str) -> str | None:
     match = re.search(r"PAN\s+([A-Z]{5}[0-9]{4}[A-Z]{1})", text)
     if match:
         return match.group(1).strip()
@@ -193,25 +194,13 @@ def extract_pan(text: str) -> str | None:
 
 
 # ─────────────────────────────────────────
-# Vendor address extraction
+# Trainer email extraction
 # ─────────────────────────────────────────
 
-def extract_vendor_address(text: str) -> str | None:
-    patterns = [
-        r"Vendor\s+Address\s*\n[^\n]+\n([^\n]+(?:\n[^\n]+)?)",
-        r"Vendor\s+Address[^\n]*\n[^\n]+\n([A-Za-z0-9][^\n]+(?:\n[^\n]+)?)",
-    ]
-    for pattern in patterns:
-        match = re.search(pattern, text, re.IGNORECASE)
-        if match:
-            address = match.group(1).strip()
-            # Join hyphen-split lines (e.g. "Chennai-\n600082" → "Chennai-600082")
-            address = re.sub(r'-\s*\n\s*', '', address)
-            # Replace any remaining newlines with a space
-            address = re.sub(r'\s*\n\s*', ' ', address)
-            address = address.strip()
-            if 5 <= len(address) <= 200:
-                return address
+def extract_trainer_email(text: str) -> str | None:
+    match = re.search(r"[\w\.\-]+@[\w\-]+\.[A-Za-z]{2,}", text)
+    if match:
+        return match.group(0).strip()
     return None
 
 
@@ -231,7 +220,7 @@ def extract_fields_pattern(text: str) -> dict:
         "qty": extract_qty(text),
         "rate": extract_rate(text),
         "total": extract_total(text),
-        "gstin": extract_gstin(text),
-        "pan": extract_pan(text),
-        "vendor_address": extract_vendor_address(text),
+        "institution_gstin": extract_institution_gstin(text),
+        "institution_pan": extract_institution_pan(text),
+        "trainer_email": extract_trainer_email(text),
     }

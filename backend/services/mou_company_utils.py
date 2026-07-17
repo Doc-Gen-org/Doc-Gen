@@ -10,7 +10,7 @@ def get_or_create_mou_company(db: Session, fields: dict) -> MouCompany | None:
     to generate this MOU (latest generation wins). If not found,
     creates a new record.
     """
-    name = (fields.get("vendor_name") or "").strip()
+    name = (fields.get("first_party_full_name") or "").strip()
     if not name:
         return None
 
@@ -22,12 +22,9 @@ def get_or_create_mou_company(db: Session, fields: dict) -> MouCompany | None:
         company = MouCompany(company_code=get_next_company_code(db), name=name)
         db.add(company)
 
-    company.address = fields.get("vendor_address") or company.address
-    company.signatory_name = fields.get("vendor_signatory_name") or company.signatory_name
-    company.signatory_title = fields.get("vendor_signatory_title") or company.signatory_title
-    company.email = fields.get("vendor_email") or company.email
-    company.pan = fields.get("vendor_pan") or company.pan
-    company.trainer_contact = fields.get("vendor_aadhaar") or company.trainer_contact
+    company.address = fields.get("first_party_address") or company.address
+    company.signatory_name = fields.get("first_party_signatory_name") or company.signatory_name
+    company.signatory_title = fields.get("first_party_sig_designation") or company.signatory_title
 
     db.commit()
     db.refresh(company)

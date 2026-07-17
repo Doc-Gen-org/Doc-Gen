@@ -42,7 +42,7 @@ class GenerateRequest(BaseModel):
 def generate(request: GenerateRequest, db: Session = Depends(get_db)):
     fields = dict(request.fields)
 
-    if request.document_type == "invoice":
+    if request.document_type == "invoice" and not fields.get("invoice_number"):
         fields["invoice_number"] = get_next_invoice_number(db)
 
     try:
@@ -61,7 +61,7 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
 
     trainer = None
     trainer_name = fields.get("trainer_name")
-    if trainer_name and request.document_type in ("po", "invoice"):
+    if trainer_name and request.document_type == "po":
         trainer = get_or_create_trainer_by_name(db, trainer_name)
 
     mou_company = None

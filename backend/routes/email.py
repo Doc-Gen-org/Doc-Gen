@@ -6,6 +6,7 @@ from typing import Optional
 from models.database import get_db
 from models.schemas import DocumentRecord, Trainer
 from services.email_sender import send_email_with_attachment
+from services.email_templates import build_email_for_document_type
 
 router = APIRouter()
 
@@ -45,13 +46,11 @@ def send_email(request: SendEmailRequest, db: Session = Depends(get_db)):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=422, detail={"error": "Generated file no longer exists on disk"})
 
-    subject = request.subject or f"Purchase Order from ACA Technologies"
     greeting_name = trainer_name or "Trainer"
-    body = request.message or (
-        f"Dear {greeting_name},\n\n"
-        f"Please find attached your Purchase Order from ACA Technologies.\n\n"
-        f"Regards,\nACA Technologies"
-    )
+    default_subject, default_body = build_email_for_document_type(document.document_type, greeting_name)
+
+    subject = request.subject or default_subject
+    body = request.message or default_body
 
     try:
         send_email_with_attachment(

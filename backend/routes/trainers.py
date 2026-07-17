@@ -10,6 +10,7 @@ from models.schemas import Trainer, DocumentRecord
 from services.trainer_counter import get_next_trainer_code
 from services.trainer_utils import get_latest_trainer_document, get_trainer_documents_by_type
 from services.email_sender import send_email_with_attachment
+from services.email_templates import build_email_for_document_type
 from services.generator import generate_document
 from services.invoice_counter import get_next_invoice_number
 
@@ -272,17 +273,8 @@ def send_document_by_id(trainer_id: int, document_id: int, db: Session = Depends
     except Exception:
         fields = {}
 
-    doc_label = "Purchase Order" if record.document_type == "po" else "Invoice"
     reference_number = fields.get("po_number") if record.document_type == "po" else fields.get("invoice_number")
-    reference_line = f"Reference Number: {reference_number}\n" if reference_number else ""
-
-    subject = f"{doc_label} from ACA Technologies \u2014 {trainer.name}"
-    body = (
-        f"Dear {trainer.name},\n\n"
-        f"Please find attached your {doc_label.lower()} from ACA Technologies.\n\n"
-        f"{reference_line}"
-        f"Regards,\nACA Technologies"
-    )
+    subject, body = build_email_for_document_type(record.document_type, trainer.name, reference_number)
 
     try:
         send_email_with_attachment(
@@ -327,13 +319,7 @@ async def send_document_to_trainer(
     with open(saved_path, "wb") as f:
         f.write(contents)
 
-    doc_label = "Purchase Order" if doc_type == "po" else "Invoice"
-    subject = f"{doc_label} from ACA Technologies \u2014 {trainer.name}"
-    body = (
-        f"Dear {trainer.name},\n\n"
-        f"Please find attached your {doc_label.lower()} from ACA Technologies.\n\n"
-        f"Regards,\nACA Technologies"
-    )
+    subject, body = build_email_for_document_type(doc_type, trainer.name)
 
     try:
         send_email_with_attachment(

@@ -24,76 +24,56 @@
         border-bottom: 1px solid #ddd;
     }
     .logo-block img {
-        height: 90px;
+        height: 70px;
         width: auto;
         object-fit: contain;
     }
     .po-title-block { text-align: right; }
     .po-title-block .po-title {
-        font-size: 28pt;
+        font-size: 26pt;
         white-space: nowrap;
         font-weight: 400;
         color: #222;
         letter-spacing: -0.3px;
         line-height: 1.1;
     }
-    .po-title-block .po-number {
-        font-size: 10pt;
+    .po-title-block .po-meta {
+        font-size: 9.5pt;
         font-weight: 400;
         color: #555;
-        margin-top: 3px;
+        margin-top: 4px;
     }
 
-    .company-block {
-        margin-bottom: 10px;
-        font-size: 9pt;
-        line-height: 1.45;
-    }
-    .company-block .company-name {
-        font-size: 10pt;
-        font-weight: bold;
-        margin-bottom: 1px;
-    }
-
-    .two-col {
+    .info-grid {
         display: flex;
         justify-content: space-between;
+        gap: 16px;
         margin-bottom: 10px;
-        font-size: 9pt;
-        line-height: 1.45;
+        padding: 10px 12px;
+        background: #f7f8fa;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
     }
-    .two-col .col { width: 48%; }
-    .col-label {
+    .info-grid .col { width: 48%; font-size: 9pt; line-height: 1.5; }
+    .info-grid .col-label {
         font-size: 8.5pt;
         color: #555;
         margin-bottom: 2px;
+        font-weight: 600;
     }
-    .col-name { font-weight: bold; }
+    .info-grid .col-name { font-weight: bold; margin-bottom: 1px; }
 
-    .meta-table {
-        width: 100%;
-        margin-bottom: 12px;
-        font-size: 9pt;
-    }
-    .meta-table td { padding: 1.5px 0; }
-    .meta-table td.meta-label {
-        text-align: right;
+    .onboarding-note {
+        font-size: 8.5pt;
         color: #444;
-        padding-right: 12px;
-        white-space: nowrap;
+        line-height: 1.4;
     }
-    .meta-table td.meta-value {
-        text-align: right;
-        font-weight: bold;
-        white-space: nowrap;
-        width: 100px;
-    }
-    .meta-table td.spacer { width: 100%; }
 
     table.items {
         width: 100%;
         border-collapse: collapse;
         font-size: 9pt;
+        margin-top: 4px;
     }
     table.items thead tr { background-color: #1a1a2e; }
     table.items thead th {
@@ -120,20 +100,24 @@
         text-align: right;
     }
 
+    .section-title {
+        font-size: 11pt;
+        font-weight: bold;
+        color: #1a1a2e;
+        margin: 16px 0 6px 0;
+    }
+
     .terms {
-        margin-top: 16px;
+        margin-top: 14px;
         font-size: 8pt;
         color: #333;
         line-height: 1.4;
     }
     .terms .terms-title {
         font-weight: bold;
-        font-size: 9pt;
-        margin-bottom: 3px;
-    }
-    .terms .terms-sub {
-        font-weight: bold;
-        margin: 4px 0 2px 0;
+        font-size: 9.5pt;
+        margin-bottom: 4px;
+        color: #1a1a2e;
     }
     .terms ol {
         margin: 0 0 0 16px;
@@ -141,13 +125,17 @@
     }
     .terms ol li { margin-bottom: 2px; }
 
-    .footer-note {
-        margin-top: 14px;
-        padding-top: 8px;
-        border-top: 1px solid #ddd;
-        font-size: 8pt;
-        color: #a78bfa;
-        font-style: italic;
+    .page-break { page-break-before: always; }
+
+    .sig-block {
+        margin-top: 26px;
+        font-size: 9pt;
+    }
+    .sig-block .sig-line {
+        margin-top: 30px;
+        border-top: 1px solid #999;
+        width: 200px;
+        padding-top: 4px;
     }
 </style>
 </head>
@@ -159,49 +147,52 @@
         </div>
         <div class="po-title-block">
             <div class="po-title">Purchase Order</div>
-            <div class="po-number"># {{ po_number }}</div>
+            <div class="po-meta"># {{ po_number }}</div>
+            <div class="po-meta">Date: {{ po_date }}</div>
         </div>
     </div>
 
-    <div class="company-block">
-        <div class="company-name">{{ vendor_name }}</div>
-        {{ vendor_address }}<br>
-        {% if vendor_gstin %}GSTIN {{ vendor_gstin }}<br>{% endif %}
-        {% if vendor_pan %}PAN {{ vendor_pan }}{% endif %}
-    </div>
-
-    <div class="company-block">
-        <div class="col-label">Trainer Address</div>
-        <div class="col-name">{{ trainer_name }}</div>
-        {{ (trainer_address | safe) if trainer_address else '' }}
-    </div>
-
-<div style="display:flex; justify-content:space-between; margin-bottom:12px;">
-        <div class="company-block" style="width:48%;">
-            <div class="col-label">Deliver To</div>
+    <div class="info-grid">
+        <div class="col">
+            <div class="col-label">Issued By</div>
+            <div class="col-name">ACA Technologies</div>
+            No:18/2 Govindarajulu Street, Agaram,<br>
+            Chennai - 600082
+        </div>
+        <div class="col">
+            <div class="col-label">Trainer / Consultant</div>
             <div class="col-name">{{ trainer_name }}</div>
-            {% if trainer_address %}{{ trainer_address }}{% endif %}
+            {% if trainer_email %}{{ trainer_email }}{% endif %}
         </div>
-        <table class="meta-table" style="width:48%; align-self:flex-start; padding-top:18px;">
-            <tr>
-                <td class="meta-label">Date :</td>
-                <td class="meta-value">{{ po_date }}</td>
-            </tr>
-            <tr>
-                <td class="meta-label">Start Date :</td>
-                <td class="meta-value">{{ start_date }}</td>
-            </tr>
-            <tr>
-                <td class="meta-label">End Date :</td>
-                <td class="meta-value">{{ end_date }}</td>
-            </tr>
-            <tr>
-                <td class="meta-label">Trainer / Consultant Name :</td>
-                <td class="meta-value">{{ trainer_name }}</td>
-            </tr>
-        </table>
     </div>
 
+    <div class="info-grid">
+        <div class="col">
+            <div class="col-label">Client / Institution</div>
+            <div class="col-name">{{ issuing_company_name }}</div>
+            {% if issuing_company_address %}{{ issuing_company_address }}<br>{% endif %}
+            {% if institution_gstin %}GSTIN {{ institution_gstin }}<br>{% endif %}
+            {% if institution_pan %}PAN {{ institution_pan }}{% endif %}
+        </div>
+        <div class="col">
+            <div class="col-label">Engagement Dates</div>
+            Start Date: {{ start_date }}<br>
+            End Date: {{ end_date }}
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="col">
+            <div class="col-label">Training Location</div>
+            {% if location %}{{ location }}{% endif %}
+        </div>
+        <div class="col">
+            <div class="col-label">Onboarding Requirement</div>
+            <div class="onboarding-note">Trainer must onboard and complete profile formalities on hiretrainers.in before engagement confirmation.</div>
+        </div>
+    </div>
+
+    <div class="section-title">Training Scope And Commercials</div>
     <table class="items">
         <thead>
             <tr>
@@ -216,11 +207,11 @@
             <tr>
                 <td>1</td>
                 <td>
-                    Trainer name - {{ trainer_name }}<br>
-                    Batch - {{ technology }}<br>
-                    {% if location %}Location of Training - {{ location }}<br>{% endif %}
+                    Trainer engagement - {{ trainer_name }}<br>
+                    Training / Batch: {{ technology }}<br>
+                    {% if location %}Location: {{ location }}<br>{% endif %}
                     Scope of Training as per MOA<br>
-                    Unit of Measure (QTY) - Days
+                    Unit of Measure: Days
                 </td>
                 <td class="num">{{ qty }}</td>
                 <td class="num">{{ rate }}</td>
@@ -237,25 +228,45 @@
     </table>
 
     <div class="terms">
-        <div class="terms-title">Terms &amp; Conditions</div>
-        <div class="terms-sub">Payment Terms:</div>
+        <div class="terms-title">Payment Terms</div>
         <ol>
-            <li>Freelance trainers can raise invoices only after completing at least 15 training days. Invoices must be raised only for completed training days.</li>
-            <li>Subsequent invoices must be raised after completing each additional 15 training days. If the remaining contract duration is less than 15 days, the final invoice must be raised upon completion of the contract.</li>
-            <li>Each invoice must be accompanied by the Purchase Order (PO) issued by {{ vendor_name }} before the commencement of services and such invoice must have reference to the respective purchase order number.</li>
-            <li>While submitting subsequent invoices, previous invoice linked to the same PO must be shared alongside for ease of reconciliation.</li>
-            <li>Invoices should include all reimbursement claims for travel and accommodation. Reimbursement claims must be supported by all necessary documents, such as bills and receipts.</li>
-            <li>Reimbursement should be included in the Training service invoice; no separate invoice must be raised for reimbursements.</li>
-            <li>Any reimbursement claimed separately after the final invoice for the PO shall be rejected.</li>
-            <li>Invoices shall be paid on net 30 basis from date of approval of invoice by {{ vendor_name }} SPOC.</li>
-            <li>Invoice including reimbursement claims shall be processed only after approval of {{ vendor_name }} SPOC.</li>
-            <li>Reimbursements are limited to limits as agreed upon in MOU.</li>
-            <li>All payments are subject to direct and indirect tax laws as applicable.</li>
+            <li>Payment shall be made within 30 days after completion and approval of the training, unless otherwise agreed in writing by ACA Technologies.</li>
+            <li>Payment shall be made only for completed and approved training days / sessions.</li>
+            <li>Trainer may raise invoice only after completion and approval of the agreed training.</li>
+            <li>Invoice must reference this PO number and include applicable tax details, bank details, and supporting documents.</li>
+            <li>TDS at 10% will be deducted from payable amounts as applicable.</li>
+            <li>All payments are subject to applicable tax, GST, invoice verification, client approval, and internal approval by ACA Technologies.</li>
         </ol>
     </div>
 
-    <div class="footer-note">
-        This is a system generated PO and does not require signature.
+    <div class="terms">
+        <div class="terms-title">Travel, Accommodation, Food And Reimbursement Terms</div>
+        <ol>
+            <li>Travel expenses, accommodation, food, or other reimbursements, if approved, shall be reimbursed only against valid bills or receipts.</li>
+            <li>Reimbursements will not be paid in advance unless ACA Technologies explicitly approves an exception in writing.</li>
+            <li>Reimbursement claims must be submitted with the relevant training invoice and valid supporting documents.</li>
+            <li>Unapproved expenses, unsupported claims, or claims submitted after final settlement may be rejected.</li>
+        </ol>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="terms">
+        <div class="terms-title">Other Trainer Engagement Terms</div>
+        <ol>
+            <li>PO cancellation by ACA Technologies: ACA Technologies reserves the right to cancel, withdraw, or discontinue this Purchase Order / trainer engagement at any time at its sole discretion. Payment, if applicable, shall be made only for completed and approved training days / sessions as per the agreed terms.</li>
+            <li>Trainer cancellation at the last moment is not encouraged. If the trainer cannot continue or must cancel, the trainer should inform ACA Technologies at least 48 hours in advance.</li>
+            <li>Last-minute cancellation, discontinuation, misconduct, or direct dealing with the client may lead to payment deductions, non-payment for incomplete work, or legal action as appropriate.</li>
+            <li>The trainer shall not directly approach, solicit, or enter into business dealings with ACA Technologies' clients for the same or related training opportunities.</li>
+            <li>The trainer shall be punctual, maintain professional conduct, follow client and ACA Technologies coordination requirements, and provide daily training updates when requested.</li>
+            <li>The trainer shall maintain confidentiality of training materials, client information, student information, credentials, assessments, and other business information shared during the engagement.</li>
+            <li>The trainer is expected to deliver the agreed scope professionally and coordinate concerns, schedule changes, or delivery issues through ACA Technologies.</li>
+        </ol>
+    </div>
+
+    <div class="sig-block">
+        <div><strong>For ACA Technologies</strong></div>
+        <div class="sig-line">Authorized Signatory</div>
     </div>
 
 </body>

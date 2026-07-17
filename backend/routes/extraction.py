@@ -78,14 +78,12 @@ async def extract_document(
             llm_raw = extract_fields_from_text(raw_text)
             llm_fields = {
                 "issuing_company_name": llm_raw.get("issuing_company") or llm_raw.get("issuing_company_name"),
-                "vendor_name": "ACA Technologies",
                 "technology": llm_raw.get("technology"),
                 "trainer_name": llm_raw.get("trainer_name"),
             }
         except Exception:
             llm_fields = {
                 "issuing_company_name": None,
-                "vendor_name": "ACA Technologies",
                 "technology": None,
                 "trainer_name": None,
             }
@@ -95,12 +93,6 @@ async def extract_document(
         # PO number is no longer taken from the source document — ACA
         # assigns its own PO number manually for the output document.
         extracted_fields["po_number"] = ""
-
-        # These fields never come from extraction; the source PO has no
-        # data for them, so they're always filled in manually on review.
-        extracted_fields["trainer_address"] = ""
-        extracted_fields["vendor_gstin"] = ""
-        extracted_fields["vendor_pan"] = ""
 
         suggested_output_type = "po"
 
@@ -152,7 +144,7 @@ def transform_document(request: TransformRequest, db: Session = Depends(get_db))
     # Auto-link (or auto-create) the trainer this document belongs to
     trainer = None
     trainer_name = request.fields.get("trainer_name")
-    if trainer_name and request.output_document_type in ("po", "invoice"):
+    if trainer_name and request.output_document_type == "po":
         trainer = get_or_create_trainer_by_name(db, trainer_name)
 
     record = DocumentRecord(
