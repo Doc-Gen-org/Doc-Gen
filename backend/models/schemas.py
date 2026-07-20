@@ -20,6 +20,7 @@ class DocumentRecord(Base):
     source_document_id = Column(String, nullable=True)
     trainer_id = Column(Integer, ForeignKey("trainers.id"), nullable=True)
     mou_company_id = Column(Integer, ForeignKey("mou_companies.id"), nullable=True)
+    intern_id = Column(Integer, ForeignKey("interns.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Trainer(Base):
@@ -35,6 +36,25 @@ class Trainer(Base):
     payment_status = Column(String, nullable=False, default="Pending")
     paid_date = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class Intern(Base):
+    __tablename__ = "interns"
+
+    id = Column(Integer, primary_key=True, index=True)
+    intern_code = Column(String, unique=True, nullable=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    institution = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    offer_sent_at = Column(String, nullable=True)         # "YYYY-MM-DD HH:MM" — set when offer letter is sent
+    certificate_sent_at = Column(String, nullable=True)   # set when completion certificate is sent
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class InternCounter(Base):
+    __tablename__ = "intern_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
 
 class InvoiceCounter(Base):
     __tablename__ = "invoice_counter"
@@ -103,11 +123,8 @@ class FinanceRecord(Base):
     __tablename__ = "finance_records"
 
     id = Column(Integer, primary_key=True, index=True)
-    company_name = Column(String, nullable=False)
-    amount_received = Column(Float, nullable=False)
-    receiving_date = Column(String, nullable=False)  # "YYYY-MM-DD"
-    trainer_name = Column(String, nullable=False)     # free text — manual entry, not a strict FK
-    amount_sent = Column(Float, nullable=False)
-    sending_date = Column(String, nullable=False)      # "YYYY-MM-DD"
-    notes = Column(String, nullable=True)               # the only optional field
+    entry_type = Column(String, nullable=False)   # "received" or "paid"
+    amount = Column(Float, nullable=False)
+    date = Column(String, nullable=False)          # "YYYY-MM-DD"
+    notes = Column(String, nullable=True)          # company/trainer/context goes here — free text, not a strict field
     created_at = Column(DateTime(timezone=True), server_default=func.now())
