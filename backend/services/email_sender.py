@@ -13,6 +13,27 @@ def _check_smtp_configured(config: dict):
         )
 
 
+def _send_via_smtp(config: dict, msg: EmailMessage) -> None:
+    """
+    Port 465 expects an SSL connection from the moment it's opened
+    (smtplib.SMTP_SSL). Port 587 (and most others) expect a plain
+    connection that gets upgraded to TLS via STARTTLS. Using the wrong
+    one for a given port fails to connect at all, so pick based on
+    the configured port rather than assuming STARTTLS always.
+    """
+    port = config["SMTP_PORT"]
+
+    if port == 465:
+        with smtplib.SMTP_SSL(config["SMTP_HOST"], port) as server:
+            server.login(config["SMTP_USER"], config["SMTP_PASSWORD"])
+            server.send_message(msg)
+    else:
+        with smtplib.SMTP(config["SMTP_HOST"], port) as server:
+            server.starttls()
+            server.login(config["SMTP_USER"], config["SMTP_PASSWORD"])
+            server.send_message(msg)
+
+
 def send_email_with_attachment(
     db: Session,
     to_email: str,
@@ -39,10 +60,7 @@ def send_email_with_attachment(
 
     msg.add_attachment(file_data, maintype=maintype, subtype=subtype, filename=file_name)
 
-    with smtplib.SMTP(config["SMTP_HOST"], config["SMTP_PORT"]) as server:
-        server.starttls()
-        server.login(config["SMTP_USER"], config["SMTP_PASSWORD"])
-        server.send_message(msg)
+    _send_via_smtp(config, msg)
 
 
 def send_warning_email(db: Session, to_email: str, recipient_name: str, message: str) -> None:
@@ -60,7 +78,4 @@ def send_warning_email(db: Session, to_email: str, recipient_name: str, message:
     body = f"Dear {recipient_name},\n\n{message}\n\nRegards,\nACA Technologies"
     msg.set_content(body)
 
-    with smtplib.SMTP(config["SMTP_HOST"], config["SMTP_PORT"]) as server:
-        server.starttls()
-        server.login(config["SMTP_USER"], config["SMTP_PASSWORD"])
-        server.send_message(msg)
+    _send_via_smtp(config, msg)

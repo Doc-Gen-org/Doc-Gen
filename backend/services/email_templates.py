@@ -71,6 +71,68 @@ def build_invoice_email(trainer_name: str, reference_number: str | None = None) 
     return subject, body
 
 
+def strip_markdown_bold(text: str) -> str:
+    """
+    Certificate contribution summaries may contain **bold** markdown
+    (per Creator's own hint text for that field). Email bodies here are
+    plain text, so drop the ** markers rather than showing them literally.
+    """
+    import re
+    return re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+
+
+def build_offer_letter_email(
+    intern_name: str, role: str, department: str, start_date: str,
+    duration: str, work_mode: str, acceptance_deadline: str,
+) -> tuple[str, str]:
+    subject = "Congratulations! Internship Offer from ACA Technologies"
+
+    body = (
+        f"Dear {intern_name},\n\n"
+        f"Congratulations!\n\n"
+        f"We are pleased to inform you that you have been selected for the position of {role} "
+        f"at ACA Technologies.\n\n"
+        f"Please find the offer details below:\n\n"
+        f"Position: {role}\n"
+        f"Department/Domain: {department}\n"
+        f"Start Date: {start_date}\n"
+        f"Duration: {duration}\n"
+        f"Work Mode: {work_mode}\n\n"
+        f"Please find the offer letter attached for your reference. Kindly review the details and "
+        f"confirm your acceptance by replying to this email by {acceptance_deadline}.\n\n"
+        f"We are excited to welcome you to ACA Technologies and look forward to your successful "
+        f"internship journey with us.\n\n"
+        f"Best regards,\nACA Technologies"
+    )
+    return subject, body
+
+
+def build_internship_completion_email(intern_name: str, contribution_summary: str | None = None) -> tuple[str, str]:
+    subject = f"Completion of Internship Certificate - {intern_name}"
+
+    if contribution_summary:
+        clean_summary = strip_markdown_bold(contribution_summary)
+        contribution_line = (
+            f"We sincerely appreciate your contributions during the internship, especially your work on "
+            f"{clean_summary}.\n\n"
+        )
+    else:
+        contribution_line = "We sincerely appreciate your contributions during the internship.\n\n"
+
+    body = (
+        f"Dear {intern_name},\n\n"
+        f"Congratulations on successfully completing your internship with ACA Technologies.\n\n"
+        f"{contribution_line}"
+        f"Your work ethic, technical proficiency, and professional conduct throughout the internship "
+        f"have been commendable. We wish you continued success in your academic and professional journey.\n\n"
+        f"Please find your internship completion certificate attached.\n\n"
+        f"Best regards,\nACA Technologies\n"
+        f"Email: support@hiretrainers.in\n"
+        f"Website: www.hiretrainers.in"
+    )
+    return subject, body
+
+
 def build_default_email(trainer_name: str, doc_label: str, reference_number: str | None = None) -> tuple[str, str]:
     subject = f"{doc_label} from ACA Technologies \u2014 {trainer_name}"
 

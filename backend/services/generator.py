@@ -8,11 +8,7 @@ from datetime import datetime
 from collections import OrderedDict
 
 from services.mou_defaults import ACA_MOU_DEFAULTS
-
-TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "..", "templates")
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
-
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+from services.app_paths import TEMPLATES_DIR, GENERATED_FILES_DIR as OUTPUT_DIR
 
 jinja_env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
 
