@@ -13,7 +13,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [title, setTitle] = useState("Confirm");
-    const resolver = useRef<(value: boolean) => void>();
+    const resolver = useRef<((value: boolean) => void) | undefined>(undefined);
 
     const confirm = useCallback((msg: string, t = "Confirm") => {
         setMessage(msg);

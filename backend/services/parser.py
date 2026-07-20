@@ -10,28 +10,31 @@ import shutil
 # ─────────────────────────────────────────
 
 def _find_tesseract() -> str:
-    # 1. Check environment variable (most portable — set this on any machine)
+    # 1. Check environment variable — this is how the packaged Electron
+    #    app tells the backend exactly where the bundled Tesseract is;
+    #    it's also the most portable option for any manual setup.
     env_path = os.environ.get("TESSERACT_PATH")
     if env_path and os.path.exists(env_path):
         return env_path
 
-    # 2. Check if tesseract is on system PATH (standard install on Mac/Linux)
+    # 2. Check if tesseract is on system PATH (standard install on Mac/Linux,
+    #    or a manual Windows install that was added to PATH)
     system_path = shutil.which("tesseract")
     if system_path:
         return system_path
 
-    # 3. Check common Windows install locations
+    # 3. Check the standard Windows install location
     windows_paths = [
         r"C:\Program Files\Tesseract-OCR\tesseract.exe",
         r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
-        r"C:\Users\sanja\Desktop\Sanjay\tesseract.exe",
-        r"C:\Users\KBsan\Desktop\tesseract.exe",
     ]
     for path in windows_paths:
         if os.path.exists(path):
             return path
 
-    # 4. Search relative to this file (for bundled/portable installs)
+    # 4. Search relative to this file (for a portable/bundled install
+    #    that isn't going through Electron's env var, e.g. running the
+    #    PyInstaller-built backend exe directly)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     bundled_paths = [
         os.path.join(base_dir, "bin", "tesseract.exe"),
@@ -52,7 +55,7 @@ def _find_tesseract() -> str:
 # ─────────────────────────────────────────
 
 def _find_poppler() -> str | None:
-    # 1. Check environment variable
+    # 1. Check environment variable — set by the packaged Electron app
     env_path = os.environ.get("POPPLER_PATH")
     if env_path and os.path.exists(env_path):
         return env_path
@@ -63,19 +66,18 @@ def _find_poppler() -> str | None:
         # Return the directory containing it, not the binary itself
         return os.path.dirname(system_path)
 
-    # 3. Check common Windows locations
+    # 3. Check the standard Windows install location
     windows_paths = [
-        r"C:\Users\sanja\Desktop\Sanjay\Poppler\poppler-26.02.0\Library\bin",
-        r"C:\Users\KBsan\Desktop\Poppler\poppler-26.02.0\Library\bin",
-        r"C:\poppler\poppler-26.02.0\Library\bin",
-        r"C:\poppler\Library\bin",
         r"C:\Program Files\poppler\bin",
+        r"C:\poppler\bin",
+        r"C:\poppler\Library\bin",
     ]
     for path in windows_paths:
         if os.path.exists(path):
             return path
 
-    # 4. Search relative to this file
+    # 4. Search relative to this file (portable/bundled install run
+    #    without going through Electron's env var)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     bundled_paths = [
         os.path.join(base_dir, "bin", "poppler", "bin"),

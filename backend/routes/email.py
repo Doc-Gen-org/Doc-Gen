@@ -7,10 +7,9 @@ from models.database import get_db
 from models.schemas import DocumentRecord, Trainer
 from services.email_sender import send_email_with_attachment
 from services.email_templates import build_email_for_document_type
+from services.app_paths import GENERATED_FILES_DIR as OUTPUT_DIR
 
 router = APIRouter()
-
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
 
 
 class SendEmailRequest(BaseModel):

@@ -4,9 +4,7 @@ import uuid
 from sqlalchemy.orm import Session
 from models.schemas import ReceivedDocument, DocumentRecord
 from services.invoice_finance_extraction import extract_finance_details
-
-RECEIVED_DIR = os.path.join(os.path.dirname(__file__), "..", "received_documents")
-os.makedirs(RECEIVED_DIR, exist_ok=True)
+from services.app_paths import RECEIVED_DOCUMENTS_DIR as RECEIVED_DIR
 
 
 def save_received_document(db: Session, trainer_id: int, doc_type: str, original_filename: str, contents: bytes) -> ReceivedDocument:

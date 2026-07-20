@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { routes } from "../../routes";
-import "./Sidebar.css";
+import "./sidebar.css";
 
 function Sidebar() {
     const location = useLocation();
@@ -10,7 +10,7 @@ function Sidebar() {
     return (
         <nav className="sidebar">
             <div className="sidebar-header">
-                <img src="/aca-logo.png" alt="ACA Technologies" className="sidebar-logo" />
+                <img src={`${import.meta.env.BASE_URL}aca-logo.png`} alt="ACA Technologies" className="sidebar-logo" />
                 <div className="sidebar-title">
                     <span className="sidebar-title-main">DocGen</span>
                     <span className="sidebar-title-sub">ACA Technologies</span>
