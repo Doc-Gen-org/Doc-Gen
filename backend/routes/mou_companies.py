@@ -7,10 +7,9 @@ from pydantic import BaseModel
 from models.database import get_db
 from models.schemas import MouCompany, DocumentRecord
 from services.mou_company_counter import get_next_company_code
+from services.app_paths import GENERATED_FILES_DIR
 
 router = APIRouter()
-
-GENERATED_FILES_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
 
 
 class MouCompanyCreate(BaseModel):

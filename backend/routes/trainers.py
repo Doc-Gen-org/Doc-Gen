@@ -13,12 +13,9 @@ from services.email_sender import send_email_with_attachment
 from services.email_templates import build_email_for_document_type
 from services.generator import generate_document
 from services.invoice_counter import get_next_invoice_number
+from services.app_paths import UPLOADED_DOCUMENTS_DIR as UPLOADS_DIR, GENERATED_FILES_DIR
 
 router = APIRouter()
-
-UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "..", "uploaded_documents")
-GENERATED_FILES_DIR = os.path.join(os.path.dirname(__file__), "..", "generated_files")
-os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 
 class TrainerCreate(BaseModel):

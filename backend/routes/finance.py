@@ -14,27 +14,22 @@ from services.finance_service import (
 
 router = APIRouter()
 
+VALID_ENTRY_TYPES = {"received", "paid"}
+
 
 class FinanceRecordCreate(BaseModel):
-    company_name: str
-    amount_received: float
-    receiving_date: str
-    trainer_name: str
-    amount_sent: float
-    sending_date: str
+    entry_type: str
+    amount: float
+    date: str
     notes: str | None = None
 
 
 def _serialize_record(r):
     return {
         "id": r.id,
-        "company_name": r.company_name,
-        "amount_received": r.amount_received,
-        "receiving_date": r.receiving_date,
-        "trainer_name": r.trainer_name,
-        "amount_sent": r.amount_sent,
-        "sending_date": r.sending_date,
-        "profit": r.amount_received - r.amount_sent,
+        "entry_type": r.entry_type,
+        "amount": r.amount,
+        "date": r.date,
         "notes": r.notes,
         "created_at": r.created_at.isoformat() if r.created_at else None,
     }
@@ -48,14 +43,16 @@ def get_records(db: Session = Depends(get_db)):
 
 @router.post("/finance/records")
 def add_record(request: FinanceRecordCreate, db: Session = Depends(get_db)):
+    if request.entry_type not in VALID_ENTRY_TYPES:
+        raise HTTPException(
+            status_code=422,
+            detail={"error": f"entry_type must be one of {sorted(VALID_ENTRY_TYPES)}"},
+        )
     record = create_finance_record(
         db,
-        company_name=request.company_name,
-        amount_received=request.amount_received,
-        receiving_date=request.receiving_date,
-        trainer_name=request.trainer_name,
-        amount_sent=request.amount_sent,
-        sending_date=request.sending_date,
+        entry_type=request.entry_type,
+        amount=request.amount,
+        date=request.date,
         notes=request.notes,
     )
     return _serialize_record(record)
@@ -80,17 +77,15 @@ def export_csv(db: Session = Depends(get_db)):
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow([
-        "Company", "Amount Received", "Receiving Date",
-        "Trainer", "Amount Sent", "Sending Date", "Profit", "Notes",
-    ])
+    writer.writerow(["Type", "Amount", "Date", "Notes"])
 
     for r in records:
-        writer.writerow([
-            r.company_name, r.amount_received, r.receiving_date,
-            r.trainer_name, r.amount_sent, r.sending_date,
-            r.amount_received - r.amount_sent, r.notes or "",
-        ])
+        # Wrapping the date as an Excel text-formula (="...") stops Excel
+        # from auto-converting it into a date serial number when the CSV
+        # is opened — that auto-conversion is what causes the "#######"
+        # overflow display when the column is too narrow.
+        excel_safe_date = f'="{r.date}"'
+        writer.writerow([r.entry_type, r.amount, excel_safe_date, r.notes or ""])
 
     output.seek(0)
     return StreamingResponse(

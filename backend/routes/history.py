@@ -5,12 +5,9 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from models.database import get_db
 from models.schemas import DocumentRecord, Company
+from services.app_paths import GENERATED_FILES_DIR
 
 router = APIRouter()
-
-GENERATED_FILES_DIR = os.path.join(
-    os.path.dirname(__file__), "..", "generated_files"
-)
 
 
 @router.get("/history")
