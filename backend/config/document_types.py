@@ -33,6 +33,7 @@ DOCUMENT_TYPES = [
             {"name": "first_party_sig_designation", "label": "Signature Block — Designation", "type": "text", "required": True},
             {"name": "first_party_sig_date", "label": "Signature Block — Date", "type": "date", "required": True},
             {"name": "first_party_sig_place", "label": "Signature Block — Place", "type": "text", "required": True},
+            {"name": "aca_sig_date", "label": "ACA Signature Date", "type": "date", "required": True},
             {"name": "witness1_name", "label": "Witness 1 — Name", "type": "text", "required": True},
             {"name": "witness1_address", "label": "Witness 1 — Address", "type": "textarea", "required": True},
             {"name": "witness2_name", "label": "Witness 2 — Name", "type": "text", "required": True},
@@ -50,27 +51,6 @@ DOCUMENT_TYPES = [
             {"name": "technology", "label": "Technology / Subject", "type": "text", "required": False},
             {"name": "attended_dates", "label": "Training Days Attended", "type": "multidate", "required": False},
             {"name": "num_rows", "label": "Number of Blank Item Rows", "type": "number", "required": False},
-        ],
-    },
-    {
-        "id": "certificate",
-        "label": "Internship Certificate",
-        "fields": [
-            {"name": "intern_name", "label": "Intern Name", "type": "text", "required": True},
-            {"name": "student_id", "label": "Student ID / Roll Number", "type": "text", "required": True},
-            {"name": "degree_year", "label": "Degree & Year", "type": "text", "required": True},
-            {"name": "institution_name", "label": "Institution Name", "type": "text", "required": True},
-            {"name": "institution_location", "label": "Institution Location", "type": "text", "required": True},
-            {"name": "start_date", "label": "Internship Start Date", "type": "text", "required": True},
-            {"name": "duration", "label": "Duration", "type": "text", "required": True},
-            {
-                "name": "contribution_summary",
-                "label": "Contribution Summary",
-                "type": "textarea",
-                "required": True,
-                "placeholder": "Wrap key phrases in **double asterisks** to make them bold. Example: developing an **AI-powered application** to mask PII from resumes, classifying vendors and trainers through AI/ML based on WhatsApp chats, and scraping training titles using machine learning"
-            },
-            {"name": "certificate_date", "label": "Certificate Issue Date", "type": "date", "required": True, "defaultToday": True},
         ],
     },
     {
