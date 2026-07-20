@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useDocumentTypes } from "./hooks/useDocumentTypes";
 import { useCreatorGenerate } from "./hooks/useCreatorGenerate";
 import CreatorForm from "./components/CreatorForm/CreatorForm";
-import SendEmailPanel from "../Editor/components/SendEmailPanel/SendEmailPanel";
 import { useToast } from "../../contexts/ToastContext";
 import "./Creator.css";
 
@@ -12,7 +11,7 @@ function todayISO(): string {
 
 function Creator() {
     const { types, loading, error: typesError } = useDocumentTypes();
-    const { generate, status, error: generateError, documentId } = useCreatorGenerate();
+    const { generate, status, error: generateError } = useCreatorGenerate();
     const { showToast } = useToast();
 
     const [selectedTypeId, setSelectedTypeId] = useState<string>("");
@@ -119,10 +118,6 @@ function Creator() {
 
                     {status === "success" && (
                         <p className="success-text">Document downloaded successfully.</p>
-                    )}
-
-                    {status === "success" && documentId && (
-                        <SendEmailPanel documentId={documentId} />
                     )}
                 </>
             )}

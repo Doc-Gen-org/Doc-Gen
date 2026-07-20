@@ -1,48 +1,35 @@
 const BASE_URL = "http://localhost:8000";
 
+export type FinanceEntryType = "received" | "paid";
+
 export interface FinanceRecord {
     id: number;
-    company_name: string;
-    amount_received: number;
-    receiving_date: string;
-    trainer_name: string;
-    amount_sent: number;
-    sending_date: string;
-    profit: number;
+    entry_type: FinanceEntryType;
+    amount: number;
+    date: string;
     notes: string | null;
     created_at: string | null;
 }
 
 export interface FinanceRecordInput {
-    company_name: string;
-    amount_received: number;
-    receiving_date: string;
-    trainer_name: string;
-    amount_sent: number;
-    sending_date: string;
+    entry_type: FinanceEntryType;
+    amount: number;
+    date: string;
     notes?: string;
-}
-
-export interface CompanyBreakdown {
-    company_name: string;
-    received: number;
-    sent: number;
-    profit: number;
 }
 
 export interface PeriodBreakdown {
     date?: string;
     month?: string;
     received: number;
-    sent: number;
+    paid: number;
     profit: number;
 }
 
 export interface FinanceSummary {
     total_received: number;
-    total_sent: number;
+    total_paid: number;
     net_profit: number;
-    by_company: CompanyBreakdown[];
     daily: PeriodBreakdown[];
     monthly: PeriodBreakdown[];
 }

@@ -4,7 +4,7 @@ import type { DocumentTypeSchema } from "../../../lib/api/documentTypesClient";
 
 // Doc types that are actually form-based Creator documents.
 // "email" exists in the schema but isn't a generatable document type.
-const CREATOR_DOC_TYPES = ["po", "mou", "invoice", "certificate"];
+const CREATOR_DOC_TYPES = ["po", "mou", "invoice"];
 
 export function useDocumentTypes() {
     const [types, setTypes] = useState<DocumentTypeSchema[]>([]);
