@@ -22,11 +22,25 @@
     font-weight: 600;
 }
 
-.finance-disclaimer {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--color-border);
-    font-size: 0.76rem;
-    color: var(--color-slate-light);
-    font-style: italic;
+.finance-copy-cell {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.finance-copy-button {
+    padding: 3px 10px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-slate);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.finance-copy-button:hover {
+    background: var(--color-border);
+    color: var(--color-ink);
 }

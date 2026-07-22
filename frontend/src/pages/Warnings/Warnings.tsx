@@ -95,7 +95,7 @@ function Warnings() {
                 {mode === "rows" ? (
                     <>
                         <label className="form-section-label">Recipients</label>
-                        {recipients.map((row, index) => (
+                        {recipients.map((row) => (
                             <div key={row.id} className="recipient-row">
                                 <input
                                     type="text"

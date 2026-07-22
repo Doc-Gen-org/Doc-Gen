@@ -13,6 +13,7 @@ function FinanceDetailsPanel({ trainerId, trainerName, onClose }: FinanceDetails
     const [details, setDetails] = useState<Record<string, string> | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -21,6 +22,17 @@ function FinanceDetailsPanel({ trainerId, trainerName, onClose }: FinanceDetails
             .catch((err) => setError(err instanceof Error ? err.message : "Failed to load finance details."))
             .finally(() => setLoading(false));
     }, [trainerId]);
+
+    const handleCopy = async (label: string, value: string) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            setCopiedLabel(label);
+            setTimeout(() => setCopiedLabel((current) => (current === label ? null : current)), 1500);
+        } catch {
+            // Clipboard access can fail (e.g. no permission, insecure context) —
+            // fail silently rather than interrupt the user with an error.
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -68,6 +80,16 @@ function FinanceDetailsPanel({ trainerId, trainerName, onClose }: FinanceDetails
                                     <tr key={label}>
                                         <td className="finance-label">{label}</td>
                                         <td className="finance-value">{value}</td>
+                                        <td className="finance-copy-cell">
+                                            <button
+                                                type="button"
+                                                className="finance-copy-button"
+                                                onClick={() => handleCopy(label, value)}
+                                                title="Copy to clipboard"
+                                            >
+                                                {copiedLabel === label ? "Copied" : "Copy"}
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

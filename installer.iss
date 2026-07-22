@@ -30,6 +30,17 @@ OutputDir=installer_output
 OutputBaseFilename=DocGen-Setup-{#MyAppVersion}
 Compression=lzma2
 SolidCompression=yes
+; Our bundle (Ollama + 2 models + everything else) exceeds Inno
+; Setup's ~4.2GB limit for a single monolithic Setup.exe. DiskSpanning
+; splits the payload into Setup.exe plus several .bin data files that
+; must sit alongside it — this is NOT for physical disk swapping; a
+; high SlicesPerDisk just means it reads all the .bin files
+; automatically from the same folder with no "insert next disk"
+; prompt. Distributing the installer now means sharing the whole
+; installer_output folder (or a zip of it), not a single .exe file.
+DiskSpanning=yes
+DiskSliceSize=2000000000
+SlicesPerDisk=26
 ArchitecturesInstallIn64BitMode=x64compatible
 WizardStyle=modern
 ; No code signing certificate yet — this installer will be unsigned.
