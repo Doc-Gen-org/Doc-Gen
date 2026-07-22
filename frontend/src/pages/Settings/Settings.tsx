@@ -20,6 +20,8 @@ function Settings() {
     const [testStatus, setTestStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
     const [testError, setTestError] = useState<string | null>(null);
 
+    const [showHelp, setShowHelp] = useState(false);
+
     useEffect(() => {
         fetchEmailSettings()
             .then((settings) => {
@@ -83,13 +85,43 @@ function Settings() {
                     <span className={configured ? "status-pill success" : "status-pill warning"}>
                         {configured ? "Configured" : "Not configured"}
                     </span>
+                    <button
+                        type="button"
+                        className="help-toggle-button"
+                        onClick={() => setShowHelp((v) => !v)}
+                    >
+                        {showHelp ? "Hide instructions" : "? How do I get these?"}
+                    </button>
                 </div>
+
+                {showHelp && (
+                    <div className="help-panel">
+                        <p className="help-panel-title">Setting up Hostinger custom domain email</p>
+                        <ol>
+                            <li>SMTP Host: <code>smtp.hostinger.com</code></li>
+                            <li>SMTP Port: <code>587</code></li>
+                            <li>SMTP Username: the full mailbox address, e.g. <code>hr@yourcompany.com</code></li>
+                            <li>SMTP Password: try the regular password for that mailbox first — the same one used to log into <code>mail.hostinger.com</code> or webmail.</li>
+                        </ol>
+                        <p className="help-panel-note">
+                            If sending fails with an authentication error, that mailbox likely has two-factor
+                            authentication turned on — in that case, use a Hostinger App Password instead of
+                            the regular one: in hPanel, go to Emails → your domain → Mailboxes → the ⋮ menu
+                            next to the mailbox → App passwords → Generate. Use that generated code as the
+                            SMTP Password instead.
+                        </p>
+                        <p className="help-panel-note">
+                            Always use <strong>Send Test Email</strong> below after saving to confirm it
+                            actually works before relying on it.
+                        </p>
+                    </div>
+                )}
 
                 <div className="form-field">
                     <label>SMTP Host</label>
                     <input
                         type="text"
-                        placeholder="smtp.gmail.com"
+                        placeholder="smtp.hostinger.com"
                         value={smtpHost}
                         onChange={(e) => setSmtpHost(e.target.value)}
                     />

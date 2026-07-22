@@ -15,6 +15,57 @@
 
 .status-line {
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.help-toggle-button {
+    background: none;
+    border: none;
+    color: var(--color-navy);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+}
+
+.help-panel {
+    background: var(--color-neutral-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    font-size: 0.85rem;
+    color: var(--color-ink);
+}
+
+.help-panel-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.help-panel ol {
+    margin: 0 0 12px 18px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.help-panel-note {
+    font-size: 0.8rem;
+    color: var(--color-slate);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.help-panel-note code {
+    background: var(--color-border);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.78rem;
 }
 
 .settings-card .form-field {
