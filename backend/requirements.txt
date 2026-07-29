@@ -13,3 +13,4 @@ requests
 docxtpl
 python-dateutil
 httpx
+pyinstaller
