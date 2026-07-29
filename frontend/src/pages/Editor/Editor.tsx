@@ -55,7 +55,7 @@ function Editor() {
     return (
         <div className="editor">
             <h1>Upload Document</h1>
-            <p className="editor-subtitle">Upload a PDF or DOCX to extract and edit its fields.</p>
+            <p className="editor-subtitle">Upload a PDF or DOCX to extract and edit its fields.(For only PO documents)</p>
 
             <Dropzone file={file} onFileSelected={selectFile} />
 
