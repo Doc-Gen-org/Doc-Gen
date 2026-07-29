@@ -4,21 +4,30 @@ from models.schemas import Trainer, DocumentRecord
 from services.trainer_counter import get_next_trainer_code
 
 
-def get_or_create_trainer_by_name(db: Session, trainer_name: str) -> Trainer | None:
+def get_or_create_trainer_by_name(db: Session, trainer_name: str, trainer_email: str | None = None) -> Trainer | None:
     if not trainer_name or not trainer_name.strip():
         return None
 
     normalized = trainer_name.strip().lower()
+    clean_email = (trainer_email or "").strip()
 
     existing = db.query(Trainer).all()
     for t in existing:
         if t.name.strip().lower() == normalized:
+            # Backfill a missing email from this PO, but never overwrite
+            # one that's already on file — that could be a manually
+            # corrected address, and a new PO's value shouldn't
+            # silently clobber it.
+            if clean_email and not t.email:
+                t.email = clean_email
+                db.commit()
+                db.refresh(t)
             return t
 
     trainer = Trainer(
         trainer_code=get_next_trainer_code(db),
         name=trainer_name.strip(),
-        email="",
+        email=clean_email,
         payment_status="Pending",
         paid_date=None,
     )

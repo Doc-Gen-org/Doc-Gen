@@ -8,6 +8,7 @@ from models.schemas import Company, DocumentRecord
 from config.document_types import DOCUMENT_TYPES
 from services.generator import generate_document
 from services.invoice_counter import get_next_invoice_number
+from services.po_counter import get_next_po_number
 from services.trainer_utils import get_or_create_trainer_by_name
 from services.mou_company_utils import get_or_create_mou_company
 from pydantic import BaseModel
@@ -45,6 +46,9 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
     if request.document_type == "invoice" and not fields.get("invoice_number"):
         fields["invoice_number"] = get_next_invoice_number(db)
 
+    if request.document_type == "po" and not fields.get("po_number"):
+        fields["po_number"] = get_next_po_number(db)
+
     try:
         file_path = generate_document(
             request.document_type,
@@ -62,7 +66,7 @@ def generate(request: GenerateRequest, db: Session = Depends(get_db)):
     trainer = None
     trainer_name = fields.get("trainer_name")
     if trainer_name and request.document_type == "po":
-        trainer = get_or_create_trainer_by_name(db, trainer_name)
+        trainer = get_or_create_trainer_by_name(db, trainer_name, fields.get("trainer_email"))
 
     mou_company = None
     if request.document_type == "mou":

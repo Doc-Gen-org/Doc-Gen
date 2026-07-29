@@ -11,6 +11,7 @@ from services.mou_pattern_extraction import extract_mou_fields
 from services.ai_extraction import extract_fields_from_text
 from services.generator import generate_document
 from services.trainer_utils import get_or_create_trainer_by_name
+from services.po_counter import get_next_po_number
 from models.database import get_db
 from models.schemas import DocumentRecord
 from pydantic import BaseModel
@@ -90,8 +91,10 @@ async def extract_document(
 
         extracted_fields = {**pattern_fields, **llm_fields}
 
-        # PO number is no longer taken from the source document — ACA
-        # assigns its own PO number manually for the output document.
+        # PO number is left blank at extraction time and auto-assigned
+        # (PO-ACA-0001, PO-ACA-0002, ...) when the document is actually
+        # generated — not here, so an abandoned extraction never wastes
+        # a number. The field stays editable if manual override is needed.
         extracted_fields["po_number"] = ""
 
         suggested_output_type = "po"
@@ -127,12 +130,17 @@ class TransformRequest(BaseModel):
 
 @router.post("/transform")
 def transform_document(request: TransformRequest, db: Session = Depends(get_db)):
+    fields = dict(request.fields)
+
+    if request.output_document_type == "po" and not fields.get("po_number"):
+        fields["po_number"] = get_next_po_number(db)
+
     try:
         file_path = generate_document(
             request.output_document_type,
             request.company_id,
             request.output_format,
-            request.fields,
+            fields,
         )
     except FileNotFoundError as e:
         raise HTTPException(status_code=422, detail={"error": str(e)})
@@ -143,16 +151,16 @@ def transform_document(request: TransformRequest, db: Session = Depends(get_db))
 
     # Auto-link (or auto-create) the trainer this document belongs to
     trainer = None
-    trainer_name = request.fields.get("trainer_name")
+    trainer_name = fields.get("trainer_name")
     if trainer_name and request.output_document_type == "po":
-        trainer = get_or_create_trainer_by_name(db, trainer_name)
+        trainer = get_or_create_trainer_by_name(db, trainer_name, fields.get("trainer_email"))
 
     record = DocumentRecord(
         document_type=request.output_document_type,
         company_id=request.company_id,
         output_format=request.output_format,
         filename=filename,
-        fields_json=json.dumps(request.fields),
+        fields_json=json.dumps(fields),
         source_document_id=request.source_document_id,
         trainer_id=trainer.id if trainer else None,
     )
