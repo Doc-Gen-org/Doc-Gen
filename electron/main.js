@@ -15,7 +15,7 @@ let mainWindow = null;
 
 const isDev = !app.isPackaged;
 
-// In dev, everything (backend, Ollama) is assumed to already be
+// In dev, everything (backend, Ollama) is assumed to already be .
 // running manually, same as it has been throughout development —
 // this file does not change that workflow. Only a packaged build
 // spawns and manages these processes itself.
