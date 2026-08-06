@@ -1,5 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+from xhtml2pdf import pisa
 from docxtpl import DocxTemplate
 import os
 import re
@@ -80,7 +80,10 @@ def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
     filename = f"{document_type}_{company_id}_{uuid.uuid4().hex[:8]}.pdf"
     output_path = os.path.join(OUTPUT_DIR, filename)
 
-    HTML(string=rendered_html).write_pdf(output_path)
+    with open(output_path, "wb") as f:
+        pisa_status = pisa.CreatePDF(rendered_html, dest=f)
+    if pisa_status.err:
+        raise RuntimeError(f"xhtml2pdf failed to render PDF for document_type='{document_type}', company_id='{company_id}'")
 
     return output_path
 

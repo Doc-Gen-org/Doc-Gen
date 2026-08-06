@@ -32,7 +32,6 @@ const OLLAMA_EXE = path.join(
 const OLLAMA_MODELS_DIR = path.join(RESOURCES_DIR, "ollama", "models");
 const TESSERACT_PATH = path.join(RESOURCES_DIR, "tesseract", "tesseract.exe");
 const POPPLER_PATH = path.join(RESOURCES_DIR, "poppler", "bin");
-const GTK3_BIN_DIR = path.join(RESOURCES_DIR, "gtk3-runtime", "bin");
 
 const BACKEND_PORT = 8000;
 const OLLAMA_PORT = 11434;
@@ -93,15 +92,13 @@ async function startBackend() {
         return;
     }
 
-    // The GTK3 runtime (Pango/Cairo/GDK-PixBuf) that WeasyPrint needs
-    // isn't a Python package — it's native DLLs. On Windows they're
-    // located via PATH, so prepend the bundled GTK3 bin folder here
-    // rather than requiring it to be installed system-wide.
+    // PDF generation now uses xhtml2pdf (pure Python, no native
+    // dependencies), so no extra runtime DLLs need to be added to
+    // PATH here beyond what the backend exe already ships with.
     const env = {
         ...process.env,
         TESSERACT_PATH,
         POPPLER_PATH,
-        PATH: `${GTK3_BIN_DIR}${path.delimiter}${process.env.PATH || ""}`,
     };
 
     backendProcess = spawn(BACKEND_EXE, [], { env });

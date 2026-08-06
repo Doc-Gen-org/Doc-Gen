@@ -20,10 +20,10 @@ hiddenimports = []
 datas = []
 binaries = []
 
-# weasyprint, uvicorn, and pydantic all rely on dynamic/plugin-style
+# xhtml2pdf, uvicorn, and pydantic all rely on dynamic/plugin-style
 # imports that PyInstaller's static analysis can't see on its own —
 # collect_all pulls in their submodules and any data files they need.
-for pkg in ("weasyprint", "uvicorn", "pydantic", "fastapi", "docxtpl", "pdf2image", "pytesseract"):
+for pkg in ("xhtml2pdf", "reportlab", "uvicorn", "pydantic", "fastapi", "docxtpl", "pdf2image", "pytesseract"):
     pkg_datas, pkg_binaries, pkg_hiddenimports = collect_all(pkg)
     datas += pkg_datas
     binaries += pkg_binaries

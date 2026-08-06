@@ -70,7 +70,7 @@ function CreatorForm({ fields, values, onChange }: CreatorFormProps) {
 
     return (
         <div className="creator-form">
-            {fields.map((field) => (
+            {fields.filter((field) => !field.autoGenerate).map((field) => (
                 <div key={field.name} className="creator-field-row">
                     <div className="creator-field-label-row">
                         <label className="creator-field-label">

@@ -10,7 +10,7 @@ DOCUMENT_TYPES = [
             {"name": "trainer_name", "label": "Trainer / Consultant Name", "type": "text", "required": True},
             {"name": "trainer_email", "label": "Trainer / Consultant Email", "type": "text", "required": False},
             {"name": "technology", "label": "Technology / Batch", "type": "text", "required": True},
-            {"name": "po_number", "label": "PO Number", "type": "text", "required": True},
+            {"name": "po_number", "label": "PO Number", "type": "text", "required": False, "autoGenerate": True},
             {"name": "po_date", "label": "PO Date", "type": "date", "required": True},
             {"name": "start_date", "label": "Training Start Date", "type": "date", "required": True},
             {"name": "end_date", "label": "Training End Date", "type": "date", "required": True},
@@ -46,7 +46,7 @@ DOCUMENT_TYPES = [
         "fields": [
             {"name": "trainer_name", "label": "Trainer Name", "type": "text", "required": True},
             {"name": "po_number", "label": "Purchase Order Number", "type": "text", "required": True},
-            {"name": "invoice_number", "label": "Invoice Number", "type": "text", "required": True},
+            {"name": "invoice_number", "label": "Invoice Number", "type": "text", "required": False, "autoGenerate": True},
             {"name": "invoice_date", "label": "Invoice Date", "type": "date", "required": True, "defaultToday": True},
             {"name": "technology", "label": "Technology / Subject", "type": "text", "required": False},
             {"name": "attended_dates", "label": "Training Days Attended", "type": "multidate", "required": False},

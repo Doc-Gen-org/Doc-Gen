@@ -7,6 +7,7 @@ export interface DocumentTypeField {
     required: boolean;
     placeholder?: string;
     defaultToday?: boolean;
+    autoGenerate?: boolean;
 }
 
 export interface DocumentTypeSchema {
