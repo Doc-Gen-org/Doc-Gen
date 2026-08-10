@@ -40,7 +40,15 @@ def send_email_with_attachment(
     subject: str,
     body: str,
     attachment_path: str,
+    html_body: str | None = None,
 ) -> None:
+    """
+    body is always the plain-text version (required — used as the
+    fallback for clients that don't render HTML). html_body is
+    optional; when provided, it's sent as an HTML alternative so
+    most modern email clients show the styled/highlighted version
+    instead of the plain fallback.
+    """
     config = get_email_config(db)
     _check_smtp_configured(config)
 
@@ -49,6 +57,9 @@ def send_email_with_attachment(
     msg["From"] = f"{config['FROM_NAME']} <{config['FROM_EMAIL']}>"
     msg["To"] = to_email
     msg.set_content(body)
+
+    if html_body:
+        msg.add_alternative(html_body, subtype="html")
 
     with open(attachment_path, "rb") as f:
         file_data = f.read()

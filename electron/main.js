@@ -15,7 +15,7 @@ let mainWindow = null;
 
 const isDev = !app.isPackaged;
 
-// In dev, everything (backend, Ollama) is assumed to already be .
+// In dev, everything (backend, Ollama) is assumed to already be
 // running manually, same as it has been throughout development —
 // this file does not change that workflow. Only a packaged build
 // spawns and manages these processes itself.
@@ -32,7 +32,7 @@ const OLLAMA_EXE = path.join(
 const OLLAMA_MODELS_DIR = path.join(RESOURCES_DIR, "ollama", "models");
 const TESSERACT_PATH = path.join(RESOURCES_DIR, "tesseract", "tesseract.exe");
 const POPPLER_PATH = path.join(RESOURCES_DIR, "poppler", "bin");
-const GTK3_BIN_DIR = path.join(RESOURCES_DIR, "gtk3-runtime", "bin");
+const PLAYWRIGHT_BROWSERS_PATH = path.join(RESOURCES_DIR, "playwright-browsers");
 
 const BACKEND_PORT = 8000;
 const OLLAMA_PORT = 11434;
@@ -93,15 +93,17 @@ async function startBackend() {
         return;
     }
 
-    // The GTK3 runtime (Pango/Cairo/GDK-PixBuf) that WeasyPrint needs
-    // isn't a Python package — it's native DLLs. On Windows they're
-    // located via PATH, so prepend the bundled GTK3 bin folder here
-    // rather than requiring it to be installed system-wide.
+    // Tells Playwright/Chromium (used for PDF generation) where to find
+    // the bundled browser instead of looking for a user-level install
+    // that won't exist on a fresh machine. No native DLL PATH setup
+    // needed anymore — this replaced the old GTK3/WeasyPrint dependency
+    // entirely, which was the single most fragile piece of the
+    // original packaging effort.
     const env = {
         ...process.env,
         TESSERACT_PATH,
         POPPLER_PATH,
-        PATH: `${GTK3_BIN_DIR}${path.delimiter}${process.env.PATH || ""}`,
+        PLAYWRIGHT_BROWSERS_PATH,
     };
 
     backendProcess = spawn(BACKEND_EXE, [], { env });

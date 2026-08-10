@@ -20,14 +20,23 @@ hiddenimports = []
 datas = []
 binaries = []
 
-# weasyprint, uvicorn, and pydantic all rely on dynamic/plugin-style
+# playwright, uvicorn, and pydantic all rely on dynamic/plugin-style
 # imports that PyInstaller's static analysis can't see on its own —
 # collect_all pulls in their submodules and any data files they need.
-for pkg in ("weasyprint", "uvicorn", "pydantic", "fastapi", "docxtpl", "pdf2image", "pytesseract"):
+# For playwright specifically, this also bundles its internal driver/
+# folder (an embedded Node.js binary + JS driver files playwright's
+# Python client talks to) — that's non-Python data living inside the
+# package directory, and collect_all's data-file collection picks it
+# up the same way it picks up any other package data.
+for pkg in ("playwright", "uvicorn", "pydantic", "fastapi", "docxtpl", "pdf2image", "pytesseract"):
     pkg_datas, pkg_binaries, pkg_hiddenimports = collect_all(pkg)
     datas += pkg_datas
     binaries += pkg_binaries
     hiddenimports += pkg_hiddenimports
+
+# playwright's sync API is built on greenlet, which has its own C
+# extension that static analysis sometimes misses.
+hiddenimports += ["greenlet"]
 
 # uvicorn's protocol/loop backends are selected dynamically at
 # runtime and are frequently missed by static analysis specifically

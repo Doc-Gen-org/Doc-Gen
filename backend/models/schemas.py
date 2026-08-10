@@ -62,6 +62,12 @@ class InvoiceCounter(Base):
     id = Column(Integer, primary_key=True)
     last_number = Column(Integer, nullable=False, default=0)
 
+class POCounter(Base):
+    __tablename__ = "po_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
 class TrainerCounter(Base):
     __tablename__ = "trainer_counter"
 

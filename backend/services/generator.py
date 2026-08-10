@@ -1,5 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+from playwright.sync_api import sync_playwright
 from docxtpl import DocxTemplate
 import os
 import re
@@ -80,7 +80,18 @@ def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
     filename = f"{document_type}_{company_id}_{uuid.uuid4().hex[:8]}.pdf"
     output_path = os.path.join(OUTPUT_DIR, filename)
 
-    HTML(string=rendered_html).write_pdf(output_path)
+    # Real headless Chromium rendering — a strict superset of the CSS
+    # our templates use (WeasyPrint-era HTML/CSS renders unmodified).
+    # A fresh browser launch per call is intentional: this is a
+    # single-user desktop app generating one document at a time, not
+    # a high-throughput server, so the ~200ms launch cost is
+    # irrelevant and avoids any persistent-browser lifecycle to manage.
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.set_content(rendered_html)
+        page.pdf(path=output_path, format="A4", print_background=True)
+        browser.close()
 
     return output_path
 

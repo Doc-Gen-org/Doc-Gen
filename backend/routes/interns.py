@@ -249,7 +249,7 @@ def send_offer_letter(intern_id: int, db: Session = Depends(get_db)):
     except (json.JSONDecodeError, TypeError):
         fields = {}
 
-    subject, body = build_offer_letter_email(
+    subject, body, html_body = build_offer_letter_email(
         intern.name,
         fields.get("role", ""),
         fields.get("department", ""),
@@ -266,6 +266,7 @@ def send_offer_letter(intern_id: int, db: Session = Depends(get_db)):
             subject=subject,
             body=body,
             attachment_path=file_path,
+            html_body=html_body,
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail={"error": f"Email sending failed: {str(e)}"})
@@ -309,7 +310,7 @@ def send_certificate(intern_id: int, db: Session = Depends(get_db)):
 
     contribution_summary = cert_fields.get("contribution_summary")
 
-    subject, body = build_internship_completion_email(intern.name, contribution_summary)
+    subject, body, html_body = build_internship_completion_email(intern.name, contribution_summary)
 
     try:
         send_email_with_attachment(
@@ -318,6 +319,7 @@ def send_certificate(intern_id: int, db: Session = Depends(get_db)):
             subject=subject,
             body=body,
             attachment_path=file_path,
+            html_body=html_body,
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail={"error": f"Email sending failed: {str(e)}"})

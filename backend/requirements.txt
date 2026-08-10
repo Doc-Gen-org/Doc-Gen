@@ -8,9 +8,9 @@ pytesseract
 pdf2image
 Pillow
 jinja2
-weasyprint
 requests
 docxtpl
 python-dateutil
 httpx
 pyinstaller
+playwright

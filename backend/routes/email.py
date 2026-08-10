@@ -46,10 +46,14 @@ def send_email(request: SendEmailRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=422, detail={"error": "Generated file no longer exists on disk"})
 
     greeting_name = trainer_name or "Trainer"
-    default_subject, default_body = build_email_for_document_type(document.document_type, greeting_name)
+    default_subject, default_body, default_html_body = build_email_for_document_type(document.document_type, greeting_name)
 
     subject = request.subject or default_subject
     body = request.message or default_body
+    # Only send the styled HTML alternative when nothing was manually
+    # overridden — a hand-typed message wouldn't match the default
+    # HTML layout, so that case falls back to plain text only.
+    html_body = None if request.message else default_html_body
 
     try:
         send_email_with_attachment(
@@ -58,6 +62,7 @@ def send_email(request: SendEmailRequest, db: Session = Depends(get_db)):
             subject=subject,
             body=body,
             attachment_path=file_path,
+            html_body=html_body,
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail={"error": f"Email sending failed: {str(e)}"})

@@ -10,7 +10,7 @@ DOCUMENT_TYPES = [
             {"name": "trainer_name", "label": "Trainer / Consultant Name", "type": "text", "required": True},
             {"name": "trainer_email", "label": "Trainer / Consultant Email", "type": "text", "required": False},
             {"name": "technology", "label": "Technology / Batch", "type": "text", "required": True},
-            {"name": "po_number", "label": "PO Number", "type": "text", "required": True},
+            {"name": "po_number", "label": "PO Number (leave blank to auto-assign)", "type": "text", "required": False},
             {"name": "po_date", "label": "PO Date", "type": "date", "required": True},
             {"name": "start_date", "label": "Training Start Date", "type": "date", "required": True},
             {"name": "end_date", "label": "Training End Date", "type": "date", "required": True},

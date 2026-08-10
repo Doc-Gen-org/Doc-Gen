@@ -271,7 +271,7 @@ def send_document_by_id(trainer_id: int, document_id: int, db: Session = Depends
         fields = {}
 
     reference_number = fields.get("po_number") if record.document_type == "po" else fields.get("invoice_number")
-    subject, body = build_email_for_document_type(record.document_type, trainer.name, reference_number)
+    subject, body, html_body = build_email_for_document_type(record.document_type, trainer.name, reference_number)
 
     try:
         send_email_with_attachment(
@@ -280,6 +280,7 @@ def send_document_by_id(trainer_id: int, document_id: int, db: Session = Depends
             subject=subject,
             body=body,
             attachment_path=file_path,
+            html_body=html_body,
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail={"error": f"Email sending failed: {str(e)}"})
@@ -316,7 +317,7 @@ async def send_document_to_trainer(
     with open(saved_path, "wb") as f:
         f.write(contents)
 
-    subject, body = build_email_for_document_type(doc_type, trainer.name)
+    subject, body, html_body = build_email_for_document_type(doc_type, trainer.name)
 
     try:
         send_email_with_attachment(
@@ -325,6 +326,7 @@ async def send_document_to_trainer(
             subject=subject,
             body=body,
             attachment_path=saved_path,
+            html_body=html_body,
         )
     except Exception as e:
         raise HTTPException(status_code=422, detail={"error": f"Email sending failed: {str(e)}"})
