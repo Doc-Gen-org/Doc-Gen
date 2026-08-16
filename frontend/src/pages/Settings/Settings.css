@@ -92,3 +92,29 @@
     border-color: var(--color-navy);
     box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
 }
+
+.backup-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.backup-restore-button {
+    background: var(--color-surface);
+    color: var(--color-slate);
+    border: 1px solid var(--color-border-strong);
+}
+
+.backup-restore-button:hover:not(:disabled) {
+    background: var(--color-neutral-bg);
+}
+
+.settings-columns {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.settings-column {
+    flex: 0 0 auto;
+}

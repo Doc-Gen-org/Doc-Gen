@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react";
-import { fetchEmailSettings, saveEmailSettings, sendTestEmail } from "../../lib/api/settingsClient";
+import { useState, useEffect, useRef } from "react";
+import { fetchEmailSettings, saveEmailSettings, sendTestEmail, exportBackup, importBackup } from "../../lib/api/settingsClient";
 import { useToast } from "../../contexts/ToastContext";
+import { useConfirm } from "../../contexts/ConfirmContext";
 import "./Settings.css";
 
 function Settings() {
     const { showToast } = useToast();
+    const confirm = useConfirm();
+    const [exporting, setExporting] = useState(false);
+    const [importing, setImporting] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [smtpHost, setSmtpHost] = useState("");
     const [smtpPort, setSmtpPort] = useState("587");
     const [smtpUser, setSmtpUser] = useState("");
@@ -73,6 +78,45 @@ function Settings() {
         }
     };
 
+    const handleExport = async () => {
+        setExporting(true);
+        try {
+            await exportBackup();
+            showToast("Backup downloaded");
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "Backup export failed.", "error");
+        } finally {
+            setExporting(false);
+        }
+    };
+
+    const handleImportClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = "";
+        if (!file) return;
+
+        const confirmed = await confirm(
+            "Restoring this backup will replace ALL current data (trainers, documents, passwords, everything) with what's in this file. This can't be undone. Continue?",
+            "Restore Backup"
+        );
+        if (!confirmed) return;
+
+        setImporting(true);
+        try {
+            await importBackup(file);
+            showToast("Backup restored — reloading the app");
+            setTimeout(() => window.location.reload(), 1200);
+        } catch (err) {
+            showToast(err instanceof Error ? err.message : "Backup import failed.", "error");
+        } finally {
+            setImporting(false);
+        }
+    };
+
     if (loading) return <div className="settings"><p>Loading...</p></div>;
 
     return (
@@ -80,6 +124,8 @@ function Settings() {
             <h1>Settings</h1>
             <p className="settings-subtitle">Configure the email account DocGen sends from.</p>
 
+            <div className="settings-columns">
+            <div className="settings-column">
             <div className="card settings-card">
                 <div className="status-line">
                     <span className={configured ? "status-pill success" : "status-pill warning"}>
@@ -191,6 +237,41 @@ function Settings() {
 
                 {testStatus === "error" && testError && <p className="error-text">{testError}</p>}
                 {testStatus === "sent" && <p className="success-text">Test email sent — check the inbox.</p>}
+            </div>
+            </div>
+
+            <div className="settings-column">
+            <div className="card settings-card">
+                <h2>Backup &amp; Restore</h2>
+                <p className="settings-subtitle" style={{ margin: "0 0 4px 0" }}>
+                    Save a full snapshot of everything — trainers, documents, passwords, all of it — to a file
+                    you keep somewhere safe. Useful before updating the app, moving to a new machine, or just
+                    as a safety copy.
+                </p>
+
+                <div className="backup-actions">
+                    <button type="button" onClick={handleExport} disabled={exporting}>
+                        {exporting ? "Preparing..." : "Export Backup"}
+                    </button>
+                    <button type="button" className="backup-restore-button" onClick={handleImportClick} disabled={importing}>
+                        {importing ? "Restoring..." : "Restore from Backup"}
+                    </button>
+                </div>
+
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".zip"
+                    style={{ display: "none" }}
+                    onChange={handleFileSelected}
+                />
+
+                <p className="settings-subtitle" style={{ marginTop: 4 }}>
+                    Restoring replaces everything currently in the app with what's in the backup file — it can't
+                    be undone, so double check you're picking the right file.
+                </p>
+            </div>
+            </div>
             </div>
         </div>
     );

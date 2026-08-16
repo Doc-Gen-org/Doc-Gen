@@ -2,8 +2,18 @@ const BASE_URL = "http://localhost:8000";
 
 export type FinanceEntryType = "received" | "paid";
 
+export interface FinanceCategory {
+    id: number;
+    name: string;
+    record_count: number;
+    received: number;
+    paid: number;
+    profit: number;
+}
+
 export interface FinanceRecord {
     id: number;
+    category_id: number | null;
     entry_type: FinanceEntryType;
     amount: number;
     date: string;
@@ -12,6 +22,7 @@ export interface FinanceRecord {
 }
 
 export interface FinanceRecordInput {
+    category_id: number;
     entry_type: FinanceEntryType;
     amount: number;
     date: string;
@@ -34,8 +45,42 @@ export interface FinanceSummary {
     monthly: PeriodBreakdown[];
 }
 
-export async function fetchFinanceRecords(): Promise<FinanceRecord[]> {
-    const response = await fetch(`${BASE_URL}/finance/records`);
+export async function fetchFinanceCategories(): Promise<FinanceCategory[]> {
+    const response = await fetch(`${BASE_URL}/finance-categories`);
+    if (!response.ok) throw new Error(`Failed to fetch categories: ${response.status}`);
+    const data = await response.json();
+    return data.categories;
+}
+
+export async function createFinanceCategory(name: string): Promise<FinanceCategory> {
+    const response = await fetch(`${BASE_URL}/finance-categories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+    });
+    if (!response.ok) throw new Error(`Failed to create category: ${response.status}`);
+    return response.json();
+}
+
+export async function renameFinanceCategory(id: number, name: string): Promise<void> {
+    const response = await fetch(`${BASE_URL}/finance-categories/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+    });
+    if (!response.ok) throw new Error(`Failed to rename category: ${response.status}`);
+}
+
+export async function deleteFinanceCategory(id: number): Promise<void> {
+    const response = await fetch(`${BASE_URL}/finance-categories/${id}`, { method: "DELETE" });
+    if (!response.ok) throw new Error(`Failed to delete category: ${response.status}`);
+}
+
+export async function fetchFinanceRecords(categoryId?: number): Promise<FinanceRecord[]> {
+    const url = categoryId !== undefined
+        ? `${BASE_URL}/finance/records?category_id=${categoryId}`
+        : `${BASE_URL}/finance/records`;
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`Failed to fetch records: ${response.status}`);
     const data = await response.json();
     return data.records;
@@ -56,6 +101,11 @@ export async function deleteFinanceRecord(id: number): Promise<void> {
     if (!response.ok) throw new Error(`Failed to delete record: ${response.status}`);
 }
 
+/**
+ * Always global — not scoped to any category. Powers the summary
+ * cards and Monthly chart, which show the whole business regardless
+ * of which category is selected in the sidebar.
+ */
 export async function fetchFinanceSummary(): Promise<FinanceSummary> {
     const response = await fetch(`${BASE_URL}/finance/summary`);
     if (!response.ok) throw new Error(`Failed to fetch summary: ${response.status}`);

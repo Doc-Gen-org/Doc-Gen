@@ -4,8 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from typing import Optional
 from models.database import get_db
 from services.finance_service import (
+    create_finance_category,
+    list_finance_categories,
+    rename_finance_category,
+    delete_finance_category,
     create_finance_record,
     list_finance_records,
     delete_finance_record,
@@ -17,7 +22,16 @@ router = APIRouter()
 VALID_ENTRY_TYPES = {"received", "paid"}
 
 
+class FinanceCategoryCreate(BaseModel):
+    name: str
+
+
+class FinanceCategoryUpdate(BaseModel):
+    name: str
+
+
 class FinanceRecordCreate(BaseModel):
+    category_id: int
     entry_type: str
     amount: float
     date: str
@@ -27,6 +41,7 @@ class FinanceRecordCreate(BaseModel):
 def _serialize_record(r):
     return {
         "id": r.id,
+        "category_id": r.category_id,
         "entry_type": r.entry_type,
         "amount": r.amount,
         "date": r.date,
@@ -35,9 +50,40 @@ def _serialize_record(r):
     }
 
 
+@router.get("/finance-categories")
+def get_categories(db: Session = Depends(get_db)):
+    return {"categories": list_finance_categories(db)}
+
+
+@router.post("/finance-categories")
+def add_category(request: FinanceCategoryCreate, db: Session = Depends(get_db)):
+    if not request.name.strip():
+        raise HTTPException(status_code=422, detail={"error": "Category name can't be empty"})
+    category = create_finance_category(db, request.name)
+    return {"id": category.id, "name": category.name, "record_count": 0, "received": 0, "paid": 0, "profit": 0}
+
+
+@router.patch("/finance-categories/{category_id}")
+def rename_category(category_id: int, request: FinanceCategoryUpdate, db: Session = Depends(get_db)):
+    if not request.name.strip():
+        raise HTTPException(status_code=422, detail={"error": "Category name can't be empty"})
+    category = rename_finance_category(db, category_id, request.name)
+    if not category:
+        raise HTTPException(status_code=404, detail={"error": "Category not found"})
+    return {"id": category.id, "name": category.name}
+
+
+@router.delete("/finance-categories/{category_id}")
+def remove_category(category_id: int, db: Session = Depends(get_db)):
+    deleted = delete_finance_category(db, category_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail={"error": "Category not found"})
+    return {"message": "Category and its records deleted successfully"}
+
+
 @router.get("/finance/records")
-def get_records(db: Session = Depends(get_db)):
-    records = list_finance_records(db)
+def get_records(category_id: Optional[int] = None, db: Session = Depends(get_db)):
+    records = list_finance_records(db, category_id)
     return {"records": [_serialize_record(r) for r in records]}
 
 
@@ -50,6 +96,7 @@ def add_record(request: FinanceRecordCreate, db: Session = Depends(get_db)):
         )
     record = create_finance_record(
         db,
+        category_id=request.category_id,
         entry_type=request.entry_type,
         amount=request.amount,
         date=request.date,
@@ -68,6 +115,9 @@ def remove_record(record_id: int, db: Session = Depends(get_db)):
 
 @router.get("/finance/summary")
 def get_summary(db: Session = Depends(get_db)):
+    # Deliberately global — not scoped to a category. Powers the top
+    # summary cards and the Monthly chart, which show the whole
+    # business regardless of which category is selected.
     return get_finance_summary(db)
 
 
@@ -80,10 +130,6 @@ def export_csv(db: Session = Depends(get_db)):
     writer.writerow(["Type", "Amount", "Date", "Notes"])
 
     for r in records:
-        # Wrapping the date as an Excel text-formula (="...") stops Excel
-        # from auto-converting it into a date serial number when the CSV
-        # is opened — that auto-conversion is what causes the "#######"
-        # overflow display when the column is too narrow.
         excel_safe_date = f'="{r.date}"'
         writer.writerow([r.entry_type, r.amount, excel_safe_date, r.notes or ""])
 

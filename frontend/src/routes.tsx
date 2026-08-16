@@ -8,6 +8,7 @@ import MouCompanies from "./pages/MouCompanies/MouCompanies";
 import AddMouCompany from "./pages/MouCompanies/AddMouCompany";
 import Interns from "./pages/Interns/Interns";
 import AddIntern from "./pages/Interns/AddIntern";
+import Passwords from "./pages/Passwords/Passwords";
 import Finance from "./pages/Finance/Finance";
 import History from "./pages/History/History";
 import Warnings from "./pages/Warnings/Warnings";
@@ -28,6 +29,7 @@ export const routes: AppRoute[] = [
     { path: "/trainers/new", label: "Add Trainer", element: <AddTrainer/>, hideFromNav: true },
     { path: "/mou-companies", label: "MOU Companies", element: <MouCompanies/> },
     { path: "/mou-companies/new", label: "Add MOU Company", element: <AddMouCompany/>, hideFromNav: true },
+    { path: "/passwords", label: "Passwords", element: <Passwords/> },
     { path: "/interns", label: "Interns", element: <Interns/> },
     { path: "/interns/new", label: "Add Intern", element: <AddIntern/>, hideFromNav: true },
     { path: "/finance", label: "Finance", element: <Finance/> },

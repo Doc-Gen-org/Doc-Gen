@@ -129,8 +129,36 @@ class FinanceRecord(Base):
     __tablename__ = "finance_records"
 
     id = Column(Integer, primary_key=True, index=True)
+    category_id = Column(Integer, ForeignKey("finance_categories.id"), nullable=True)
     entry_type = Column(String, nullable=False)   # "received" or "paid"
     amount = Column(Float, nullable=False)
     date = Column(String, nullable=False)          # "YYYY-MM-DD"
     notes = Column(String, nullable=True)          # company/trainer/context goes here — free text, not a strict field
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class PasswordCategory(Base):
+    __tablename__ = "password_categories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class PasswordEntry(Base):
+    __tablename__ = "password_entries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    category_id = Column(Integer, ForeignKey("password_categories.id"), nullable=False)
+    title = Column(String, nullable=False)
+    username = Column(String, nullable=True)
+    password = Column(String, nullable=True)
+    url = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+class FinanceCategory(Base):
+    __tablename__ = "finance_categories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
