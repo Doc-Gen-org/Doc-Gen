@@ -8,8 +8,6 @@
 #     pyinstaller docgen_backend.spec
 #
 # Output: dist/docgen-backend/docgen-backend(.exe)
-# That whole dist/docgen-backend/ folder is what gets copied into
-# Electron's packaged resources/backend/ folder (see BUILD.md).
 
 import sys
 from PyInstaller.utils.hooks import collect_all, collect_submodules
@@ -20,26 +18,14 @@ hiddenimports = []
 datas = []
 binaries = []
 
-# playwright, uvicorn, and pydantic all rely on dynamic/plugin-style
-# imports that PyInstaller's static analysis can't see on its own —
-# collect_all pulls in their submodules and any data files they need.
-# For playwright specifically, this also bundles its internal driver/
-# folder (an embedded Node.js binary + JS driver files playwright's
-# Python client talks to) — that's non-Python data living inside the
-# package directory, and collect_all's data-file collection picks it
-# up the same way it picks up any other package data.
-for pkg in ("playwright", "uvicorn", "pydantic", "fastapi", "docxtpl", "pdf2image", "pytesseract"):
+for pkg in ("playwright", "uvicorn", "pydantic", "fastapi", "docxtpl"):
     pkg_datas, pkg_binaries, pkg_hiddenimports = collect_all(pkg)
     datas += pkg_datas
     binaries += pkg_binaries
     hiddenimports += pkg_hiddenimports
 
-# playwright's sync API is built on greenlet, which has its own C
-# extension that static analysis sometimes misses.
 hiddenimports += ["greenlet"]
 
-# uvicorn's protocol/loop backends are selected dynamically at
-# runtime and are frequently missed by static analysis specifically
 hiddenimports += collect_submodules("uvicorn")
 hiddenimports += [
     "uvicorn.logging",
@@ -56,8 +42,6 @@ hiddenimports += [
     "email_validator",
 ]
 
-# Bundle the Jinja2 templates as read-only data — services/app_paths.py
-# looks for these relative to sys._MEIPASS when frozen.
 datas += [("templates", "templates")]
 
 a = Analysis(
@@ -88,7 +72,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    console=True,  # keep a console window in early builds so errors are visible; set False once stable
+    console=True,
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,

@@ -5,7 +5,7 @@
 <style>
     @page {
         size: A4;
-        margin: 1.5cm 2cm 1.5cm 2cm;
+        margin: 0.9cm 1.8cm 0.9cm 1.8cm;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -119,6 +119,31 @@
         margin-bottom: 4px;
         color: #1a1a2e;
     }
+
+    .kyc-box {
+        margin: 10px 0;
+        border: 1px solid #e2c765;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .kyc-box .kyc-header {
+        background: #f0e2ab;
+        color: #5c4a00;
+        font-weight: bold;
+        font-size: 9pt;
+        padding: 6px 12px;
+    }
+    .kyc-box .kyc-body {
+        background: #fdf6e3;
+        padding: 8px 12px;
+        font-size: 8.5pt;
+        line-height: 1.4;
+        color: #333;
+    }
+    .kyc-box .kyc-body p { margin-bottom: 8px; }
+    .kyc-box .kyc-body p:last-child { margin-bottom: 0; }
+
+    .onboarding-note a { color: #1a1a2e; font-weight: bold; text-decoration: underline; }
     .terms ol {
         margin: 0 0 0 16px;
         padding: 0;
@@ -176,8 +201,7 @@
         </div>
         <div class="col">
             <div class="col-label">Engagement Dates</div>
-            Start Date: {{ start_date }}<br>
-            End Date: {{ end_date }}
+            {{ engagement_dates_display | safe }}
         </div>
     </div>
 
@@ -188,7 +212,15 @@
         </div>
         <div class="col">
             <div class="col-label">Onboarding Requirement</div>
-            <div class="onboarding-note">Trainer must onboard and complete profile formalities on hiretrainers.in before engagement confirmation.</div>
+            <div class="onboarding-note">Trainer must onboard and complete profile formalities on <a>hiretrainers.in</a> before engagement confirmation.</div>
+        </div>
+    </div>
+
+    <div class="kyc-box">
+        <div class="kyc-header">Mandatory Onward Travel &amp; KYC Requirements</div>
+        <div class="kyc-body">
+            <p>The trainer must book the onward travel ticket from their location to {{ issuing_company_name }} ({{ location }}) within <strong>5 hrs</strong> of receiving this Purchase Order. This PO shall be considered <strong>implemented and executed</strong> only upon confirmation of the booked onward journey within the stipulated timeframe. Failure to do so may result in the PO being treated as void at the sole discretion of ACA Technologies.</p>
+            <p>As a <strong>mandatory</strong> step, the trainer must also attach a clear copy of their <strong>Aadhaar Card</strong> and <strong>PAN Card</strong> along with the acknowledgement of this Purchase Order. Engagement will not be confirmed and no payment shall be processed until valid KYC documents are received and verified.</p>
         </div>
     </div>
 
@@ -230,19 +262,19 @@
     <div class="terms">
         <div class="terms-title">Payment Terms</div>
         <ol>
-            <li>Payment shall be made within 30 days after completion and approval of the training, unless otherwise agreed in writing by ACA Technologies.</li>
-            <li>Payment shall be made only for completed and approved training days / sessions.</li>
-            <li>Trainer may raise invoice only after completion and approval of the agreed training.</li>
-            <li>Invoice must reference this PO number and include applicable tax details, bank details, and supporting documents.</li>
-            <li>TDS at 10% will be deducted from payable amounts as applicable.</li>
-            <li>All payments are subject to applicable tax, GST, invoice verification, client approval, and internal approval by ACA Technologies.</li>
+            <li>Payment shall be made <strong>within {{ payment_days }} days</strong> after completion and approval of the training, unless otherwise agreed in writing by ACA Technologies.</li>
+            <li>Payment shall be made only for <strong>completed and approved</strong> training days / sessions.</li>
+            <li>Trainer may raise invoice <strong>only after completion and approval</strong> of the agreed training.</li>
+            <li>Invoice must <strong>reference this PO number</strong> and include applicable tax details, bank details, and supporting documents.</li>
+            <li><strong>TDS at 10%</strong> will be deducted from payable amounts as applicable.</li>
+            <li>All payments are subject to applicable <strong>tax, GST, invoice verification, client approval</strong>, and internal approval by ACA Technologies.</li>
         </ol>
     </div>
 
     <div class="terms">
         <div class="terms-title">Travel, Accommodation, Food And Reimbursement Terms</div>
         <ol>
-            <li>Travel expenses, accommodation, food, or other reimbursements, if approved, shall be reimbursed only against valid bills or receipts.</li>
+            <li>Travel expenses, accommodation, food, or other reimbursements, if approved, shall be reimbursed only against <strong>valid bills or receipts</strong>.</li>
             <li>Reimbursements will not be paid in advance unless ACA Technologies explicitly approves an exception in writing.</li>
             <li>Reimbursement claims must be submitted with the relevant training invoice and valid supporting documents.</li>
             <li>Unapproved expenses, unsupported claims, or claims submitted after final settlement may be rejected.</li>

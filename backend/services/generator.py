@@ -65,6 +65,43 @@ def _format_attended_dates(fields: dict) -> dict:
     return fields
 
 
+def _format_engagement_dates(fields: dict) -> dict:
+    """
+    Same idea as _format_attended_dates, but for the PO's Engagement
+    Dates block — one line per month ("August - 1, 2, 3"), since
+    that's the requested display shape rather than a single
+    semicolon-joined line. Returns HTML with <br> between lines, so
+    the template renders it with the |safe filter.
+    """
+    raw_dates = fields.get("engagement_dates")
+    if not raw_dates:
+        fields["engagement_dates_display"] = ""
+        return fields
+
+    parsed = []
+    for d in raw_dates:
+        try:
+            parsed.append(datetime.strptime(d, "%Y-%m-%d").date())
+        except (ValueError, TypeError):
+            continue
+
+    parsed.sort()
+
+    groups = OrderedDict()
+    for d in parsed:
+        key = (d.year, d.month)
+        groups.setdefault(key, []).append(d.day)
+
+    lines = []
+    for (year, month), days in groups.items():
+        month_name = datetime(year, month, 1).strftime("%B")
+        day_list = ", ".join(str(day) for day in days)
+        lines.append(f"{month_name} - {day_list}")
+
+    fields["engagement_dates_display"] = "<br>".join(lines)
+    return fields
+
+
 def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
     template_path = f"{document_type}/{company_id}.html"
 
@@ -80,12 +117,6 @@ def generate_pdf(document_type: str, company_id: str, fields: dict) -> str:
     filename = f"{document_type}_{company_id}_{uuid.uuid4().hex[:8]}.pdf"
     output_path = os.path.join(OUTPUT_DIR, filename)
 
-    # Real headless Chromium rendering — a strict superset of the CSS
-    # our templates use (WeasyPrint-era HTML/CSS renders unmodified).
-    # A fresh browser launch per call is intentional: this is a
-    # single-user desktop app generating one document at a time, not
-    # a high-throughput server, so the ~200ms launch cost is
-    # irrelevant and avoids any persistent-browser lifecycle to manage.
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
@@ -119,6 +150,8 @@ def generate_document(document_type: str, company_id: str, output_format: str, f
         fields = {**ACA_MOU_DEFAULTS, **fields}
     elif document_type == "certificate":
         fields = {**CERTIFICATE_DEFAULTS, **fields}
+    elif document_type == "po":
+        fields = _format_engagement_dates(dict(fields))
     elif document_type == "invoice":
         fields = _format_attended_dates(dict(fields))
         raw_num_rows = fields.get("num_rows")

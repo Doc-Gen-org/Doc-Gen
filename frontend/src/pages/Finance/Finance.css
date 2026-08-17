@@ -156,11 +156,6 @@
     gap: 4px;
 }
 
-/* button.category-button (element+class) deliberately beats the
-   global button[type="button"] rule in tokens.css on specificity —
-   both are 0,1,0 as class vs attribute selectors, so which one wins
-   otherwise depends on unpredictable CSS bundling order. This makes
-   the transparent/inactive look win reliably regardless of that. */
 button.category-button {
     flex: 1;
     display: flex;

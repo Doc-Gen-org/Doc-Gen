@@ -80,12 +80,6 @@ def delete_finance_record(db: Session, record_id: int) -> bool:
 
 
 def get_finance_summary(db: Session) -> dict:
-    """
-    Deliberately NOT scoped to a category — this powers the top
-    summary cards and the Monthly Received/Paid/Profit chart, which
-    stay showing the whole business regardless of which category is
-    selected in the sidebar.
-    """
     records = list_finance_records(db)
 
     total_received = sum(r.amount for r in records if r.entry_type == "received")

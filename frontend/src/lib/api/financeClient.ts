@@ -101,11 +101,6 @@ export async function deleteFinanceRecord(id: number): Promise<void> {
     if (!response.ok) throw new Error(`Failed to delete record: ${response.status}`);
 }
 
-/**
- * Always global — not scoped to any category. Powers the summary
- * cards and Monthly chart, which show the whole business regardless
- * of which category is selected in the sidebar.
- */
 export async function fetchFinanceSummary(): Promise<FinanceSummary> {
     const response = await fetch(`${BASE_URL}/finance/summary`);
     if (!response.ok) throw new Error(`Failed to fetch summary: ${response.status}`);

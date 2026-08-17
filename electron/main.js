@@ -3,22 +3,12 @@ const path = require("path");
 const { spawn } = require("child_process");
 const http = require("http");
 
-// ─────────────────────────────────────────────────────────────
-// Child processes we own the lifecycle of. Both MUST be killed
-// when the app quits — an orphaned backend or Ollama process left
-// running after the window closes is a silent, permanent RAM leak
-// for whatever's left running in the background.
-// ─────────────────────────────────────────────────────────────
 let backendProcess = null;
 let ollamaProcess = null;
 let mainWindow = null;
 
 const isDev = !app.isPackaged;
 
-// In dev, everything (backend, Ollama) is assumed to already be
-// running manually, same as it has been throughout development —
-// this file does not change that workflow. Only a packaged build
-// spawns and manages these processes itself.
 const RESOURCES_DIR = isDev
     ? path.join(__dirname, "..", "resources")
     : process.resourcesPath;
@@ -30,22 +20,11 @@ const OLLAMA_EXE = path.join(
     RESOURCES_DIR, "ollama", process.platform === "win32" ? "ollama.exe" : "ollama"
 );
 const OLLAMA_MODELS_DIR = path.join(RESOURCES_DIR, "ollama", "models");
-const TESSERACT_PATH = path.join(RESOURCES_DIR, "tesseract", "tesseract.exe");
-const POPPLER_PATH = path.join(RESOURCES_DIR, "poppler", "bin");
 const PLAYWRIGHT_BROWSERS_PATH = path.join(RESOURCES_DIR, "playwright-browsers");
 
 const BACKEND_PORT = 8000;
 const OLLAMA_PORT = 11434;
 
-// ─────────────────────────────────────────────────────────────
-// Checks whether something is already listening on a port,
-// without waiting/retrying (unlike waitForServer below, which
-// polls until ready). Used to decide whether to spawn our own
-// copy of a service at all — many machines already have Ollama
-// running permanently in the background (its installer sets it
-// up to auto-start), and trying to spawn a second copy on the
-// same port just fails outright rather than doing anything useful.
-// ─────────────────────────────────────────────────────────────
 function isPortOpen(port) {
     return new Promise((resolve) => {
         const req = http.get({ host: "127.0.0.1", port, timeout: 1000 }, () => {
@@ -60,11 +39,6 @@ function isPortOpen(port) {
     });
 }
 
-// ─────────────────────────────────────────────────────────────
-// Wait for an HTTP server to actually respond before moving on —
-// spawning a process doesn't mean it's ready to accept requests
-// yet, especially Ollama on a slower machine.
-// ─────────────────────────────────────────────────────────────
 function waitForServer(port, timeoutMs = 30000) {
     return new Promise((resolve, reject) => {
         const start = Date.now();
@@ -93,16 +67,8 @@ async function startBackend() {
         return;
     }
 
-    // Tells Playwright/Chromium (used for PDF generation) where to find
-    // the bundled browser instead of looking for a user-level install
-    // that won't exist on a fresh machine. No native DLL PATH setup
-    // needed anymore — this replaced the old GTK3/WeasyPrint dependency
-    // entirely, which was the single most fragile piece of the
-    // original packaging effort.
     const env = {
         ...process.env,
-        TESSERACT_PATH,
-        POPPLER_PATH,
         PLAYWRIGHT_BROWSERS_PATH,
     };
 
@@ -124,11 +90,6 @@ async function startOllama() {
         return;
     }
 
-    // OLLAMA_MODELS points Ollama at the pre-baked model directory
-    // shipped inside the app instead of the user's default
-    // ~/.ollama — no internet access or `ollama pull` needed at
-    // runtime. Both tinyllama-po and llama3.2:3b must already be
-    // present there at build time (see BUILD.md).
     const env = {
         ...process.env,
         OLLAMA_MODELS: OLLAMA_MODELS_DIR,
@@ -147,11 +108,6 @@ async function startOllama() {
 }
 
 function stopChildProcesses() {
-    // Only kill processes we actually spawned ourselves — if a port
-    // was already occupied by something we didn't start (e.g. a
-    // pre-existing system-wide Ollama service), backendProcess /
-    // ollamaProcess stays null and there's nothing to kill here.
-    // Never touch a process this app didn't launch.
     if (backendProcess) {
         backendProcess.kill();
         backendProcess = null;
@@ -166,7 +122,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
-        show: false, // avoid a flash of blank white before content is ready
+        show: false,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
@@ -184,8 +140,6 @@ function createWindow() {
 
 app.whenReady().then(async () => {
     if (isDev) {
-        // Dev mode: backend and Ollama are already running manually,
-        // same workflow as always — just open the window.
         createWindow();
         return;
     }
@@ -194,9 +148,6 @@ app.whenReady().then(async () => {
         await Promise.all([startBackend(), startOllama()]);
     } catch (err) {
         console.error("Failed to start required services:", err);
-        // Still open the window — the UI can surface a clear
-        // "backend not reachable" error rather than the app
-        // silently never appearing at all.
     }
 
     createWindow();

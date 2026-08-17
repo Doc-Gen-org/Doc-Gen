@@ -271,7 +271,8 @@ def send_document_by_id(trainer_id: int, document_id: int, db: Session = Depends
         fields = {}
 
     reference_number = fields.get("po_number") if record.document_type == "po" else fields.get("invoice_number")
-    subject, body, html_body = build_email_for_document_type(record.document_type, trainer.name, reference_number)
+    payment_days = fields.get("payment_days") if record.document_type == "po" else None
+    subject, body, html_body = build_email_for_document_type(record.document_type, trainer.name, reference_number, payment_days)
 
     try:
         send_email_with_attachment(

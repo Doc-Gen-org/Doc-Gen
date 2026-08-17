@@ -115,9 +115,6 @@ def remove_record(record_id: int, db: Session = Depends(get_db)):
 
 @router.get("/finance/summary")
 def get_summary(db: Session = Depends(get_db)):
-    # Deliberately global — not scoped to a category. Powers the top
-    # summary cards and the Monthly chart, which show the whole
-    # business regardless of which category is selected.
     return get_finance_summary(db)
 
 

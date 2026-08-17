@@ -39,10 +39,14 @@ _HTML_WRAPPER_OPEN = '<div style="font-family: Arial, sans-serif; font-size: 14p
 _HTML_WRAPPER_CLOSE = "</div>"
 
 
-def build_po_email(trainer_name: str, reference_number: str | None = None) -> tuple[str, str, str]:
+def build_po_email(trainer_name: str, reference_number: str | None = None, payment_days: int | str | None = None) -> tuple[str, str, str]:
     subject = "Purchase Order, Onboarding, Aadhaar / PAN Submission and Confirmation"
 
     reference_line = f"Reference Number: {reference_number}\n\n" if reference_number else ""
+    payment_days_line = (
+        f"- Payment will be made within {payment_days} days after completion and approval of the training.\n"
+        if payment_days else ""
+    )
 
     plain_body = (
         f"Dear {trainer_name},\n\n"
@@ -54,7 +58,7 @@ def build_po_email(trainer_name: str, reference_number: str | None = None) -> tu
         f"verification and payment processing.\n\n"
         f"{reference_line}"
         f"Please note the key terms mentioned in the PO:\n"
-        f"- Payment will be made within 30 days after completion and approval of the training.\n"
+        f"{payment_days_line}"
         f"- TDS at 10% will be deducted from payable amounts as applicable.\n"
         f"- Travel or reimbursement claims, if approved, must be supported by valid bills or receipts.\n"
         f"- ACA Technologies reserves the right to cancel, withdraw, or discontinue the PO / trainer engagement "
@@ -69,6 +73,10 @@ def build_po_email(trainer_name: str, reference_number: str | None = None) -> tu
 
     name = _esc(trainer_name)
     ref_html = f"<p>Reference Number: <strong>{_esc(reference_number)}</strong></p>" if reference_number else ""
+    payment_days_html = (
+        f"<li>Payment will be made <strong>within {_esc(str(payment_days))} days</strong> after completion and approval of the training.</li>"
+        if payment_days else ""
+    )
 
     html_body = (
         _HTML_WRAPPER_OPEN
@@ -86,7 +94,7 @@ def build_po_email(trainer_name: str, reference_number: str | None = None) -> tu
         + ref_html
         + _p("Please note the key terms mentioned in the PO:")
         + "<ul>"
-        + "<li>Payment will be made within <strong>30 days</strong> after completion and approval of the training.</li>"
+        + payment_days_html
         + "<li><strong>TDS at 10%</strong> will be deducted from payable amounts as applicable.</li>"
         + "<li>Travel or reimbursement claims, if approved, must be supported by valid bills or receipts.</li>"
         + "<li><strong>ACA Technologies</strong> reserves the right to cancel, withdraw, or discontinue the PO / trainer engagement at any time at its sole discretion.</li>"
@@ -337,10 +345,10 @@ def build_default_email(trainer_name: str, doc_label: str, reference_number: str
     return subject, plain_body, html_body
 
 
-def build_email_for_document_type(document_type: str, trainer_name: str, reference_number: str | None = None) -> tuple[str, str, str]:
+def build_email_for_document_type(document_type: str, trainer_name: str, reference_number: str | None = None, payment_days: int | str | None = None) -> tuple[str, str, str]:
     """Convenience wrapper: picks the right builder based on document_type."""
     if document_type == "po":
-        return build_po_email(trainer_name, reference_number)
+        return build_po_email(trainer_name, reference_number, payment_days)
     if document_type == "invoice":
         return build_invoice_email(trainer_name, reference_number)
     doc_label = document_type.replace("_", " ").title()

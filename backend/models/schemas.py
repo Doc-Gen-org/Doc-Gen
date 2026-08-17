@@ -46,8 +46,8 @@ class Intern(Base):
     email = Column(String, nullable=False)
     institution = Column(String, nullable=True)
     phone = Column(String, nullable=True)
-    offer_sent_at = Column(String, nullable=True)         # "YYYY-MM-DD HH:MM" — set when offer letter is sent
-    certificate_sent_at = Column(String, nullable=True)   # set when completion certificate is sent
+    offer_sent_at = Column(String, nullable=True)
+    certificate_sent_at = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class InternCounter(Base):
@@ -125,15 +125,22 @@ class MouCompany(Base):
     trainer_contact = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class FinanceCategory(Base):
+    __tablename__ = "finance_categories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 class FinanceRecord(Base):
     __tablename__ = "finance_records"
 
     id = Column(Integer, primary_key=True, index=True)
     category_id = Column(Integer, ForeignKey("finance_categories.id"), nullable=True)
-    entry_type = Column(String, nullable=False)   # "received" or "paid"
+    entry_type = Column(String, nullable=False)
     amount = Column(Float, nullable=False)
-    date = Column(String, nullable=False)          # "YYYY-MM-DD"
-    notes = Column(String, nullable=True)          # company/trainer/context goes here — free text, not a strict field
+    date = Column(String, nullable=False)
+    notes = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class PasswordCategory(Base):
@@ -155,10 +162,3 @@ class PasswordEntry(Base):
     notes = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-
-class FinanceCategory(Base):
-    __tablename__ = "finance_categories"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())

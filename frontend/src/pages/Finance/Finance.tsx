@@ -129,7 +129,6 @@ function Finance() {
                 </a>
             </div>
 
-            {/* 1. Stats — always the whole business, unaffected by category selection. */}
             <div className="stat-cards">
                 <div className="card stat-card">
                     <div className="stat-number stat-success">{formatMoney(summary.total_received)}</div>
@@ -147,7 +146,6 @@ function Finance() {
                 </div>
             </div>
 
-            {/* 2. Categories (left) + Add a Record / Records (right), side by side. */}
             <div className="finance-layout">
                 <div className="category-sidebar card">
                     <div className="category-sidebar-title">Categories</div>
@@ -292,7 +290,6 @@ function Finance() {
                 </div>
             </div>
 
-            {/* 3. Chart — moved below the categories row, always global. */}
             <div className="card finance-panel full-width">
                 <h2>Monthly Received, Paid &amp; Profit</h2>
                 {summary.monthly.length === 0 ? (
