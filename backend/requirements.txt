@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+sqlalchemy
+pdfplumber
+python-docx
+jinja2
+playwright
+requests
+docxtpl
+python-dateutil
+httpx
+pyinstaller

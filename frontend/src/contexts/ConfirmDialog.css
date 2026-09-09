@@ -1,0 +1,33 @@
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 21, 26, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.confirm-dialog {
+    width: 380px;
+    padding: 24px;
+}
+
+.confirm-dialog h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+}
+
+.confirm-dialog p {
+    color: var(--color-slate);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

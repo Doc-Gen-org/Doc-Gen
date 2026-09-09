@@ -1,0 +1,337 @@
+.finance-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.finance-subtitle {
+    color: var(--color-slate);
+    font-size: 0.92rem;
+    margin-top: 4px;
+}
+
+.export-link {
+    text-decoration: none;
+}
+
+.stat-cards {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    padding: 22px 28px;
+    min-width: 200px;
+}
+
+.stat-number {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+}
+
+.stat-number.stat-success { color: var(--color-success); }
+.stat-number.stat-danger { color: var(--color-danger); }
+
+.stat-label {
+    color: var(--color-slate);
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.finance-panel {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.finance-panel.full-width {
+    width: 100%;
+}
+
+.finance-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.finance-form input {
+    padding: 8px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+}
+
+.finance-form input:focus {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+}
+
+.finance-form .notes-input {
+    grid-column: span 3;
+}
+
+.finance-form button {
+    grid-column: span 3;
+}
+
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+}
+
+.finance-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-slate);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border-strong);
+}
+
+.finance-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.88rem;
+}
+
+.finance-table tbody tr:hover {
+    background: var(--color-bg);
+}
+
+.profit-positive {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.profit-negative {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+.finance-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    margin: 24px 0;
+}
+
+.finance-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+
+.category-sidebar {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-sidebar-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-slate);
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+button.category-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--color-ink);
+}
+
+.category-item.active button.category-button {
+    background: var(--color-navy);
+    color: #fff;
+}
+
+.category-item:not(.active) button.category-button:hover {
+    background: var(--color-neutral-bg);
+}
+
+.category-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-count {
+    font-size: 0.72rem;
+    opacity: 0.7;
+    margin-left: 8px;
+}
+
+button.category-delete-button {
+    background: none;
+    border: none;
+    color: var(--color-slate);
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding: 4px 6px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.category-item:hover button.category-delete-button {
+    opacity: 1;
+}
+
+button.category-delete-button:hover {
+    color: var(--color-danger);
+    background: none;
+}
+
+.category-rename-input {
+    flex: 1;
+    padding: 6px 9px;
+    border: 1px solid var(--color-navy);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+}
+
+button.category-add-button {
+    margin-top: 6px;
+    background: none;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--color-slate);
+    cursor: pointer;
+}
+
+button.category-add-button:hover {
+    background: var(--color-neutral-bg);
+}
+
+.category-add-row {
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+}
+
+.category-add-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 9px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+button.btn-compact {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.category-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+}
+
+.category-profit {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.category-profit.positive { color: var(--color-success); }
+.category-profit.negative { color: var(--color-danger); }
+
+.records-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.records-panel-header h2 { margin: 0; }
+
+.category-stats-inline {
+    display: flex;
+    gap: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.editing-row td { padding: 4px 8px; }
+
+.edit-input {
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border);
+}
+
+.page-info {
+    font-size: 0.85rem;
+    color: var(--color-slate);
+}
+
+.fy-table th.fy-num,
+.fy-table td.fy-num {
+    text-align: right;
+}
+
+.fy-total-row td {
+    border-top: 2px solid var(--color-border-strong);
+    background: var(--color-neutral-bg);
+}

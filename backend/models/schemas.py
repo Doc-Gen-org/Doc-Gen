@@ -1,0 +1,177 @@
+from sqlalchemy import Column, Integer, String, DateTime, Text, Float, ForeignKey  # type: ignore[import]
+from sqlalchemy.sql import func  # type: ignore[import]
+from models.database import Base
+
+class Company(Base):
+    __tablename__ = "companies"
+
+    id = Column(String, primary_key=True)
+    name = Column(String, nullable=False)
+
+class DocumentRecord(Base):
+    __tablename__ = "documents"
+
+    id = Column(Integer, primary_key=True, index=True)
+    document_type = Column(String, nullable=False)
+    company_id = Column(String, nullable=False)
+    output_format = Column(String, nullable=False)
+    filename = Column(String, nullable=False)
+    fields_json = Column(Text, nullable=False)
+    source_document_id = Column(String, nullable=True)
+    trainer_id = Column(Integer, ForeignKey("trainers.id"), nullable=True)
+    mou_company_id = Column(Integer, ForeignKey("mou_companies.id"), nullable=True)
+    intern_id = Column(Integer, ForeignKey("interns.id"), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class Trainer(Base):
+    __tablename__ = "trainers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    trainer_code = Column(String, unique=True, nullable=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    phone = Column(String, nullable=True)
+    pan = Column(String, nullable=True)
+    aadhaar = Column(String, nullable=True)
+    payment_status = Column(String, nullable=False, default="Pending")
+    paid_date = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class Intern(Base):
+    __tablename__ = "interns"
+
+    id = Column(Integer, primary_key=True, index=True)
+    intern_code = Column(String, unique=True, nullable=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    institution = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    offer_sent_at = Column(String, nullable=True)
+    certificate_sent_at = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class InternCounter(Base):
+    __tablename__ = "intern_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
+class InvoiceCounter(Base):
+    __tablename__ = "invoice_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
+class POCounter(Base):
+    __tablename__ = "po_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
+class TrainerCounter(Base):
+    __tablename__ = "trainer_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
+class MouCompanyCounter(Base):
+    __tablename__ = "mou_company_counter"
+
+    id = Column(Integer, primary_key=True)
+    last_number = Column(Integer, nullable=False, default=0)
+
+class WarningEmailLog(Base):
+    __tablename__ = "warning_email_log"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recipient_name = Column(String, nullable=False)
+    recipient_email = Column(String, nullable=False)
+    message = Column(Text, nullable=False)
+    sent_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class EmailSettings(Base):
+    __tablename__ = "email_settings"
+
+    id = Column(Integer, primary_key=True)
+    smtp_host = Column(String, nullable=True)
+    smtp_port = Column(Integer, nullable=True)
+    smtp_user = Column(String, nullable=True)
+    smtp_password = Column(String, nullable=True)
+    from_name = Column(String, nullable=True)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+class ReceivedDocument(Base):
+    __tablename__ = "received_documents"
+
+    id = Column(Integer, primary_key=True, index=True)
+    trainer_id = Column(Integer, ForeignKey("trainers.id"), nullable=False)
+    doc_type = Column(String, nullable=False)
+    filename = Column(String, nullable=False)
+    original_filename = Column(String, nullable=False)
+    uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
+    finance_details_json = Column(Text, nullable=True)
+
+class MouCompany(Base):
+    __tablename__ = "mou_companies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    company_code = Column(String, unique=True, nullable=True)
+    name = Column(String, nullable=False)
+    address = Column(Text, nullable=True)
+    signatory_name = Column(String, nullable=True)
+    signatory_title = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    pan = Column(String, nullable=True)
+    trainer_contact = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class FinanceCategory(Base):
+    __tablename__ = "finance_categories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class FinanceRecord(Base):
+    __tablename__ = "finance_records"
+
+    id = Column(Integer, primary_key=True, index=True)
+    category_id = Column(Integer, ForeignKey("finance_categories.id"), nullable=True)
+    entry_type = Column(String, nullable=False)
+    amount = Column(Float, nullable=False)
+    date = Column(String, nullable=False)
+    notes = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class PasswordCategory(Base):
+    __tablename__ = "password_categories"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class PasswordEntry(Base):
+    __tablename__ = "password_entries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    category_id = Column(Integer, ForeignKey("password_categories.id"), nullable=False)
+    title = Column(String, nullable=False)
+    username = Column(String, nullable=True)
+    password = Column(String, nullable=True)
+    url = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+class CompanyAccount(Base):
+    __tablename__ = "company_accounts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    label = Column(String, nullable=False)
+    account_holder_name = Column(String, nullable=False)
+    bank_name = Column(String, nullable=True)
+    account_number = Column(String, nullable=False)
+    ifsc_code = Column(String, nullable=True)
+    pan_number = Column(String, nullable=True)
+    mode_of_payment = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
