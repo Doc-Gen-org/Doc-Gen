@@ -3,6 +3,9 @@ import { useHistory } from "./hooks/useHistory";
 import { useToast } from "../../contexts/ToastContext";
 import { useConfirm } from "../../contexts/ConfirmContext";
 import { formatDate } from "../../lib/dateUtils";
+import { getHistoryPreviewUrl } from "../../lib/api/historyClient";
+import DocumentPreviewModal from "../../components/DocumentPreviewModal/DocumentPreviewModal";
+import type { HistoryRecord } from "../../lib/api/historyClient";
 import "./History.css";
 
 const DOC_TYPE_LABELS: Record<string, string> = {
@@ -21,6 +24,7 @@ function History() {
     const { showToast } = useToast();
     const confirm = useConfirm();
     const [search, setSearch] = useState("");
+    const [previewRecord, setPreviewRecord] = useState<HistoryRecord | null>(null);
 
     const filteredRecords = records.filter((r) => {
         const q = search.trim().toLowerCase();
@@ -89,6 +93,9 @@ function History() {
                                     <td>{r.output_format.toUpperCase()}</td>
                                     <td>{formatDate(r.created_at)}</td>
                                     <td className="actions-cell">
+                                        <button type="button" className="btn-compact btn-secondary" onClick={() => setPreviewRecord(r)}>
+                                            Preview
+                                        </button>
                                         <button type="button" className="btn-compact btn-secondary" onClick={() => handleDownload(r)}>
                                             Download
                                         </button>
@@ -101,6 +108,15 @@ function History() {
                         </tbody>
                     </table>
                 </div>
+            )}
+
+            {previewRecord && (
+                <DocumentPreviewModal
+                    url={getHistoryPreviewUrl(previewRecord.id)}
+                    format={previewRecord.output_format}
+                    title={previewRecord.filename}
+                    onClose={() => setPreviewRecord(null)}
+                />
             )}
         </div>
     );

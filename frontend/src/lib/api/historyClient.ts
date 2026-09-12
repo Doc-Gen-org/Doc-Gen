@@ -34,6 +34,10 @@ export async function downloadHistoryFile(record: HistoryRecord): Promise<void> 
     window.URL.revokeObjectURL(url);
 }
 
+export function getHistoryPreviewUrl(id: number): string {
+    return `${BASE_URL}/history/${id}/preview`;
+}
+
 export async function deleteHistoryRecord(id: number): Promise<void> {
     const response = await fetch(`${BASE_URL}/history/${id}`, {
         method: "DELETE",

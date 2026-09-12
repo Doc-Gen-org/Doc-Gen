@@ -59,6 +59,35 @@ def download_history_file(record_id: int, db: Session = Depends(get_db)):
     )
 
 
+@router.get("/history/{record_id}/preview")
+def preview_history_file(record_id: int, db: Session = Depends(get_db)):
+    record = db.query(DocumentRecord).filter(
+        DocumentRecord.id == record_id
+    ).first()
+
+    if not record:
+        raise HTTPException(status_code=404, detail={"error": "Record not found"})
+
+    file_path = os.path.join(GENERATED_FILES_DIR, record.filename)
+
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "File no longer exists on disk — may have been cleared"}
+        )
+
+    media_type = "application/pdf" if record.output_format == "pdf" else \
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+    # No `filename=` kwarg here (unlike /download) — that's what makes
+    # FastAPI omit the Content-Disposition: attachment header, so the
+    # browser renders the file inline instead of forcing a save dialog.
+    return FileResponse(
+        path=file_path,
+        media_type=media_type,
+    )
+
+
 @router.get("/history/{record_id}/fields")
 def get_history_fields(record_id: int, db: Session = Depends(get_db)):
     record = db.query(DocumentRecord).filter(
